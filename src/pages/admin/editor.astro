@@ -1,0 +1,85 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Icon from '../../components/admin/Icon.astro';
+import { brand } from '../../data/admin';
+const title = 'Tipografía como arquitectura';
+---
+<AdminLayout title="Editar entrada" fullscreen>
+  <div class="ed">
+    <header class="ed__bar">
+      <div class="ed__left">
+        <a href="/admin/entradas/" class="ed__back" aria-label="Ver entradas"><span class="monogram monogram--lg">{brand.initial}</span></a>
+        <button type="button" class="ed__inserter" aria-label="Añadir bloque"><Icon name="plus" size={22} /></button>
+        <button type="button" class="ed__icon" aria-label="Herramientas"><Icon name="posts" size={22} /></button>
+        <button type="button" class="ed__icon" aria-label="Deshacer"><Icon name="undo" size={22} /></button>
+        <button type="button" class="ed__icon" aria-label="Rehacer" disabled><Icon name="redo" size={22} /></button>
+        <button type="button" class="ed__icon" aria-label="Vista de lista"><Icon name="listView" size={22} /></button>
+      </div>
+      <button type="button" class="ed__doc"><span><Icon name="posts" size={18} />{title}</span><kbd>⌘K</kbd></button>
+      <div class="ed__right">
+        <button type="button" class="ed__link">Guardar borrador</button>
+        <button type="button" class="ed__icon" aria-label="Vista previa"><Icon name="preview" size={22} /></button>
+        <button type="button" class="ed__publish">Publicar</button>
+        <button type="button" class="ed__toggle" aria-label="Ajustes" aria-pressed="true"><Icon name="sidebar" size={20} /></button>
+        <button type="button" class="ed__icon" aria-label="Opciones"><Icon name="more" size={20} /></button>
+      </div>
+    </header>
+
+    <div class="ed__body">
+      <div class="ed__canvas">
+        <article class="ed__doc-col">
+          <h1 class="ed__title" contenteditable="true">{title}</h1>
+          <p contenteditable="true">Un sistema tipográfico no decora el contenido: lo sostiene. Cada nivel de la jerarquía funciona como un forjado; si uno cede, el resto del edificio lo nota.</p>
+          <div class="blk is-selected">
+            <div class="blk__toolbar" role="toolbar" aria-label="Herramientas del bloque">
+              <button type="button" aria-label="Párrafo"><Icon name="paragraph" size={22} /></button>
+              <button type="button" class="narrow" aria-label="Arrastrar"><Icon name="drag" size={18} /></button>
+              <span class="blk__move"><button type="button" aria-label="Mover arriba"><Icon name="chevronUp" size={16} /></button><button type="button" aria-label="Mover abajo"><Icon name="chevronDown" size={16} /></button></span>
+              <button type="button" aria-label="Alinear texto"><Icon name="align" size={20} /></button>
+              <button type="button" aria-label="Negrita"><b>B</b></button>
+              <button type="button" aria-label="Cursiva"><i>I</i></button>
+              <button type="button" aria-label="Enlace"><Icon name="link" size={20} /></button>
+              <button type="button" aria-label="Opciones del bloque"><Icon name="more" size={20} /></button>
+            </div>
+            <p contenteditable="true">La pregunta no es qué fuente usar, sino cuántas decisiones puede tomar el lector sin darse cuenta de que las está tomando.</p>
+          </div>
+          <figure class="ed__img">
+            <div><Icon name="image" size={36} /><span>[IMAGEN]</span></div>
+            <figcaption>Retícula modular del manual de marca, versión 3.</figcaption>
+          </figure>
+          <h2 contenteditable="true">Tres reglas antes de elegir una fuente</h2>
+          <div class="ed__placeholder"><span>Escribe / para elegir un bloque</span><button type="button" aria-label="Añadir bloque"><Icon name="plus" size={16} /></button></div>
+        </article>
+      </div>
+
+      <aside class="ed__side" aria-label="Ajustes del editor">
+        <div class="ed__tabs" role="tablist">
+          <div><button type="button" role="tab" aria-selected="true" class="is-on">Entrada</button><button type="button" role="tab" aria-selected="false">Bloque</button></div>
+          <button type="button" class="ed__icon" aria-label="Cerrar ajustes"><Icon name="close" size={20} /></button>
+        </div>
+        <div class="ed__panel">
+          <button type="button" class="ed__featured">Establecer la imagen destacada</button>
+          <p class="ed__post-title"><Icon name="posts" size={20} /><strong>{title}</strong></p>
+          <button type="button" class="ed__link ed__link--flush">Añade un extracto…</button>
+          <dl class="ed__meta">
+            <dt>Estado</dt><dd><button type="button">Borrador</button></dd>
+            <dt>Publicar</dt><dd><button type="button">Inmediatamente</button></dd>
+            <dt>Enlace</dt><dd><button type="button">/tipografia-como-arquitectura</button></dd>
+            <dt>Autor</dt><dd><button type="button">admin</button></dd>
+            <dt>Plantilla</dt><dd><button type="button">Entrada única</button></dd>
+            <dt>Comentarios</dt><dd><button type="button">Abiertos</button></dd>
+          </dl>
+        </div>
+        <details class="ed__section" open>
+          <summary>Categorías</summary>
+          <div class="ed__checks">
+            {['Ensayo','Lettering','Proceso','Sistemas','Tipografía'].map((c) => <label><input type="checkbox" checked={c === 'Ensayo' || c === 'Tipografía'} /> {c}</label>)}
+            <a href="/admin/editor/">Añadir una categoría nueva</a>
+          </div>
+        </details>
+        <details class="ed__section"><summary>Etiquetas</summary><div class="ed__checks"><input type="text" aria-label="Añadir etiqueta" /></div></details>
+      </aside>
+    </div>
+    <nav class="ed__crumbs" aria-label="Ruta de bloques"><a href="/admin/editor/">Documento</a><span>›</span><span>Párrafo</span></nav>
+  </div>
+</AdminLayout>

@@ -1,0 +1,18 @@
+---
+// Layout base — el marco que envuelve todas las páginas.
+// MUDA v1 entra aquí después (tokens CSS); de momento, silencio.
+const { title = 'Koi Samsa', description = 'Sistemas de marca co-gobernados con IA. Arte, diseño y branding.' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

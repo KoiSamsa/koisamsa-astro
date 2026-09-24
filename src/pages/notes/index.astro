@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const notes = (await getCollection('notes', (e) => !e.data.borrador))
+  .sort((a, b) => (b.data.fecha?.getTime() ?? 0) - (a.data.fecha?.getTime() ?? 0));
+---
+<Base title="Notes — Koi Samsa">
+  <main>
+    <h1>Notes</h1>
+    <p>Artículos que no son ni ensayo ni blog.</p>
+    <ul>
+      {notes.map((n) => <li><a href={`/notes/${n.id}/`}>{n.data.title}</a></li>)}
+    </ul>
+  </main>
+</Base>

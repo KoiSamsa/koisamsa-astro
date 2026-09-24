@@ -1,0 +1,19 @@
+---
+// Plantilla mínima de nota. El diseño llega por prototipo (proceso firmado 19-jul), no aquí.
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  const notes = await getCollection('notes', (e) => !e.data.borrador);
+  return notes.map((n) => ({ params: { slug: n.id }, props: { note: n } }));
+}
+const { note } = Astro.props;
+const { Content } = await render(note);
+---
+<Base title={`${note.data.title} — Koi Samsa`} description={note.data.description}>
+  <main>
+    <article>
+      <h1>{note.data.title}</h1>
+      <Content />
+    </article>
+  </main>
+</Base>

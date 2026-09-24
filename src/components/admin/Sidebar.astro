@@ -1,0 +1,29 @@
+---
+import Icon from './Icon.astro';
+import { menu } from '../../data/admin';
+interface Props { active: string; current?: string }
+const { active, current } = Astro.props;
+---
+<nav class="sb" aria-label="Menú principal">
+  {menu.map((item) => {
+    const on = item.id === active;
+    return (
+      <Fragment>
+        {item.gapBefore && <div class="sb__sep" />}
+        <a href={item.href} class:list={['sb__item', { 'is-active': on }]} aria-current={on ? 'page' : undefined}>
+          <Icon name={item.id} class="sb__icon" />
+          <span>{item.label}</span>
+          {item.badge && <span class="sb__badge">{item.badge}</span>}
+        </a>
+        {on && item.sub && (
+          <div class="sb__sub">
+            {item.sub.map((s) => (
+              <a href={s.href} class:list={['sb__subitem', { 'is-current': s.label === current }]}>{s.label}</a>
+            ))}
+          </div>
+        )}
+      </Fragment>
+    );
+  })}
+  <button type="button" class="sb__item sb__collapse"><Icon name="collapse" class="sb__icon" /><span>Cerrar menú</span></button>
+</nav>

@@ -1,0 +1,40 @@
+---
+// Marco del admin (clon de estudio de la estructura de un CMS clásico).
+// Independiente de Base.astro: el admin no hereda estilos del sitio público.
+import '../styles/admin.css';
+import AdminBar from '../components/admin/AdminBar.astro';
+import Sidebar from '../components/admin/Sidebar.astro';
+import { brand } from '../data/admin';
+interface Props { title: string; active?: string; current?: string; fullscreen?: boolean }
+const { title, active = 'dashboard', current, fullscreen = false } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{title} ‹ {brand.site} — {brand.name}</title>
+  </head>
+  <body class="ca">
+    {fullscreen ? <slot /> : (
+      <Fragment>
+        <AdminBar />
+        <div class="ca__wrap">
+          <Sidebar active={active} current={current} />
+          <main class="ca__main">
+            <div class="screen-tabs">
+              <button type="button">Opciones de pantalla</button>
+              <button type="button">Ayuda</button>
+            </div>
+            <slot />
+            <footer class="ca__footer">
+              <span><em>Gracias por crear con <a href="/admin/">{brand.name}</a>.</em></span>
+              <span>Versión {brand.version}</span>
+            </footer>
+          </main>
+        </div>
+      </Fragment>
+    )}
+  </body>
+</html>

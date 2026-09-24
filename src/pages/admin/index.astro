@@ -1,0 +1,75 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import Postbox from '../../components/admin/Postbox.astro';
+import Icon from '../../components/admin/Icon.astro';
+import { brand, getPosts, keystatic } from '../../data/admin';
+const posts = await getPosts();
+const published = posts.filter((p) => !p.draft).slice(0, 4);
+const drafts = posts.filter((p) => p.draft);
+---
+<AdminLayout title="Escritorio" active="dashboard" current="Inicio">
+  <h1 class="wp-heading">Escritorio</h1>
+
+  <section class="welcome">
+    <div class="welcome__head">
+      <div>
+        <h2>Te damos la bienvenida a {brand.name}</h2>
+        <a href="/admin/">Descubre las novedades de la versión {brand.version}</a>
+      </div>
+      <a href="/admin/" class="welcome__dismiss"><Icon name="closeCircle" size={18} />Descartar</a>
+    </div>
+    <div class="welcome__cols">
+      <div class="welcome__col"><span class="welcome__icon"><Icon name="pages" size={22} /></span><div><h3>Escribe con bloques</h3><p>Cada párrafo, imagen o titular es una pieza que se mueve y se reutiliza.</p><a href={keystatic.create}>Añade una entrada nueva</a></div></div>
+      <div class="welcome__col"><span class="welcome__icon"><Icon name="layout" size={22} /></span><div><h3>Personaliza el diseño</h3><p>Plantillas, estilos globales y tipografía desde un único lugar.</p><a href="/admin/">Abrir el editor del sitio</a></div></div>
+      <div class="welcome__col"><span class="welcome__icon"><Icon name="shield" size={22} /></span><div><h3>Revisa la salud del sitio</h3><p>Copias, actualizaciones y seguridad, en un solo informe.</p><a href="/admin/">Ver el estado del sitio</a></div></div>
+    </div>
+  </section>
+
+  <div class="dash">
+    <div class="dash__col">
+      <Postbox title="De un vistazo">
+        <div class="glance">
+          <a href="/admin/entradas/"><Icon name="posts" size={18} />{posts.length} {posts.length === 1 ? 'entrada' : 'entradas'}</a>
+          <a href="/admin/"><Icon name="pages" size={18} />5 páginas</a>
+          <a href="/admin/"><Icon name="comments" size={18} />14 comentarios</a>
+          <a href="/admin/" class="is-warn"><Icon name="comments" size={18} />1 en moderación</a>
+        </div>
+        <p class="muted">{brand.name} {brand.version} funcionando con el tema <a href="/admin/">{brand.name}</a>.</p>
+      </Postbox>
+      <Postbox title="Actividad">
+        <h3 class="pb__sub">Publicadas recientemente</h3>
+        <ul class="activity">
+          {published.length ? published.map((p) => <li><span>{p.day}</span><a href={p.editHref}>{p.title}</a></li>) : <li class="muted">Todavía no hay nada publicado.</li>}
+        </ul>
+        <div class="subsub">
+          <a href="/admin/">Todos (14)</a> | <a href="/admin/">Pendientes (1)</a> | <a href="/admin/">Aprobados (13)</a> | <a href="/admin/">Spam (0)</a>
+        </div>
+      </Postbox>
+    </div>
+
+    <div class="dash__col">
+      <Postbox title="Borrador rápido">
+        <form class="qd">
+          <label for="qd-title">Título</label>
+          <input id="qd-title" type="text" />
+          <label for="qd-content">Contenido</label>
+          <textarea id="qd-content" rows="3" placeholder="¿Qué tienes en mente?"></textarea>
+          <div><a href={keystatic.create} class="btn">Escribir en el editor</a></div>
+        </form>
+        <h3 class="pb__sub pb__sub--rule">Tus borradores recientes <a href="/admin/entradas/">Ver todos ({drafts.length})</a></h3>
+        {drafts.map((p) => <div class="draft"><a href={p.editHref}>{p.title}</a> <span class="muted">{p.day}</span></div>)}
+      </Postbox>
+      <Postbox title="Estado de salud del sitio">
+        <div class="health">
+          <div class="health__ring">
+            <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18" fill="none" stroke="#dcdcde" stroke-width="4" /><circle cx="22" cy="22" r="18" fill="none" stroke="#00a32a" stroke-width="4" stroke-dasharray="96 113" stroke-linecap="round" transform="rotate(-90 22 22)" /></svg>
+            <strong>Bueno</strong>
+          </div>
+          <p class="muted">El estado de salud del sitio es bueno, aunque todavía quedan cosas por mejorar en rendimiento y seguridad. Revisa los <a href="/admin/">2 elementos</a> en la pantalla de salud del sitio.</p>
+        </div>
+      </Postbox>
+    </div>
+
+    <div class="dash__drop">Arrastra las cajas aquí</div>
+  </div>
+</AdminLayout>

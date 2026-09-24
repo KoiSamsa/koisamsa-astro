@@ -1,0 +1,66 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getPosts, keystatic } from '../../data/admin';
+const posts = await getPosts();
+const drafts = posts.filter((p) => p.draft).length;
+const published = posts.length - drafts;
+---
+<AdminLayout title="Entradas" active="posts" current="Todas las entradas">
+  <div class="wp-heading-row">
+    <h1 class="wp-heading">Entradas</h1>
+    <a href={keystatic.create} class="btn">Añadir nueva entrada</a>
+  </div>
+
+  <div class="listbar">
+    <div class="subsub">
+      <a href="/admin/entradas/" class="is-current">Todas <span>({posts.length})</span></a> |
+      <a href="/admin/entradas/">Publicadas <span>({published})</span></a> |
+      <a href="/admin/entradas/">Borradores <span>({drafts})</span></a>
+    </div>
+    <form role="search" class="search">
+      <label for="post-search" class="sr-only">Buscar entradas</label>
+      <input id="post-search" type="search" />
+      <button type="button" class="btn">Buscar entradas</button>
+    </form>
+  </div>
+
+  <div class="tablenav">
+    <div class="tablenav__actions">
+      <select aria-label="Acciones en lote"><option>Acciones en lote</option><option>Editar</option><option>Mover a la papelera</option></select>
+      <button type="button" class="btn">Aplicar</button>
+      <select aria-label="Filtrar por fecha"><option>Todas las fechas</option><option>septiembre 2026</option><option>agosto 2026</option></select>
+      <select aria-label="Filtrar por categoría"><option>Todas las categorías</option><option>Ensayo</option><option>Lettering</option><option>Proceso</option><option>Sistemas</option></select>
+      <button type="button" class="btn">Filtrar</button>
+    </div>
+    <div class="pager"><span>{posts.length} {posts.length === 1 ? 'elemento' : 'elementos'}</span></div>
+  </div>
+
+  {posts.length === 0 && <p class="muted">No hay entradas. <a href={keystatic.create}>Escribe la primera</a>.</p>}
+  <table class="wp-list">
+    <thead>
+      <tr>
+        <td class="col-cb"><input type="checkbox" aria-label="Seleccionar todo" /></td>
+        <th scope="col"><a href="/admin/entradas/">Título</a></th>
+        <th scope="col" class="col-author">Autor</th>
+        <th scope="col" class="col-cats">Categorías</th>
+                <th scope="col" class="col-date"><a href="/admin/entradas/">Fecha</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      {posts.map((p, i) => (
+        <tr>
+          <th scope="row" class="col-cb"><input type="checkbox" aria-label={`Seleccionar ${p.title}`} /></th>
+          <td class="col-title">
+            <strong><a href={p.editHref}>{p.title}</a>{p.draft && <span class="post-state"> — Borrador</span>}</strong>
+            <div class:list={['row-actions', { 'is-visible': i === 0 }]}>
+              <a href={p.editHref}>Editar</a>{!p.draft && <Fragment> | <a href={`/notes/${p.slug}/`}>Ver</a></Fragment>}
+            </div>
+          </td>
+          <td><a href="/admin/entradas/">admin</a></td>
+          <td><a href="/admin/entradas/">{p.cats}</a></td>
+          <td>{p.draft ? 'Borrador' : 'Publicada'}<br />{p.date}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</AdminLayout>
