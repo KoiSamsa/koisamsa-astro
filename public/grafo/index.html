@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>v1.22 · KOI SAMSA · respira y late</title>
+<!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
+     tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--papel:#FAF9F7;--tinta:#0B0B0B;--ink:#3F4245;--ink-2:#787B7E;--ink-3:#A1A3A6;
+  --line:rgba(11,11,11,.11);--panel-w:440px}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--papel);color:var(--ink);
+  font-family:ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased}
+#stage{position:fixed;inset:0;cursor:grab;touch-action:none}
+#stage.drag{cursor:grabbing}
+#stage.point{cursor:pointer}
+canvas{display:block;width:100%;height:100%}
+#grain{position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.55;mix-blend-mode:multiply;background-repeat:repeat}
+.lb{position:absolute;transform:translate(-50%,0);letter-spacing:.14em;text-transform:uppercase;
+  white-space:nowrap;pointer-events:none;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:#1A1C1E;z-index:1;
+  text-shadow:0 0 6px var(--papel),0 0 5px var(--papel),0 0 4px var(--papel),0 0 3px var(--papel),0 0 2px var(--papel),0 0 1px var(--papel)}
+.hud{position:fixed;z-index:5;display:flex;gap:12px;align-items:center}
+#hud-tl{top:26px;left:28px}
+#hud-tr{top:26px;right:28px}
+/* El logo y el sonido viven DENTRO del canvas: cuando el panel o la franja
+   se abren, se apartan en vez de quedar debajo. */
+#hud-br{bottom:26px;right:28px;z-index:8;transition:right .34s cubic-bezier(.22,1,.36,1),bottom .34s cubic-bezier(.22,1,.36,1)}
+#logo{position:fixed;bottom:24px;left:28px;z-index:8;height:26px;width:auto;opacity:.9;
+  transition:bottom .34s cubic-bezier(.22,1,.36,1)}
+body.panel-on #hud-br{right:calc(var(--panel-w) + 28px)}
+body.strip-on #hud-br,body.strip-on #logo{bottom:calc(var(--strip-h) + 24px)}
+.ico{width:44px;height:44px;padding:0;display:inline-flex;align-items:center;justify-content:center;
+  border-radius:50%;border:.5px solid var(--line);background:transparent;cursor:pointer;
+  transition:background .15s ease,border-color .15s ease}
+.ico svg{width:19px;height:19px;display:block}
+.ico:hover{background:rgba(11,11,11,.045)}
+.ico[data-on="1"]{background:var(--tinta);border-color:var(--tinta)}
+.ico[data-on="1"] svg *{stroke:var(--papel)}
+.ico[data-on="1"] svg .fillme{fill:var(--papel);stroke:none}
+.ico:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+/* cuarto de la fila: paleta · casa · ayuda · búsqueda (3 × 44 + 3 × 12 + 28) */
+#search{position:fixed;top:26px;left:196px;z-index:6;display:flex;align-items:center;
+  width:44px;overflow:hidden;transition:width .28s cubic-bezier(.4,0,.2,1)}
+#search.open{width:360px;border:.5px solid var(--line);border-radius:22px;background:rgba(255,255,255,.6);backdrop-filter:blur(6px)}
+#q{flex:1;min-width:0;border:0;background:transparent;outline:none;font:inherit;font-size:14px;
+  color:var(--ink);padding:0 6px 0 10px;opacity:0;transition:opacity .2s ease .06s}
+#search.open #q{opacity:1}
+#res{position:fixed;top:78px;left:196px;z-index:6;width:360px;max-height:46vh;overflow-y:auto;display:none;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border:.5px solid var(--line);padding:4px}
+#res button{display:block;width:100%;text-align:left;border:0;background:transparent;cursor:pointer;
+  font:inherit;font-size:13px;padding:9px 12px;color:var(--ink)}
+#res button:hover,#res button:focus-visible{background:rgba(11,11,11,.05);outline:none}
+#res .k{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);display:block}
+#panel{position:fixed;top:0;right:0;bottom:0;width:var(--panel-w);max-width:92vw;z-index:7;
+  background:var(--papel);border-left:.5px solid var(--line);
+  transform:translateX(101%);transition:transform .38s cubic-bezier(.4,0,.2,1);overflow-y:auto}
+#panel.open{transform:translateX(0)}
+#panel-x{position:absolute;top:26px;right:28px}
+/* v1.4 · el conmutador de ancho (#p-w) se retira: el panel ocupa la mitad, y punto. */
+.kicker{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+#panel h1{font-size:40px;line-height:1.05;letter-spacing:-.02em;margin:0 0 16px;font-weight:600;color:#141618}
+.desc{font-size:15.5px;line-height:1.6;color:var(--ink-2);margin:0 0 28px}
+.rule{height:.5px;background:var(--line);margin:24px 0}
+#p-c{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:.5px solid var(--line)}
+.cell{background:var(--papel);border:0;cursor:pointer;font:inherit;text-align:left;
+  padding:14px 14px 16px;min-height:78px;display:flex;flex-direction:column;justify-content:flex-start;
+  transition:background .14s ease;position:relative;overflow:hidden}
+.cell:hover{background:rgba(11,11,11,.045)}
+.cell:focus-visible{outline:2px solid var(--tinta);outline-offset:-2px}
+.cell .t{font-size:13.5px;line-height:1.3;color:var(--ink);font-weight:500}
+.cell .m{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+/* la franja al doble se gana el sitio: la ficha muestra también su descripción */
+.cell .d{font-size:11.5px;line-height:1.45;color:var(--ink-2);margin-top:8px;
+  padding-top:8px;border-top:.5px solid var(--line)}
+.cell.void .t,.cell.void .d{color:var(--ink-3)}
+.cell .bar{position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent}
+.veil{position:fixed;inset:0;z-index:9;background:rgba(250,249,247,.72);backdrop-filter:blur(7px);
+  display:none;align-items:center;justify-content:center;padding:28px}
+.veil.open{display:flex}
+.card{background:var(--papel);border:.5px solid var(--line);width:min(560px,100%);position:relative;padding:38px 40px 30px}
+.card-x{position:absolute;top:20px;right:22px}
+.slide{display:none}.slide.on{display:block}
+.fig{height:186px;display:flex;align-items:center;justify-content:center;margin-bottom:26px;background:rgba(11,11,11,.025)}
+.card h2{font-size:26px;line-height:1.15;letter-spacing:-.01em;margin:0 0 12px;font-weight:600;color:#141618}
+.card p{font-size:15px;line-height:1.62;color:var(--ink-2);margin:0}
+.nav{display:flex;align-items:center;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:.5px solid var(--line)}
+.dots{display:flex;gap:7px}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(11,11,11,.16);border:0;padding:0;cursor:pointer}
+.dot[data-on="1"]{background:var(--tinta)}
+.tx{border:.5px solid var(--line);background:transparent;font:inherit;font-size:13px;padding:9px 18px;cursor:pointer;color:var(--ink)}
+.tx:hover{background:rgba(11,11,11,.045)}
+.tx[disabled]{opacity:.3;cursor:default}
+kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--line);padding:1px 5px;background:rgba(11,11,11,.03)}
+@media (max-width:720px){#panel{width:100%}#search.open{width:calc(100vw - 110px)}#res{width:calc(100vw - 56px)}#p-c{grid-template-columns:1fr}}
+
+/* ═══ v1.3 · TRES REGIONES ═══════════════════════════════════════
+   grafo = estructura · panel = UNA pieza · franja = listas          */
+:root{--panel-w:50vw;--strip-h:224px}   /* escritorio: siempre la mitad · franja al doble (v1.4) */
+#panel{width:var(--panel-w);max-width:none}
+
+/* ── EL ARTÍCULO · escala de espaciado KS ────────────────────────
+   8 pasos, regla del sistema: «sin valores intermedios».
+   El panel es un viewport de tablet, así que se le aplica el mismo
+   corte que ks-scope-editorial usa en 960px — pero medido contra el
+   PANEL, no contra la ventana. Debajo: una columna y marginalia en
+   flujo. Encima: columna de margen.                                */
+:root{
+  --sp-xs:8px; --sp-sm:12px; --sp-md:18px; --sp-lg:24px;
+  --sp-xl:32px; --sp-2xl:48px; --sp-3xl:72px;
+  --r-sm:5px; --r-md:10px;
+  --marg:180px; --medida:680px}
+#panel{container-type:inline-size;padding:var(--sp-xl)}
+
+.art{font-size:17px;line-height:1.66;color:var(--ink);margin:0;max-width:var(--medida)}
+.art p{margin:0 0 1.1em;text-wrap:pretty}
+.art strong{font-weight:600;color:#141618}
+.art em{font-style:italic}
+.art h3{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  font-weight:500;margin:var(--sp-xl) 0 var(--sp-md);padding-top:var(--sp-md);
+  border-top:.5px solid var(--line)}
+
+/* ── RETÍCULA BASE 60 ───────────────────────────────────────────
+   El panel se divide en 60 unidades. 60 tiene doce divisores, así
+   que medios, tercios, cuartos, quintos y doceavos caen en entero:
+   no hay decimales que redondear ni fracciones que no encajen.
+
+     1 unidad = 100cqi / 60  (cqi = 1% del ancho útil del panel)
+
+   Reparto del artículo, siempre sumando 60:
+     margen 15 (1/4) · 20 (1/3) · 24 (2/5)
+     medianil 2 fijo
+     texto = 60 − margen − 2                                       */
+#panel{--u:calc(100cqi / 60); --gut:2; --fr:15}
+
+.art{max-width:none;
+     padding-right:calc((var(--fr) + var(--gut)) * var(--u))}
+.art .mg{float:right;clear:right;
+         width:calc(var(--fr) * var(--u));
+         margin-top:var(--sp-xs);
+         margin-right:calc(-1 * (var(--fr) + var(--gut)) * var(--u));
+         margin-bottom:var(--sp-md);
+         margin-left:calc(var(--gut) * var(--u))}
+
+/* la nota se aprieta cuando su columna baja de 15 unidades */
+.mg{font-size:13px;line-height:1.45}
+.mg-concepto{padding:var(--sp-sm) var(--sp-md)}
+
+#panel>.kicker,#panel>h1,#panel>.desc,#panel>#p-art{max-width:none}
+#panel>h1{margin-top:0}
+
+/* ── marginalia · las CUATRO familias canon, a la spec de los ────
+   componentes firmados: .ks-aside-concept · -card · -derivada · pullquote.
+   Clase .mgl para el rótulo: .lb ya era la etiqueta de los nodos.   */
+.mg{font-size:14px;line-height:1.5;margin:var(--sp-md) 0}
+.mg .mgl{display:block;position:static;transform:none;
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  margin:0 0 var(--sp-xs);font-family:ui-monospace,monospace}
+.mg p{margin:0}
+.mg p+p{margin-top:.6em}
+.mg-concepto{background:#E3F4F5;border-radius:var(--r-md);
+  padding:var(--sp-md) var(--sp-lg)}
+.mg-concepto .mgl{color:#006F73}
+.mg-nota{border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:var(--sp-sm) var(--sp-md)}
+.mg-nota .mgl{color:var(--ink-3)}
+.mg-derivada{background:#FEEEE2;border-radius:var(--r-sm);
+  border-left:3px solid #DC7D53;padding:var(--sp-sm) var(--sp-md)}
+.mg-derivada .mgl{color:#B24512}
+.pq{margin:var(--sp-lg) 0;padding-left:var(--sp-md);
+  border-left:3px solid var(--acc,var(--tinta));
+  font-size:18px;font-style:italic;line-height:1.45;color:#141618}
+.pq cite{display:block;font-size:11px;font-style:normal;color:var(--ink-3);
+  margin-top:var(--sp-xs);letter-spacing:.1em;text-transform:uppercase;
+  font-family:ui-monospace,monospace}
+@container (max-width:600px){.pq{font-size:16px}}
+
+/* ── ÍNDICE DE SECCIÓN dentro del panel · el masonry de /notes ────
+   Mismo componente que el comparador v0.1, recalibrado al ancho del
+   panel (50vw, no 1200px). Piezas MUDA: hierro · calcio · cobalto. */
+#panel.is-idx h1{font-family:'Newsreader',Georgia,serif;font-size:clamp(52px,7vw,104px);
+  line-height:.86;letter-spacing:-.04em;font-weight:700;margin:0 0 14px}
+#panel.is-idx .desc{display:none}
+.ix-dek{font:400 19px/1.45 'Newsreader',Georgia,serif;font-style:italic;
+  color:rgba(11,11,11,.66);max-width:44ch;margin:0 0 26px}
+.ix-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:12px 0;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);margin-bottom:22px}
+.ix-count{font:400 11px ui-monospace,monospace;color:var(--ink-3);letter-spacing:.02em}
+.ix-seg{display:flex;gap:6px}
+.ix-seg button{font:500 10.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.07em;
+  text-transform:uppercase;padding:6px 11px;border-radius:999px;border:.5px solid var(--line);
+  background:transparent;color:var(--ink-3);cursor:pointer}
+.ix-seg button[aria-pressed="true"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+/* ficha con artefacto jugable: el filete del acento la distingue */
+.ix-card.has-demo{border-color:rgba(11,11,11,.2)}
+.ix-card.has-demo::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2.5px;
+  background:var(--acc,var(--tinta))}
+.ix-card{position:relative}
+.ix-play{position:absolute;top:10px;right:10px;z-index:2;
+  font:500 9.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  padding:5px 9px;border-radius:999px;background:var(--tinta);color:var(--papel);opacity:0;
+  transition:opacity .16s ease}
+.ix-card.has-demo:hover .ix-play,.ix-card.has-demo:focus-visible .ix-play{opacity:1}
+.ix-foot em{font-style:normal}
+/* ── VISOR de artefacto ─────────────────────────────────────────── */
+#panel.is-demo{padding:0;display:flex;flex-direction:column;overflow:hidden}
+#panel.is-demo .kicker,#panel.is-demo h1,#panel.is-demo .desc{display:none}
+#panel.is-demo #p-art{flex:1 1 auto;min-height:0;display:flex}
+.ix-viewer{flex:1 1 auto;display:flex;flex-direction:column;min-height:0;width:100%}
+.ix-vbar{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:16px 20px;
+  border-bottom:.5px solid var(--line);background:var(--papel)}
+.ix-back{border:0;background:transparent;font:500 11.5px 'Albert Sans',system-ui,sans-serif;
+  color:var(--ink-2);cursor:pointer;padding:6px 0}
+.ix-back:hover{color:var(--ink)}
+.ix-vt{font:600 13px 'Newsreader',Georgia,serif;color:var(--ink);flex:1 1 auto;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ix-out{font:500 10.5px 'Albert Sans',system-ui,sans-serif;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-3);text-decoration:none;border:.5px solid var(--line);
+  padding:6px 11px;border-radius:999px;white-space:nowrap}
+.ix-out:hover{color:var(--ink);border-color:var(--tinta)}
+/* lanzadera del artefacto dentro del panel de una PIEZA */
+.ix-launch{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 26px;
+  padding:16px 18px;border:.5px solid var(--line);border-left:2.5px solid var(--acc,var(--tinta));
+  border-radius:10px;background:#fff}
+.ix-launch-b{font:500 11.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.06em;
+  text-transform:uppercase;padding:11px 18px;border-radius:999px;border:0;
+  background:var(--tinta);color:var(--papel);cursor:pointer}
+.ix-launch-b:hover{opacity:.86}
+.ix-launch-b:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
+.ix-launch-m{font:400 10.5px ui-monospace,monospace;color:var(--ink-3);letter-spacing:.03em}
+.ix-stage{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;background:#F6F6F3}
+.ix-frame{width:100%;height:100%;border:0;background:#F6F6F3;display:block}
+.ix-nat{font:400 9.5px ui-monospace,monospace;color:var(--ink-3);letter-spacing:.04em;white-space:nowrap}
+.ix-vseg{display:flex;gap:4px}
+.ix-vb{font:500 10px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.07em;text-transform:uppercase;
+  padding:6px 10px;border-radius:999px;border:.5px solid var(--line);background:transparent;
+  color:var(--ink-3);cursor:pointer}
+.ix-vb[aria-pressed="true"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+/* ── las tres vistas ─────────────────────────────────────────────
+   `ancho` ensancha el panel; `pleno` lo saca de la maquetación y lo
+   pone encima de todo. La franja y el HUD se apartan solos porque ya
+   dependen de --panel-w. */
+body.v-ancho{--panel-w:min(1360px,92vw)}
+body.v-pleno #panel{width:100vw;max-width:100vw;z-index:12}
+body.v-pleno #strip{display:none}
+body.v-pleno #hud-tl,body.v-pleno #hud-tr,body.v-pleno #hud-br,body.v-pleno #logo,
+body.v-pleno #search{display:none}
+body.v-pleno #panel-x{z-index:13}
+@media(max-width:860px){
+  body.v-ancho{--panel-w:100vw}
+  .ix-nat{display:none}
+}
+.ix-ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ix-sel{font:500 10.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.04em;
+  padding:7px 26px 7px 11px;border-radius:999px;border:.5px solid var(--line);
+  background:transparent;color:var(--ink-2);cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='9' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='%23787B7E' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center}
+.ix-sel:hover{border-color:var(--tinta);color:var(--ink)}
+.ix-sel:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+/* dos columnas de verdad: el orden pedido se lee en zigzag */
+.ix-grid.two{display:flex;gap:14px;align-items:flex-start}
+.ix-grid.two .ix-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
+.ix-empty{font:400 13px/1.6 'Albert Sans',system-ui,sans-serif;color:var(--ink-3);
+  padding:26px 0;margin:0;border-top:.5px dashed var(--line)}
+.ix-grid{column-gap:14px}
+.ix-card{display:block;width:100%;text-align:left;font:inherit;color:inherit;padding:0;
+  background:#fff;border:.5px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;
+  break-inside:avoid;-webkit-column-break-inside:avoid;margin:0 0 14px;
+  transition:transform .16s ease,box-shadow .16s ease}
+.ix-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px -18px rgba(29,20,12,.26)}
+.ix-card:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+/* sin nodo en el grafo: se ve, pero no lleva a ningún sitio */
+.ix-card.ghost{cursor:default;background:rgba(255,255,255,.55);border-style:dashed}
+.ix-card.ghost:hover{transform:none;box-shadow:none}
+.ix-card.ghost .ix-t{color:var(--ink-3)}
+.ix-in{display:flex;flex-direction:column;gap:9px;padding:16px 16px 14px}
+.ix-top{display:flex;align-items:center;gap:8px}
+.ix-nid{font:600 9.5px ui-monospace,monospace;color:var(--ink-2);background:rgba(11,11,11,.055);
+  border:.5px solid var(--line);padding:2px 6px;border-radius:4px}
+.ix-clu{font:600 9.5px 'Albert Sans',system-ui,sans-serif;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3)}
+.ix-t{font:600 17px/1.18 'Newsreader',Georgia,serif;letter-spacing:-.01em;color:var(--ink)}
+.ix-img{display:block;margin:1px -16px 0;background:var(--papel);font-size:0;
+  border-top:.5px solid rgba(11,11,11,.06);border-bottom:.5px solid rgba(11,11,11,.06)}
+.ix-img img{width:100%;height:auto;display:block}
+.ix-lead{font:400 12.5px/1.45 'Newsreader',Georgia,serif;color:var(--ink-2)}
+.ix-foot{font:400 10px ui-monospace,monospace;color:var(--ink-3)}
+.ix-foot em{font-style:normal;color:var(--acc,var(--ink-3))}
+@media(max-width:860px){
+  .ix-grid.two{display:block}
+  .ix-grid.two .ix-col{display:block}
+}
+
+/* ── franja inferior · donde viven las LISTAS ──────────────────── */
+#strip{position:fixed;left:0;bottom:0;right:var(--panel-w);height:var(--strip-h);z-index:6;
+  background:var(--papel);border-top:.5px solid var(--line);
+  transform:translateY(101%);transition:transform .34s cubic-bezier(.4,0,.2,1) .16s,right .38s cubic-bezier(.4,0,.2,1);
+  display:flex;flex-direction:column;padding:var(--sp-sm) var(--sp-lg) 0;
+  container-type:inline-size;--u:calc(100cqi / 60)}
+#strip.open{transform:translateY(0)}
+#st-head{display:flex;align-items:baseline;gap:var(--sp-sm);margin-bottom:var(--sp-xs);flex:0 0 auto}
+/* Breadcrumb navegable — cada tramo es un botón; el filete hereda el color de la familia. */
+#st-crumb{font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+#st-crumb .cb{border:0;background:transparent;font:inherit;font-size:inherit;letter-spacing:inherit;
+  text-transform:inherit;color:var(--ink-3);cursor:pointer;padding:3px 0;position:relative}
+#st-crumb .cb::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1.5px;
+  background:var(--cb,var(--ink));transform:scaleX(0);transform-origin:left;transition:transform .18s ease}
+#st-crumb .cb:hover,#st-crumb .cb:focus-visible{color:var(--ink);outline:none}
+#st-crumb .cb:hover::after,#st-crumb .cb:focus-visible::after{transform:scaleX(1)}
+#st-crumb .cb.here{color:var(--ink);font-weight:500;cursor:default}
+#st-crumb .cb.here::after{transform:scaleX(1)}
+#st-crumb .sep{color:var(--ink-3);opacity:.55}
+#st-crumb .also{color:var(--ink-3);text-transform:none;letter-spacing:.02em}
+#st-tags{display:flex;gap:6px;margin-left:auto}
+.tag{border:.5px solid var(--line);background:transparent;font:inherit;font-size:10.5px;
+  letter-spacing:.08em;text-transform:uppercase;padding:4px var(--sp-xs);cursor:pointer;color:var(--ink-2);border-radius:var(--r-sm)}
+.tag:hover,.tag[data-on="1"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+#st-body{display:flex;gap:1px;background:var(--line);overflow-x:auto;flex:1 1 auto;
+  scrollbar-width:thin;border-top:.5px solid var(--line)}
+#st-body .cell{flex:0 0 calc(15 * var(--u));min-height:0;padding:var(--sp-sm)}  /* 15/60 = cuatro fichas justas */
+#st-body:empty{display:none}
+#strip .none{font-size:13px;color:var(--ink-3);padding:var(--sp-sm) 0}
+
+@media (max-width:1100px){:root{--panel-w:min(94vw,580px)}}
+@media (max-width:860px){
+  :root{--panel-w:100vw;--strip-h:0px}
+  .art{padding-right:0}
+  .art .mg{float:none;width:auto;margin:var(--sp-md) 0}
+  #strip{right:0;left:0;bottom:auto;top:0;height:auto;position:relative;transform:none;
+    border-top:.5px solid var(--line);padding:16px 0 0;margin-top:26px;background:transparent}
+  #strip:not(.open){display:none}
+  #st-body{flex-wrap:wrap;overflow:visible}
+  #st-body .cell{flex:1 1 44%}
+  /* el panel ocupa todo: logo y sonido vuelven a su esquina */
+  body.panel-on #hud-br{right:28px}
+  body.strip-on #hud-br,body.strip-on #logo{bottom:26px}
+}
+@media (max-width:720px){
+  /* la búsqueda sigue siendo el cuarto icono, pero al abrirse cubre la fila */
+  #search.open{left:28px;right:28px;width:auto}
+  #res{left:28px;width:calc(100vw - 56px)}
+}
+
+/* v1.3b · la búsqueda reconstruye el grafo: el contador es toda la interfaz */
+#qn{position:fixed;left:var(--sp-lg);top:60px;z-index:8;font-family:ui-monospace,monospace;
+  font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);
+  opacity:0;transition:opacity .22s ease;pointer-events:none}
+#qn.on{opacity:1}
+#qn b{color:var(--ink);font-weight:500}
+#res{display:none!important}
+</style>
+</head>
+<body>
+<div id="stage" tabindex="0" role="application" aria-label="Mapa de koisamsa.com"><canvas id="c"></canvas></div>
+<div id="grain" aria-hidden="true"></div>
+
+<div id="search">
+  <button class="ico" id="btn-q" aria-label="Buscar" title="Buscar" style="border:0;flex:0 0 44px">
+    <svg viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="5.5" stroke="#1A1C1E" stroke-width="1.3"/><path d="M13.2 13.2 L17 17" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/></svg>
+  </button>
+  <input id="q" type="search" placeholder="Buscar en el mapa" autocomplete="off" aria-label="Buscar en el mapa">
+</div>
+<div id="res" role="listbox" aria-label="Resultados"></div>
+<div id="qn" role="status" aria-live="polite"></div>
+
+<!-- Orden v1.4: paleta · casa · ayuda · búsqueda. La paleta va primera y activa
+     por defecto — sin ella las secciones no se distinguen. -->
+<div class="hud" id="hud-tl">
+  <button class="ico" id="btn-pal" data-on="1" aria-label="Paleta de color" aria-pressed="true" title="Paleta de color">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M10 2.8c-4 0-7.2 3.1-7.2 7 0 3.9 3.2 6.4 7.2 6.4 1.2 0 1.9-.7 1.9-1.6 0-.9-.8-1.3-.8-2.1 0-.8.6-1.4 1.5-1.4h1.3c2 0 3.3-1.3 3.3-3.4 0-2.9-3-4.9-7.2-4.9Z" stroke="#1A1C1E" stroke-width="1.25" stroke-linejoin="round"/><circle class="fillme" cx="6.6" cy="9.1" r="1" fill="#1A1C1E"/><circle class="fillme" cx="9.4" cy="6.5" r="1" fill="#1A1C1E"/><circle class="fillme" cx="13" cy="7.4" r="1" fill="#1A1C1E"/></svg>
+  </button>
+  <button class="ico" id="btn-home" aria-label="Volver al inicio · pasa por encima para ver la posición de partida" title="Inicio">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M3 9.2 L10 3.2 L17 9.2 M5 8.4 V16.4 H15 V8.4" stroke="#1A1C1E" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
+  </button>
+  <button class="ico" id="btn-help" aria-label="Cómo se usa este mapa" title="Cómo se usa este mapa">
+    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" stroke="#1A1C1E" stroke-width="1.3"/><path d="M7.9 7.7 A2.1 2.1 0 1 1 10 10.6 V11.9" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/><circle class="fillme" cx="10" cy="14.3" r=".85" fill="#1A1C1E"/></svg>
+  </button>
+</div>
+
+<div class="hud" id="hud-tr">
+  <button class="ico" id="btn-i" aria-label="Sobre este sitio" title="Sobre este sitio">
+    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" stroke="#1A1C1E" stroke-width="1.3"/><path d="M10 8.8 V14" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/><circle class="fillme" cx="10" cy="6.3" r=".85" fill="#1A1C1E"/></svg>
+  </button>
+</div>
+
+<div class="hud" id="hud-br">
+  <button class="ico" id="btn-snd" data-on="0" aria-label="Sonido" aria-pressed="false" title="Sonido">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M4 7.6 H7 L11 4.4 V15.6 L7 12.4 H4 Z" stroke="#1A1C1E" stroke-width="1.25" stroke-linejoin="round"/><path d="M13.6 7.6 A3.4 3.4 0 0 1 13.6 12.4" stroke="#1A1C1E" stroke-width="1.25" stroke-linecap="round"/></svg>
+  </button>
+</div>
+
+<img id="logo" src="ks-logo-tinta.png" alt="Koi Samsa">
+
+<div id="strip" aria-label="Navegación transversal">
+  <div id="st-head">
+    <div id="st-crumb"></div>
+    <div id="st-tags"></div>
+  </div>
+  <div id="st-body"></div>
+</div>
+
+<aside id="panel" role="dialog" aria-labelledby="p-t">
+  <button class="ico" id="panel-x" aria-label="Cerrar">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M5.5 5.5 L14.5 14.5 M14.5 5.5 L5.5 14.5" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/></svg>
+  </button>
+  <p class="kicker" id="p-k"></p>
+  <h1 id="p-t"></h1>
+  <p class="desc" id="p-d"></p>
+  <div id="p-art"></div>
+</aside>
+
+<div class="veil" id="veil-help" role="dialog" aria-modal="true" aria-labelledby="s-t">
+ <div class="card">
+  <button class="ico card-x" id="help-x" aria-label="Cerrar">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M5.5 5.5 L14.5 14.5 M14.5 5.5 L5.5 14.5" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/></svg>
+  </button>
+  <div class="slide on" data-s="0">
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
+      <circle cx="115" cy="75" r="13" fill="#0B0B0B"/>
+      <g stroke="#0B0B0B" stroke-width=".7" opacity=".35">
+        <path d="M115 75 L115 22"/><path d="M115 75 L166 42"/><path d="M115 75 L179 96"/>
+        <path d="M115 75 L142 129"/><path d="M115 75 L88 129"/><path d="M115 75 L51 96"/><path d="M115 75 L64 42"/></g>
+      <g fill="#787B7E"><circle cx="115" cy="22" r="9"/><circle cx="166" cy="42" r="9"/><circle cx="179" cy="96" r="9"/>
+        <circle cx="142" cy="129" r="9"/><circle cx="88" cy="129" r="9"/><circle cx="51" cy="96" r="9"/><circle cx="64" cy="42" r="9"/></g></svg></div>
+    <h2 id="s-t">Esto es un mapa, no un menú</h2>
+    <p>Siete secciones alrededor de un centro. No hay barra de navegación porque la navegación es el mapa: lo que ves es la estructura entera del sitio, de una vez.</p>
+  </div>
+  <div class="slide" data-s="1">
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
+      <g stroke="#0B0B0B" stroke-width=".8" opacity=".5">
+        <path d="M115 75 L72 48"/><path d="M115 75 L160 52"/><path d="M115 75 L150 116"/><path d="M115 75 L76 108"/></g>
+      <circle cx="115" cy="75" r="16" fill="#0B0B0B"/><circle cx="115" cy="75" r="23" stroke="#0B0B0B" stroke-width="1.1"/>
+      <g fill="#636669"><circle cx="72" cy="48" r="8"/><circle cx="160" cy="52" r="8"/><circle cx="150" cy="116" r="8"/><circle cx="76" cy="108" r="8"/></g>
+      <g fill="#D7D9DA"><circle cx="26" cy="30" r="7"/><circle cx="205" cy="128" r="7"/><circle cx="30" cy="132" r="6"/><circle cx="200" cy="24" r="6"/></g></svg></div>
+    <h2>Lo que pinchas pasa a ser el centro</h2>
+    <p>El nodo se vuelve negro, sus vecinos se acercan y el resto se apaga. Cualquier pieza puede ser el sol un rato: aquí no hay una jerarquía fija, hay la que tú abres.</p>
+  </div>
+  <div class="slide" data-s="2">
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
+      <g stroke="#0B0B0B" stroke-width=".8" opacity=".4"><path d="M72 75 L158 75"/></g>
+      <circle cx="72" cy="75" r="17" fill="#636669"/><circle cx="158" cy="75" r="17" fill="#C6C8CA" opacity=".55"/>
+      <text x="72" y="119" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#3F4245">EXISTE</text>
+      <text x="158" y="119" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#A1A3A6">POR ESCRIBIR</text></svg></div>
+    <h2>Lo pálido todavía no existe</h2>
+    <p>Algunos nodos laten con menos tinta. Son piezas que otras ya enlazan pero que aún no están escritas — huecos declarados, no olvidos. El mapa enseña también lo que falta.</p>
+  </div>
+  <div class="slide" data-s="3">
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
+      <g stroke="#0B0B0B" stroke-width="1.1" fill="none" stroke-linecap="round">
+        <path d="M62 60 A32 32 0 1 1 62 90" opacity=".8"/><path d="M58 84 L62 92 L70 88" opacity=".8"/>
+        <circle cx="163" cy="66" r="11"/><path d="M171 74 L179 82"/>
+        <path d="M150 106 H190" opacity=".5"/><path d="M150 118 H176" opacity=".5"/></g></svg></div>
+    <h2>Gira, acerca, busca</h2>
+    <p>Arrastra para orbitar y la rueda para acercarte. La lupa busca por nombre. Con teclado: <kbd>Tab</kbd> entra al mapa, <kbd>←</kbd><kbd>→</kbd> recorren, <kbd>Enter</kbd> abre y <kbd>Esc</kbd> suelta.</p>
+  </div>
+  <div class="nav">
+    <button class="tx" id="s-prev" disabled>Anterior</button>
+    <div class="dots" id="s-dots"></div>
+    <button class="tx" id="s-next">Siguiente</button>
+  </div>
+ </div>
+</div>
+
+<div class="veil" id="veil-about" role="dialog" aria-modal="true" aria-labelledby="a-t">
+ <div class="card">
+  <button class="ico card-x" id="about-x" aria-label="Cerrar">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M5.5 5.5 L14.5 14.5 M14.5 5.5 L5.5 14.5" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/></svg>
+  </button>
+  <p class="kicker">Sobre este sitio</p>
+  <h2 id="a-t" style="margin-bottom:16px">Koi Samsa</h2>
+  <p style="margin-bottom:14px">Arte, diseño y estrategia de marca. Están juntos porque en la práctica nunca estuvieron separados: más de una vez el arte ha sido una rama del encargo de marca.</p>
+  <p>Un menú obliga a partir en dos lo que en mi cabeza no está partido. Un mapa no: la pieza se queda entera y enseña sus dos vínculos a la vez.</p>
+ </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  var s=180,c=document.createElement('canvas');c.width=c.height=s;
+  var g=c.getContext('2d'),d=g.createImageData(s,s),a=d.data;
+  for(var i=0;i<a.length;i+=4){var v=Math.random()*255;a[i]=a[i+1]=a[i+2]=v;a[i+3]=Math.random()*26;}
+  g.putImageData(d,0,0);
+  document.getElementById('grain').style.backgroundImage='url('+c.toDataURL()+')';
+})();
+
+/* ---- rampas MUDA v1.3 ---- */
+var RAMPS={
+slate:['#F5F7F7','#E7E8E9','#D7D9DA','#C6C8CA','#B4B6B8','#A1A3A6','#8D9092','#787B7E','#636669','#44474A','#282B2E'],
+taupe:['#F7F6F2','#E7E6DD','#DBDAD1','#CDCBC3','#C1BFB6','#AAA8A1','#94928A','#7E7C76','#686761','#504D48','#2D2A23'],
+sand:['#F8F3E6','#EDE3CD','#DFD7C5','#CEC1AA','#BCAB90','#A6977E','#91836D','#7D6F5D','#695D4D','#564A3D','#43392E'],
+teal:['#E3F4F5','#B8E1E3','#85CFD2','#42BCC1','#00A4A9','#009398','#008186','#006F73','#015D60','#114C4E','#163B3D'],
+blue:['#E2EAF1','#C7D6E4','#AEC2D7','#94AEC9','#7E9BB9','#6788A8','#517597','#335E82','#295174','#1B405F','#0D2F4B'],
+rose:['#F4EAE7','#F2DDD9','#F0D1CB','#EDC4BD','#E1ACA5','#D5958D','#C87D76','#BA6660','#9D504A','#813B35','#662721'],
+gold:['#FFFAE0','#FFF6C2','#FDF297','#FBE87E','#F6D004','#EFC704','#E7BC04','#DEB203','#D6A705','#CE9C06','#C69309'],
+orange:['#FEEEE2','#F9DBC7','#F5C7AD','#EFB494','#E9A17C','#E28D65','#DC7D53','#D2652D','#C65210','#B24512','#9E3913']
+};
+var SEC_FAM=['slate','slate','taupe','teal','blue','rose','gold','orange'];
+var FAM_SHIFT={gold:2,teal:0,blue:0,rose:0,sand:0,taupe:0,slate:0,orange:0};
+var COL={};
+for(var f in RAMPS){COL[f]=RAMPS[f].map(function(h){return new THREE.Color(h);});}
+
+var N=[
+["HOME",0,0,"El centro del mapa. De aquí salen las siete secciones.",0],
+["STUDIO",1,0,"Diseño y estrategia de marca.",1],
+["GALERÍA",1,0,"Arte abstracto y caligrafía.",2],
+["NOTES",1,0,"Ensayos y pensamiento de marca.",3],
+["LAB",1,0,"Artefactos y prototipos.",4],
+["ACADEMIA",1,0,"Docencia. Carpeta vacía, contenido real.",5],
+["STORE",1,0,"Venta. Falta decidir qué artworks.",6],
+["ABOUT",1,0,"Quién está detrás.",7],
+["MUDA",2,0,"El design system. Vault95.",1],
+["BGS",2,0,"El método. Vault90.",1],
+["Encargo de marca 1",3,1,"04 STUDIO vacía: solo README.",1],
+["Encargo de marca 2",3,1,"Por escribir.",1],
+["Encargo de marca 3",3,1,"Por escribir.",1],
+["Arte corporativo",3,1,"La bisagra entre STUDIO y GALERÍA.",2],
+["El Viaje Imaginario",3,1,"Serie · Vault02.1. Sin ficha.",2],
+["Mar de Fueguitos",3,1,"Serie · Vault02.2. Sin ficha.",2],
+["Contenido del Silencio",3,1,"Serie · Vault02.3, embrión.",2],
+["Caligrafía",3,1,"Raíz de tu docencia. No existe.",2],
+["N17.n1 Ouroboros",2,0,"Nota publicada. Grado 18.",3],
+["N17.n2 Musk",2,0,"Nota.",3],
+["N17.n3 Tecnofeudalismo",2,0,"Nota.",3],
+["N17.n5 Grupo de Uno",2,0,"Nota.",3],
+["N01.n2 La IA se cansa",2,0,"Nota publicada.",3],
+["Glosario UX-UI",2,0,"254 términos. LAB y ACADEMIA.",4],
+["Stakeholder Topology",2,0,"N07.a1 · artefacto v0.6.",4],
+["Han Stack",2,0,"N01.a1 · también de ACADEMIA.",4],
+["Rare Earths",2,0,"N19.a2 · artefacto.",4],
+["KS Color Compass",2,0,"N20.a1 · artefacto de color.",4],
+["Ouroboros Digital",2,0,"N17.a1 · bisagra LAB–NOTES.",4],
+["Habitación entropía",2,0,"N09.a1 · artefacto.",4],
+["Curso Domestika",3,1,"Solo en tu cabeza.",5],
+["Lettering",3,1,"Tu faceta docente. Sin escribir.",5],
+["Artworks por elegir",3,1,"Espera decisión de obra.",6],
+["KS Color Book",2,0,"N20.p1 · producto.",6],
+["DS ligeros en md",2,0,"Producto en markdown.",6],
+["Manifiesto",3,1,"ABOUT sin cuerpo.",7],
+["Posición",3,1,"En Cerebro. Sin versión pública.",7]
+];
+var L=[
+[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],
+[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],
+[2,14],[2,15],[2,16],[2,17],[2,13],
+[3,18],[3,19],[3,20],[3,21],[3,22],
+[4,23],[4,24],[4,25],[4,26],[4,27],[4,28],[4,29],
+[5,23],[5,25],[5,30],[5,31],
+[6,32],[6,33],[6,34],
+[7,35],[7,36],
+[23,8],[27,8],[34,8],
+[24,9],[25,9],[26,9],
+[18,28],[19,28],[20,28],[21,28],[22,28],[29,18],
+[13,14],[13,10],
+[17,31],[30,31],
+[32,14],[32,15],
+[33,27],
+[35,1],[35,2],[35,3]
+];
+/* ─── v1.3 · CONTENIDO REAL ──────────────────────────────────────
+   El grafo dejó de ser un menú de secciones: cuelga de él un artículo
+   de verdad, con sus cuatro familias de marginalia canon.            */
+N.push(["Una habitación con mesa propia",2,0,"N09.n3 · Woolf, Arendt y la mesa que ya no está entre nosotros.",3]);
+L.push([3,37],[37,29],[37,20],[37,22]);
+
+var DOC={};
+DOC[37]={
+  kick:'Notes · N09.n3',
+  body:`<p>Resulta curioso, por no decir impertinente, que en este año de gracia de 2026 se nos hable de «creatividad democratizada». Uno se pregunta, mientras observa cómo una barra de progreso genera tres mil palabras sobre la melancolía en menos de un segundo, si no estaremos confundiendo el acceso con la autoría.</p>
+
+<p>Qué habría pensado la señora <strong>Woolf</strong> de todo esto. Ella, que fue tan insistente —y con razón— en que para escribir hace falta una habitación con cerrojo y una renta que permita no tener que lamer las botas de nadie.</p>
+
+<aside class="mg mg-concepto"><span class="mgl">Concepto</span><p><strong>Habitación propia.</strong> En Woolf no es un cuarto: es la condición material —dinero y cerrojo— sin la cual no hay voz propia posible.</p></aside>
+
+<p>Quizá la Señora Virginia nos diría, con esa sonrisa fina y algo cansada, que la «habitación propia» ha sido invadida. Ya no es que el Sr. Milton o los parientes pesados interrumpan el flujo del pensamiento llamando a la puerta. Ahora, el interruptor está dentro. El cuarto propio de 2026 tiene wifi y un asistente que completa tus frases antes de que sepas cuál era la tuya.</p>
+
+<aside class="mg mg-nota"><span class="mgl">Nota</span><p>Se cita mucho el cerrojo y poco la renta. La parte incómoda de Woolf es la económica, y es justo la que sigue vigente.</p></aside>
+
+<aside class="mg mg-nota"><span class="mgl">Nota</span><p>El interruptor dentro: ya no interrumpe nadie desde fuera. La distracción se ha vuelto interna y solícita.</p></aside>
+
+<h3>La mesa de Arendt</h3>
+
+<p>Aquí es donde <strong>Hannah Arendt</strong> deja su taza de té sobre la madera y carraspea. Ella nos recordaría su famosa mesa. Esa mesa que se sitúa <em>entre</em> nosotros, que nos relaciona pero que, bendita sea, también nos mantiene a una distancia prudencial para que no nos caigamos unos sobre otros.</p>
+
+<blockquote class="pq">Al inundar el mundo de palabras que no vienen de nadie, la mesa se ha vuelto de humo.<cite>N09.n3</cite></blockquote>
+
+<p>Si yo no sé si usted ha escrito lo que leo, o si lo ha vomitado un servidor en Virginia del Norte, ya no hay nada «entre» nosotros: no hay objeto común, no hay testigo, no hay mundo. Solo hay superficie.</p>
+
+<aside class="mg mg-derivada"><span class="mgl">↳ Pieza derivada</span><p><strong>N09.a1 · Habitación entropía</strong> — el artefacto que mide esto mismo, pero en números.</p></aside>
+
+<aside class="mg mg-concepto"><span class="mgl">Concepto</span><p><strong>Natalidad.</strong> En Arendt, la capacidad de empezar algo que no estaba previsto. Lo contrario de completar una frase estadísticamente probable.</p></aside>
+
+<p>Hoy habitamos un caparazón de respuestas predictivas. Es una existencia acolchada, ciertamente. Ya no hay que sudar para dar con la palabra precisa, esa que escuece porque ha sido arrancada de la duda. Nuestros órganos sensoriales —el juicio crítico, la sensibilidad estética, la capacidad de discernir lo verdadero de lo verosímil— se atrofian cuando el caparazón decide la dirección por nosotros. Estamos canjeando la <strong>Natalidad</strong> por una <strong>Sustitución eficiente</strong>.</p>`
+};
+
+/* ─── CATEGORÍAS TRANSVERSALES ───────────────────────────────────
+   Atraviesan las siete secciones. Son lo que la lupa entiende cuando
+   alguien busca «arte»: no un nodo, una constelación.                */
+var TAG={};
+function _tg(list,name){for(var k=0;k<list.length;k++){(TAG[list[k]]=TAG[list[k]]||[]).push(name);}}
+_tg([2,13,14,15,16,17,32,35],'arte');                 /* galería · corporativo · 3 series · caligrafía · artworks · manifiesto */
+_tg([1,8,9,10,11,12,13],'marca');                     /* studio · muda · bgs · 3 encargos · corporativo */
+_tg([18,19,20,21,22,25,29,37],'ia');
+_tg([23,24,25,26,27,28,29],'artefacto');
+_tg([17,23,25,30,31],'docencia');
+_tg([8,27,33],'color');                               /* muda · color compass · color book */
+_tg([3,18,19,20,21,22,35,36,37],'escritura');
+var TAGS_ALL=['arte','marca','ia','artefacto','docencia','color','escritura'];
+
+
+/* El "main" no vive en el mismo escalón en todas las familias.
+   El activo usa el main; hover y reposo cercano caen desde él.
+   orange main = 600 (#DC7D53, firmado 08-jul).
+   Pendiente: mains firmados de slate, taupe, blue, rose y gold. */
+var FAM_MAIN={orange:6},MAIN_DEF=8;
+function mainOf(i){return PAL?(FAM_MAIN[famOf(i)]||MAIN_DEF):MAIN_DEF;}
+/* VOID_FLOOR: un nodo «por escribir» nunca baja de aquí. Por debajo del
+   stop 300 se confunde con el papel #FAF9F7 y deja de existir en pantalla —
+   que es justo lo contrario de lo que queremos decir: existe, falta escribirlo. */
+var I_FAR=2,VOID_SHIFT=1,VOID_FLOOR=3;
+
+/* ─── NODOS HÍBRIDOS ────────────────────────────────────────────
+   Pertenecen a más de una sección. El PRIMER índice es su NATURALEZA
+   (lo que la pieza ES); los siguientes son su OBJETIVO (para qué sirve).
+
+   Ley: · mirándolo a él        → naturaleza pura
+        · desde un padre suyo   → mezcla sesgada 0.78 hacia ese padre
+        · sin sol               → 50 / 50 con el segundo padre          */
+var HYB={
+  13:[1,2],      // Arte corporativo   · nace en STUDIO, vive en GALERÍA
+  17:[2,5],      // Caligrafía         · es obra, se enseña
+  23:[4,5],      // Glosario UX-UI     · es artefacto, se enseña
+  25:[4,5],      // Han Stack          · es artefacto, se enseña
+  32:[2,6],      // Artworks por elegir· es obra, se vende
+  35:[7,1,2,3]   // Manifiesto         · es de ABOUT, toca las tres facetas
+};
+var BIAS=0.78;
+
+/* mezcla en CIELAB — regla de la casa: el color se mezcla como pigmento */
+function _lin(c){return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4);}
+function _unlin(c){return c<=.0031308?c*12.92:1.055*Math.pow(c,1/2.4)-.055;}
+function _h2r(h){h=h.replace('#','');return[parseInt(h.substr(0,2),16)/255,parseInt(h.substr(2,2),16)/255,parseInt(h.substr(4,2),16)/255];}
+function _rgb2lab(g){
+  var r=_lin(g[0]),gg=_lin(g[1]),b=_lin(g[2]);
+  var X=r*.4124564+gg*.3575761+b*.1804375,Y=r*.2126729+gg*.7151522+b*.0721750,Z=r*.0193339+gg*.1191920+b*.9503041;
+  function f(t){return t>.008856?Math.pow(t,1/3):(7.787*t+16/116);}
+  var fx=f(X/.95047),fy=f(Y),fz=f(Z/1.08883);
+  return[116*fy-16,500*(fx-fy),200*(fy-fz)];
+}
+function _lab2rgb(l){
+  var fy=(l[0]+16)/116,fx=fy+l[1]/500,fz=fy-l[2]/200;
+  function fi(t){var c=t*t*t;return c>.008856?c:(t-16/116)/7.787;}
+  var X=fi(fx)*.95047,Y=fi(fy),Z=fi(fz)*1.08883;
+  return[_unlin(Math.max(0,Math.min(1,X*3.2404542+Y*-1.5371385+Z*-.4985314))),
+         _unlin(Math.max(0,Math.min(1,X*-.9692660+Y*1.8760108+Z*.0415560))),
+         _unlin(Math.max(0,Math.min(1,X*.0556434+Y*-.2040259+Z*1.0572252)))];
+}
+var _cA=[],_cB=[],_mixOut=new THREE.Color();
+function mixStop(hexA,hexB,t,out){
+  var A=_rgb2lab(_h2r(hexA)),B=_rgb2lab(_h2r(hexB));
+  var c=_lab2rgb([A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t,A[2]+(B[2]-A[2])*t]);
+  out.setRGB(c[0],c[1],c[2]);return out;
+}
+/* t suavizado por nodo para que el viraje sea gradual */
+var HT={};for(var _k in HYB)HT[_k]=0;
+
+function famBySec(s){return PAL?SEC_FAM[s]:'slate';}
+function hexBySec(s,idx){
+  var f=famBySec(s),sh=PAL?(FAM_SHIFT[f]||0):0;
+  return RAMPS[f][Math.max(0,Math.min(10,idx+sh))];
+}
+var RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var RAD=[15,11.5,5.8,5.2];
+var PH_NAT=0.72,RAD_NAT=630;   /* compensa el ángulo más cerrado: mismo encuadre */
+var ORB=RM?0:0.10,PAR=RM?0:0.65,LAY=0.26,FOC=0.34,ZOOM=0.60,GRAV=0.60,LUZ=0.30,TINTA=0.22;
+var RING=155,PAL=true;   /* v1.4 · encendida de salida: sin color no se leen las secciones */
+
+/* la familia de un nodo es la de su NATURALEZA: si es híbrido manda HYB[i][0],
+   no la sección bajo la que esté listado */
+function famOf(i){
+  if(!PAL)return 'slate';
+  var h=(typeof HYB!=='undefined')?HYB[i]:null;
+  return SEC_FAM[h?h[0]:N[i][4]];
+}
+/* raw = stop de estado (hover / activo): no se le aplica el desplazamiento
+   de familia, porque el tope de estado ya está fijado en 700-800 */
+function stopOf(i,idx,raw){
+  var f=famOf(i),sh=(PAL&&!raw)?(FAM_SHIFT[f]||0):0;
+  return COL[f][Math.max(0,Math.min(10,idx+sh))];
+}
+function hexOf(i,idx){
+  return RAMPS[famOf(i)][Math.max(0,Math.min(10,idx))];
+}
+
+function dotTex(){
+  var s=64,c=document.createElement('canvas');c.width=s;c.height=s;
+  var g=c.getContext('2d'),grd=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+  grd.addColorStop(0,'rgba(255,255,255,1)');grd.addColorStop(.62,'rgba(255,255,255,1)');
+  grd.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=grd;g.fillRect(0,0,s,s);
+  var t=new THREE.Texture(c);t.needsUpdate=true;return t;
+}
+function toonRamp(){
+  var d=new Uint8Array([70,140,205,255]);
+  var t=new THREE.DataTexture(d,d.length,1,THREE.LuminanceFormat);
+  t.minFilter=THREE.NearestFilter;t.magFilter=THREE.NearestFilter;
+  t.generateMipmaps=false;t.needsUpdate=true;return t;
+}
+var TX_HARD=dotTex(),RAMP=toonRamp();
+
+var stage=document.getElementById('stage'),cvs=document.getElementById('c');
+var W=innerWidth,H=innerHeight;
+var scene=new THREE.Scene();
+/* 36° ≈ un 65mm: perspectiva larga. Con 50° las esferas del borde
+   se proyectaban como elipses — la «aberración» no era un efecto, era el gran angular. */
+var cam=new THREE.PerspectiveCamera(36,W/H,1,5000);
+var rnd=new THREE.WebGLRenderer({canvas:cvs,antialias:true,alpha:true});
+rnd.setPixelRatio(Math.min(devicePixelRatio,2));rnd.setSize(W,H,false);
+var amb=new THREE.AmbientLight(0xffffff,0.88);scene.add(amb);
+var dl=new THREE.DirectionalLight(0xffffff,0.22);dl.position.set(3,5,6);scene.add(dl);
+
+var sel=null,hov=null,SET=null,snd=false,actx=null;
+var P=[],V=[],PIN=[],SC=[];
+for(var i=0;i<N.length;i++){P.push(new THREE.Vector3());V.push(new THREE.Vector3());PIN.push(null);SC.push(1);}
+PIN[0]=new THREE.Vector3(0,0,0);P[0].copy(PIN[0]);
+for(var k=1;k<=7;k++){
+  var a=(k-1)/7*6.28318-1.5708;
+  PIN[k]=new THREE.Vector3(RING*Math.cos(a),0,RING*Math.sin(a));P[k].copy(PIN[k]);
+}
+var parent={};
+for(var k=0;k<L.length;k++){var l=L[k];if(l[0]>=1&&l[0]<=7&&parent[l[1]]===undefined)parent[l[1]]=l[0];}
+for(var i=8;i<N.length;i++){
+  var pa=parent[i]!==undefined?P[parent[i]]:new THREE.Vector3();
+  P[i].set(pa.x+(Math.random()-.5)*70,(Math.random()-.5)*100,pa.z+(Math.random()-.5)*70);
+}
+
+var group=new THREE.Group();scene.add(group);
+var meshes=[];
+for(var i=0;i<N.length;i++){
+  var mat=new THREE.MeshToonMaterial({color:0x8D9092,gradientMap:RAMP,transparent:true,opacity:1,depthWrite:false});
+  var m=new THREE.Mesh(new THREE.SphereGeometry(RAD[N[i][1]],30,22),mat);
+  m.userData.i=i;group.add(m);meshes.push(m);
+}
+var CBLACK=new THREE.Color(0x000000);
+var ringMat=new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false});
+var ringMesh=new THREE.Mesh(new THREE.RingGeometry(1,1.028,64),ringMat);scene.add(ringMesh);
+
+var SEG=14;
+var lgeo=new THREE.BufferGeometry();
+var lpos=new Float32Array(L.length*SEG*6);
+lgeo.setAttribute('position',new THREE.BufferAttribute(lpos,3));
+var lmat=new THREE.LineBasicMaterial({color:0x000000,transparent:true,opacity:0.22});
+group.add(new THREE.LineSegments(lgeo,lmat));
+
+var PPL=5,PN=L.length*PPL,ppos=new Float32Array(PN*3);
+var pgeo=new THREE.BufferGeometry();
+pgeo.setAttribute('position',new THREE.BufferAttribute(ppos,3));
+var pmat=new THREE.PointsMaterial({color:0x000000,map:TX_HARD,size:2.5,sizeAttenuation:true,transparent:true,opacity:.5,depthWrite:false});
+group.add(new THREE.Points(pgeo,pmat));
+var pt=[];for(var i=0;i<PN;i++)pt.push(Math.random());
+
+var labels=[];
+N.forEach(function(d,i){
+  var e=document.createElement('div');e.className='lb';e.textContent=d[0];
+  e.style.fontSize=(d[1]===0?12.5:d[1]===1?12:10.5)+'px';
+  if(d[1]<=1)e.style.fontWeight='500';
+  stage.appendChild(e);labels.push({e:e,i:i,w:d[0].length*(d[1]<=1?8:6.8)});
+});
+/* v1.16 · la etiqueta HOME es el faro clicable: con un nodo activo,
+   un clic en ella devuelve a la vista general (setSel hoisted). */
+labels[0].e.style.pointerEvents='auto';
+labels[0].e.style.cursor='pointer';
+labels[0].e.addEventListener('click',function(ev){ev.stopPropagation();if(sel!==null)setSel(null);});
+
+function nbrList(i){var r=[];for(var k=0;k<L.length;k++){var l=L[k];
+  if(l[0]===i)r.push(l[1]);if(l[1]===i)r.push(l[0]);}return r;}
+function nbrs(i){var s={};s[i]=1;nbrList(i).forEach(function(j){s[j]=1;});return s;}
+
+var UP=new THREE.Vector3(0,1,0);
+var tA=new THREE.Vector3(),tB=new THREE.Vector3(),tC=new THREE.Vector3(),tD=new THREE.Vector3(),tP=new THREE.Vector3();
+function ctrl(a,b,out){
+  out.copy(a).add(b).multiplyScalar(0.5);
+  tD.copy(b).sub(a);var len=tD.length();tD.cross(UP);
+  if(tD.lengthSq()<0.0001)tD.set(0,1,0);
+  tD.normalize().multiplyScalar(len*0.15);out.add(tD);
+}
+function bez(a,c,b,t,out){
+  var u=1-t;
+  out.x=u*u*a.x+2*u*t*c.x+t*t*b.x;
+  out.y=u*u*a.y+2*u*t*c.y+t*t*b.y;
+  out.z=u*u*a.z+2*u*t*c.z+t*t*b.z;
+}
+
+function step(){
+  var n=P.length;
+  for(var i=0;i<n;i++){
+    if(!on_(i))continue;
+    for(var j=i+1;j<n;j++){
+      if(!on_(j))continue;
+      var dx=P[j].x-P[i].x,dy=P[j].y-P[i].y,dz=P[j].z-P[i].z,d2=dx*dx+dy*dy+dz*dz;
+      if(d2<1)d2=1;
+      var d=Math.sqrt(d2),f=Math.min(5000/d2,1.0); /* v1.22: aún más suaves */
+      dx=dx/d*f;dy=dy/d*f;dz=dz/d*f;
+      V[i].x-=dx;V[i].y-=dy;V[i].z-=dz;V[j].x+=dx;V[j].y+=dy;V[j].z+=dz;
+    }
+  }
+  for(var k=0;k<L.length;k++){
+    var l=L[k],a=l[0],b=l[1];
+    if(!on_(a)||!on_(b))continue;
+    var touch=(sel!==null)&&(a===sel||b===sel);
+    /* v1.13 · el abanico del referente: los vecinos del elegido se recogen
+       a distancia de lectura (rest ~26 con GRAV 0.60), muelle más firme */
+    /* v1.22: el reposo del abanico se alcanza en RAMPA (SELW), no de golpe */
+    var restT=34-22*GRAV;
+    var rest=touch?(64-(64-restT)*SELW):((a<=7&&b<=7)?RING:64);
+    var dx=P[b].x-P[a].x,dy=P[b].y-P[a].y,dz=P[b].z-P[a].z;
+    var d=Math.sqrt(dx*dx+dy*dy+dz*dz)||1;
+    var f=(d-rest)*(touch?0.004+0.012*GRAV*SELW:0.004);
+    dx=dx/d*f;dy=dy/d*f;dz=dz/d*f;
+    V[a].x+=dx;V[a].y+=dy;V[a].z+=dz;V[b].x-=dx;V[b].y-=dy;V[b].z-=dz;
+  }
+  if(sel!==null&&SET){
+    for(var i=0;i<n;i++){
+      if(i===sel||!SET[i])continue;
+      var dx=P[sel].x-P[i].x,dy=P[sel].y-P[i].y,dz=P[sel].z-P[i].z;
+      var d=Math.sqrt(dx*dx+dy*dy+dz*dz)||1;
+      var f=Math.min(d*0.0016*GRAV,0.9)*SELW;   /* v1.22: en rampa */
+      V[i].x+=dx/d*f*d*0.028;V[i].y+=dy/d*f*d*0.028;V[i].z+=dz/d*f*d*0.028;
+    }
+  }
+  for(var k=0;k<=7;k++){
+    /* en subgrafo la sección superviviente suelta su vértice del heptágono:
+       el resultado se recoloca como constelación nueva, no como resto de la vieja */
+    var soft=(sel!==null&&SET&&(k===sel||SET[k]))||(ACT&&ACT[k]);
+    var st=soft?0.010:0.09; /* v1.22: el pin también respira */
+    V[k].x+=(PIN[k].x-P[k].x)*st;V[k].y+=(PIN[k].y-P[k].y)*st;V[k].z+=(PIN[k].z-P[k].z)*st;
+  }
+  /* v1.12 · el vecindario respira hacia el protagonista de proximidad.
+     Un tercio de la gravedad de sel: sugiere, no reordena. */
+  if(PROT!==null&&PROTN&&sel===null){
+    for(var i=0;i<n;i++){
+      if(i===PROT||!PROTN[i]||!on_(i))continue;
+      var dx=P[PROT].x-P[i].x,dy=P[PROT].y-P[i].y,dz=P[PROT].z-P[i].z;
+      var d=Math.sqrt(dx*dx+dy*dy+dz*dz)||1;
+      var f=0.006*GRAV*PROTW;
+      V[i].x+=dx/d*f*d*0.02;V[i].y+=dy/d*f*d*0.02;V[i].z+=dz/d*f*d*0.02;
+    }
+  }
+  /* v1.20 · pulso medusa: contracción-relajación asíncrona por nodo */
+  if(MED)for(var i=1;i<n;i++){
+    if(!on_(i))continue;var q=PHZ[i];
+    V[i].x+=Math.sin(T*q[0]+q[1])*0.006;
+    V[i].y+=Math.sin(T*q[2]+q[3])*0.008;
+    V[i].z+=Math.cos(T*q[0]+q[3])*0.006;
+  }
+  for(var i=8;i<n;i++)if(on_(i))V[i].y-=P[i].y*0.003;
+  if(ACT)for(var i=0;i<n;i++){if(!ACT[i])continue;
+    V[i].x-=P[i].x*0.010;V[i].y-=P[i].y*0.012;V[i].z-=P[i].z*0.010;}
+  for(var i=0;i<n;i++){
+    if(!on_(i)){V[i].multiplyScalar(0.6);continue;}   /* congelado: al salir del filtro vuelve donde estaba */
+    /* v1.22 · inercia real: el látigo del grafo era fuerza dura + fricción
+       dura (velocidad terminal instantánea = movimiento mecánico). Aquí
+       fuerzas a la mitad Y fricción a la mitad: los nodos planean en
+       arcos, como en el referente. */
+    V[i].multiplyScalar(i<=7?0.86:0.88);
+    P[i].addScaledVector(V[i],LAY);
+  }
+}
+
+var ACT=null;                       /* null = grafo entero · objeto = subgrafo vivo */
+function on_(i){return !ACT||ACT[i];}
+
+/* ─── v1.12 · FOCO POR PROXIMIDAD (la monarquía rotatoria) ─────────
+   Referente: el grafo del AI Coding Dictionary (aihero.dev, obs. 21-jul-2026;
+   RETIRADO del sitio a fecha 26-jul — este bloque reconstruye la conducta
+   desde la descripción de Patricia, no desde el código original).
+   Conducta: el protagonismo no es binario (hover sí/no) sino CONTINUO —
+   al acercar la cámara a una zona, el nodo más próximo va asumiendo el
+   protagonismo gradualmente: crece, sube a su main, su etiqueta aparece,
+   y su vecindario respira hacia él. Al alejarse, el poder vuelve al sol
+   (HOME) sin salto. El sol sigue existiendo: solo deja de ser absoluto.
+   Piezas: PW[i]  peso continuo por nodo (0-1, easing 0.08)
+           PROX   factor global «estás acercándote» (0 al radio natural)
+           PROT   nodo protagonista actual (sólo si su peso supera 0.30)
+           PROTN  su vecindario, para la gravedad local en step()
+   Se desactiva sola cuando hay sel, hover o subgrafo: los estados
+   explícitos mandan sobre el implícito.                              */
+var PW=[],PROT=null,PROTN=null,PROTW=0;
+for(var _q=0;_q<N.length;_q++)PW.push(0);
+
+/* v1.20 · MEDUSA: cada nodo lleva su propio pulso — tres frecuencias
+   lentas (0.25-0.55 rad/s) y fases aleatorias. El impulso es diminuto;
+   el éter lo redondea. Respeta prefers-reduced-motion (amplitud 0). */
+var PHZ=[];
+for(var _q=0;_q<N.length;_q++)PHZ.push([0.25+Math.random()*0.3,Math.random()*6.28,0.25+Math.random()*0.3,Math.random()*6.28]);
+var MED=RM?0:1;
+var th=0.75,ph=PH_NAT,rad=RAD_NAT;
+var look=new THREE.Vector3(0,0,0),lookT=new THREE.Vector3(0,0,0);
+var PANX=0,PANY=0,ORBF=1;
+function place(){
+  cam.position.set(look.x+rad*Math.sin(ph)*Math.cos(th),look.y+rad*Math.cos(ph),look.z+rad*Math.sin(ph)*Math.sin(th));
+  cam.lookAt(look);
+}
+
+var ray=new THREE.Raycaster(),mo=new THREE.Vector2();
+function pick(cx,cy){
+  mo.x=(cx/W)*2-1;mo.y=-(cy/H)*2+1;
+  ray.setFromCamera(mo,cam);
+  var h=ray.intersectObjects(meshes);
+  if(h.length)return h[0].object.userData.i;
+  var best=null,bd=28;
+  for(var i=0;i<N.length;i++){
+    tA.copy(P[i]).project(cam);
+    if(tA.z>1)continue;
+    var sx=(tA.x*.5+.5)*W,sy=(-tA.y*.5+.5)*H;
+    var dd=Math.hypot(sx-cx,sy-cy);
+    if(dd<bd){bd=dd;best=i;}
+  }
+  return best;
+}
+
+var panel=document.getElementById('panel');
+/* el body lleva la cuenta: logo y sonido se apartan por CSS, no por JS */
+function openPanel(){panel.classList.add('open');document.body.classList.add('panel-on');}
+function closePanel(){panel.classList.remove('open');document.body.classList.remove('panel-on');}
+function openStrip(){strip.classList.add('open');document.body.classList.add('strip-on');}
+function closeStrip(){strip.classList.remove('open');document.body.classList.remove('strip-on');}
+function blip(){
+  if(!snd)return;
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    var o=actx.createOscillator(),g=actx.createGain();
+    o.type='sine';o.frequency.value=392;
+    g.gain.setValueAtTime(0.0001,actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.05,actx.currentTime+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+0.45);
+    o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+0.5);
+  }catch(e){}
+}
+/* etiqueta de estado — un solo sitio, para el día que se retire «Por escribir» */
+function kickOf(i){return N[i][2]?'Por escribir':['Home','Sección','Pieza',''][N[i][1]];}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function cellHTML(j){
+  var bar=PAL?'<span class="bar" style="background:'+hexOf(j,7)+'"></span>':'';
+  var d=N[j][3]?'<span class="d">'+esc(N[j][3])+'</span>':'';
+  return '<button class="cell'+(N[j][2]?' void':'')+'" data-j="'+j+'">'+bar+
+    '<span class="m">'+kickOf(j)+'</span><span class="t">'+esc(N[j][0])+'</span>'+d+'</button>';
+}
+
+/* ── ÍNDICE DE SECCIÓN · el masonry de /notes dentro del panel ─────
+   Un nodo de sección NO es una pieza: es una portada. Cuando se pincha,
+   el panel deja de mostrar ficha y muestra el índice del área. Los datos
+   viven aparte de N[]/L[] a propósito: tocar esos arrays mueve índices y
+   el motor de fuerzas se rompe en silencio (pasó ayer). */
+var IDX={
+  'NOTES':{
+    dek:'Artículos y notas sobre IA, cultura, tecnología y cosas que plantearse en un mundo acelerado.',
+    items:[
+ {nid:'N01.n2',date:'2026-04',tema:'IA',cluster:'Sistema productivo',title:'La IA sí se cansa',lead:'La IA no duerme, pero sí se agota: alucinaciones, ventanas de contexto y créditos de tokens son la factura material del cansancio algorítmico.',authors:'Han · Fisher',read:'12 min',state:'Circulación',img:'notes-assets/la-IA-se-cansa-cd4ce2c8.png'},
+ {nid:'N01.n1',date:'2026-03',tema:'Cultura',cluster:'Sistema productivo',title:'La cibersociedad del cansancio',lead:'El cansancio no es una experiencia individual: atraviesa cuerpos, centros de datos y cadenas energéticas. La máquina incansable es una transferencia de carga.',authors:'Han · Balza',read:'15 min',state:'Circulación',img:'notes-assets/N01-n2-cibercansancio.png'},
+ {nid:'N07.n1',date:'2026-05',tema:'Economía',cluster:'Poder y gobernanza',title:'Branding como gobernanza',lead:'El branding no es comunicación sino gobernanza relacional: diseña el sistema operativo de las relaciones de una organización con los cuerpos que la sostienen.',authors:'Young · Arendt',read:'14 min',state:'Revisión',img:''},
+ {nid:'N09.n3',date:'2026-02',tema:'Cultura',cluster:'Ontología',title:'Una habitación con mesa propia',lead:'Escribir con IA sin perder la mesa propia: dónde termina la asistencia y empieza la autoría cuando el origen del texto se vuelve difuso.',authors:'Arendt · Woolf',read:'11 min',state:'Circulación',img:'notes-assets/collage-woolf-artednt-KoiSamsa2-1.png'},
+ {nid:'N09.n1',date:'2026-03',tema:'IA',cluster:'Ontología',title:'IA, decisión y autoría',lead:'La IA produce efectos jurídicos sin comparecer. No puede asumir autoría porque no puede exponerse al juicio ni responder por lo que altera.',authors:'Heidegger · Arendt',read:'18 min',state:'Revisión',img:''},
+ {nid:'N17.n1',date:'2026-04',tema:'Economía',cluster:'Poder y gobernanza',title:'Tecnofeudalismo o el Ouroboros Digital',lead:'La industria tecnológica no opera como mercado sino como oligopolio circular: capital, laboratorios e infraestructura se financian en un ciclo que se autoalimenta.',authors:'Srnicek · Thiel',read:'16 min',state:'Revisión',img:'notes-assets/propuesta_ouroboros2.png'},
+ {nid:'N19.n1',date:'2026-05',tema:'Economía',cluster:'Poder y gobernanza',title:'La tabla periódica del poder',lead:'Seguir la materia es seguir el poder. Tierras raras, litio y cobalto trazan el mapa real de dependencias que el discurso de innovación mantiene invisible.',authors:'Young · Mbembe',read:'13 min',state:'Borrador',img:''},
+ {nid:'N02.n1',date:'2026-01',tema:'Economía',cluster:'Sistema productivo',title:'Metabolismo startup',lead:'La lógica startup opera como metabolismo extractivo: convierte la extracción en crecimiento simulado y desplaza el coste hacia quien no controla el sistema.',authors:'Bauman · Zuboff',read:'10 min',state:'Borrador',img:''},
+ {nid:'N03.n1',date:'2026-02',tema:'IA',cluster:'Poder y gobernanza',title:'Del storytelling al prompt',lead:'Cuando la identidad de marca se vuelve arquitectura de instrucciones, el diseñador deja de narrar y pasa a gobernar las condiciones de generación.',authors:'Heidegger · Gramsci',read:'9 min',state:'Borrador',img:''},
+ {nid:'N22.n3',date:'2026-05',tema:'Cultura',cluster:'Ontología',title:'¿Ya sé kung fu?',lead:'Cuarenta años después del Manifiesto Cyborg, la frontera entre cuerpo y tecnología ya no es teoría: es infraestructura. La pregunta ya no es si seremos cyborgs, sino de quién.',authors:'Haraway · Rivera C.',read:'8 min',state:'Borrador',img:''},
+ {nid:'N20.n1',date:'2026-04',tema:'Cultura',cluster:'Ontología',title:'Materialidad del color',lead:'El color no es código abstracto sino acuerdo material entre cuerpo, industria y cultura. Lo que un sistema no puede nombrar, no puede existir dentro de él.',authors:'Merleau-Ponty · Grosz',read:'12 min',state:'Borrador',img:''},
+ {nid:'N04.n1',date:'2026-03',tema:'Economía',cluster:'Sistema productivo',title:'Gobernar no es apostar',lead:'La cultura del MVP convierte la gobernanza en gestión probabilística del riesgo. Gobernar es estructurar el campo de decisión antes de actuar, no iterar a ciegas.',authors:'Taleb · Arendt',read:'11 min',state:'Borrador',img:''}
+    ]},
+  /* ── /lab · aquí la ficha NO resume un texto: anticipa un artefacto ──
+     Las siete piezas salen de los nodos LAB del propio grafo. `demo` es la
+     ruta del artefacto jugable; sin `demo`, la ficha lo dice y no miente. */
+  'LAB':{
+    dek:'Artefactos: piezas que se manipulan, no se leen. Cada una investiga algo que un texto no puede enseñar.',
+    items:[
+ {nid:'N17.a1',date:'2026-06',tema:'Economía',cluster:'Interactivo',title:'El Ouroboros Digital',lead:'La industria de la IA no opera como un mercado: es un circuito cerrado donde el capital del inversor A financia al laboratorio B para que compre infraestructura al proveedor A.',authors:'Canvas · fuerzas',read:'v3.1',state:'Publicado',img:'notes-assets/propuesta_ouroboros2.png',demo:'KS-N17a1-ouroboros-v3.1.html',w:1320,vista:'ancho'},
+ {nid:'N20.a1',date:'2026-05',tema:'Cultura',cluster:'Color',title:'KS Color Compass',lead:'Brújula de color: navegar el catálogo y ver qué le pasa a un matiz cuando se le quita luz.',authors:'Rampas · CIELAB',read:'v0.8.2',state:'Borrador',img:'',demo:'KS-N20a1-color-compass-v0.8.2.html',w:1380,vista:'ancho'},
+ {nid:'N07.a1',date:'2026-05',tema:'Economía',cluster:'Diagrama',title:'Stakeholder Topology',lead:'Topología de partes interesadas: quién sostiene a quién en una organización, y por dónde se rompe.',authors:'MUDA · 290 tokens',read:'v2',state:'Borrador',img:'',demo:'KS-N07a1-stakeholder-v2-muda.html',w:900,vista:'panel'},
+ {nid:'N20.a3',date:'2026-07',tema:'Cultura',cluster:'3D',title:'NCS Navigator',lead:'El sólido de color NCS, navegable en tres dimensiones. Buscar un matiz mirándolo por dentro.',authors:'Canvas 3D',read:'v0.1',state:'Borrador',img:'',demo:'KS-N20a3-ncs-navigator-v0.1.html',w:900,vista:'pleno'},
+ {nid:'N01.a1',date:'2026-03',tema:'IA',cluster:'Modelo',title:'Han Stack',lead:'La pila del cansancio: capas de infraestructura, energía y cuerpo bajo cada consulta a un modelo.',authors:'6 columnas',read:'v0.2',state:'Borrador',img:'',demo:'KS-N01a1-han-stack-v0.2.html',w:1100,vista:'ancho'},
+ {nid:'N19.a2',date:'2026-05',tema:'Economía',cluster:'Datos',title:'Rare Earths',lead:'Tierras raras, litio y cobalto: el mapa material de las dependencias que el discurso de innovación deja fuera de plano.',authors:'3 columnas',read:'v0.1',state:'Borrador',img:'',demo:'KS-N19a2-rare-earths-v0.1.html',w:1100,vista:'ancho'},
+ {nid:'N09.a1',date:'2026-02',tema:'Cultura',cluster:'Interactivo',title:'Habitación entropía',lead:'El artefacto que mide en números lo que la nota de Woolf y Arendt cuenta en palabras.',authors:'—',read:'—',state:'Borrador',img:'',demo:'',w:0,vista:'panel'},
+ {nid:'GLO',date:'2026-07',tema:'IA',cluster:'Corpus',title:'Glosario UX·UI',lead:'254 términos del oficio, verificados uno a uno contra fuente primaria. Vive entre LAB y ACADEMIA.',authors:'—',read:'254',state:'Circulación',img:'',demo:'',w:1180,vista:'ancho'}
+    ]}
+};
+/* Estado del índice. Por defecto: 2 columnas con imagen (aprobado 21-jul). */
+var IDXCOLS=2,IDXIMG=true,IDXORD='desc',IDXTEMA='',IDXDEMO=null;
+
+/* ── LAS TRES VISTAS DE UN ARTEFACTO ──────────────────────────────
+   El panel lateral es una vista VERTICAL: 50vw ≈ 720px en un portátil.
+   Medido sobre los seis artefactos, su anchura natural va de 900 a
+   1380px — o sea que TODOS van apretados en el panel, unos más que
+   otros. De ahí tres vistas, y una declarada por artefacto en `vista`:
+
+     panel  · el lateral de siempre. Sirve si el artefacto cabe en ~900.
+     ancho  · el panel se ensancha hasta 1360px y el grafo se aparta.
+              Para lo que necesita horizontal: Ouroboros, Compass, Han Stack.
+     pleno  · pantalla completa. Para lo que quiere todo el aire: el 3D.
+
+   `w` es la anchura natural medida en el CSS del artefacto (su `max-width`
+   mayor). Cuando el hueco es menor que `w`, el visor NO deja que se
+   comprima: lo escala con transform, que mantiene la proporción en vez
+   de romper la retícula interna. */
+var VISTAS={panel:'Panel',ancho:'Ancho',pleno:'Pleno'};
+var VMODO=null;   /* vista elegida a mano; null = la declarada del artefacto */
+/* Las categorías vivas hoy en koisamsa.com son tres, leídas del WordPress
+   (taxonomía `category`): Cultura · Economía · IA. Pero NO se dan por
+   cerradas: el desplegable se construye desde el propio dato, así que
+   añadir una categoría nueva es escribirla en `tema:` de una nota y ya
+   aparece. `TEMA_ORDEN` solo fija el orden de las conocidas; lo que no
+   esté en la lista se añade detrás, alfabético.
+   PROVISIONAL: el reparto nota→categoría lo hizo el operador por criterio,
+   no está firmado. En WP solo 5 posts tienen categoría asignada. */
+var TEMA_ORDEN=['IA','Economía','Cultura'];
+function temasDe(items){
+  var vis={},out=[];
+  items.forEach(function(it){if(it.tema)vis[it.tema]=(vis[it.tema]||0)+1;});
+  TEMA_ORDEN.forEach(function(t){if(vis[t]){out.push(t);delete vis[t];}});
+  return out.concat(Object.keys(vis).sort(function(a,b){return a.localeCompare(b,'es');}));
+}
+
+/* ¿esta pieza tiene nodo en el grafo?
+   BUG v1.9 (cazado por Patricia el 21-jul): esto buscaba el código SOLO al
+   principio del NOMBRE del nodo. Pero los artefactos se llaman "Ouroboros
+   Digital", "Han Stack", "Rare Earths"… y el código vive en su DESCRIPCIÓN
+   ("N17.a1 · bisagra LAB–NOTES"). Resultado: el índice declaraba "6 sin
+   nodo" cuando en realidad 6 de 7 SÍ tenían nodo. El contador mentía y las
+   fichas salían en punteado sin motivo. Ahora se busca en nombre + descripción. */
+function nodeByNid(nid){
+  if(!nid)return -1;
+  for(var i=0;i<N.length;i++)if(N[i][0].indexOf(nid)===0)return i;
+  for(var k=0;k<N.length;k++)if((N[k][0]+' '+(N[k][3]||'')).indexOf(nid)>=0)return k;
+  return -1;
+}
+/* el camino inverso: dado un nodo del grafo, ¿hay artefacto detrás?
+   Es lo que faltaba: pinchar el nodo "Ouroboros Digital" en el mapa no
+   ofrecía nada, porque el artefacto solo se conocía desde el índice. */
+function itemByNode(i){
+  for(var k in IDX){
+    var it=IDX[k].items;
+    for(var m=0;m<it.length;m++)if(nodeByNid(it[m].nid)===i)return {it:it[m],sec:k};
+  }
+  return null;
+}
+/* bloque que se pinta en el panel de una PIEZA que tiene artefacto */
+function lanzaderaHTML(it){
+  var v=it.vista||'panel';
+  return '<div class="ix-launch">'+
+    '<button class="ix-launch-b" data-demo="'+esc(it.demo)+'" data-t="'+esc(it.title)+'" '+
+      'data-w="'+(it.w||0)+'" data-vista="'+esc(v)+'">Abrir artefacto · '+esc(VISTAS[v])+'</button>'+
+    '<span class="ix-launch-m">'+esc(it.nid)+' · '+esc(it.read)+
+      (it.w?(' · ancho natural '+it.w+'px'):'')+'</span>'+
+  '</div>';
+}
+function idxCardHTML(it){
+  var j=nodeByNid(it.nid),live=j>=0,demo=!!it.demo;
+  var im=(IDXIMG&&it.img)?'<span class="ix-img"><img src="'+it.img+'" alt="" loading="lazy"></span>':'';
+  /* una pieza es accionable si tiene artefacto O nodo en el mapa */
+  var dead=!demo&&!live;
+  return '<button class="ix-card'+(dead?' ghost':'')+(demo?' has-demo':'')+'" '+
+      'data-j="'+j+'" data-demo="'+esc(it.demo||'')+'" data-t="'+esc(it.title)+'" '+
+      'data-w="'+(it.w||0)+'" data-vista="'+esc(it.vista||'panel')+'"'+
+      (dead?' aria-disabled="true"':'')+'>'+
+    (demo?'<span class="ix-play">Abrir · '+esc(VISTAS[it.vista||'panel'])+'</span>':'')+
+    '<span class="ix-in">'+
+      '<span class="ix-top"><span class="ix-nid">'+esc(it.nid)+'</span><span class="ix-clu">'+esc(it.cluster)+'</span></span>'+
+      '<span class="ix-t">'+esc(it.title)+'</span>'+im+
+      '<span class="ix-lead">'+esc(it.lead)+'</span>'+
+      '<span class="ix-foot">'+esc(it.date)+' · '+esc(it.authors)+' · '+esc(it.read)+' · '+esc(it.state)+
+        (dead?' · <em>sin nodo</em>':'')+(demo?' · <em>jugable</em>':'')+'</span>'+
+    '</span></button>';
+}
+/* ── VISOR · el artefacto, dentro del panel, en su propio documento ──
+   iframe a propósito: el Ouroboros trae su CSS entero (.chip, .tip, .lg…)
+   y el grafo tiene clases con esos mismos nombres. Ayer una colisión de
+   `.lb` mandó los rótulos fuera de la caja. Aquí no se pueden tocar. */
+function vistaActual(){return VMODO||IDXDEMO.vista||'panel';}
+function demoHTML(){
+  var v=vistaActual(),w=IDXDEMO.w||0;
+  var seg=Object.keys(VISTAS).map(function(k){
+    return '<button class="ix-vb" data-v="'+k+'" aria-pressed="'+(v===k)+'">'+VISTAS[k]+'</button>';
+  }).join('');
+  var nat=w?('<span class="ix-nat">ancho natural '+w+'px</span>'):'';
+  return '<div class="ix-viewer" data-w="'+w+'">'+
+    '<div class="ix-vbar">'+
+      '<button class="ix-back" id="ix-back">'+
+        (IDXDEMO.from==='nodo'?'‹ Volver a la pieza':'‹ Índice')+'</button>'+
+      '<span class="ix-vt">'+esc(IDXDEMO.t)+'</span>'+
+      nat+
+      '<span class="ix-vseg">'+seg+'</span>'+
+      '<a class="ix-out" href="'+esc(IDXDEMO.src)+'" target="_blank" rel="noopener">Aparte ↗</a>'+
+    '</div>'+
+    '<div class="ix-stage"><iframe class="ix-frame" src="'+esc(IDXDEMO.src)+'" '+
+      'title="'+esc(IDXDEMO.t)+'" loading="lazy"></iframe></div>'+
+  '</div>';
+}
+/* Escala en vez de comprimir: si el hueco es más estrecho que el ancho
+   natural, el iframe se pinta a su tamaño real y se reduce con transform.
+   Así el artefacto nunca ve una ventana que no es la que espera. */
+function ajustaEscala(){
+  var st=document.querySelector('.ix-stage'),fr=document.querySelector('.ix-frame');
+  if(!st||!fr||!IDXDEMO)return;
+  var w=IDXDEMO.w||0,hueco=st.clientWidth;
+  if(!w||hueco>=w){fr.style.width='100%';fr.style.height='100%';fr.style.transform='';return;}
+  var k=hueco/w;
+  fr.style.width=w+'px';
+  fr.style.height=(st.clientHeight/k)+'px';
+  fr.style.transform='scale('+k.toFixed(4)+')';
+  fr.style.transformOrigin='0 0';
+}
+/* filtra + ordena · el orden que se pide es el orden que se lee */
+function idxItems(key){
+  var out=IDX[key].items.slice();
+  if(IDXTEMA)out=out.filter(function(it){return it.tema===IDXTEMA;});
+  out.sort(function(a,b){
+    if(a.date===b.date)return 0;
+    return (IDXORD==='desc')?(a.date<b.date?1:-1):(a.date>b.date?1:-1);
+  });
+  return out;
+}
+/* Masonry de verdad: reparte por la columna más corta, así el orden pedido
+   se lee en zigzag. Con `column-count` la primera columna se llenaba entera
+   antes de saltar a la segunda — y entonces ordenar por fecha no servía de
+   nada, porque lo más viejo aparecía arriba a la derecha. */
+function idxGridHTML(items){
+  if(IDXCOLS===1)return '<div class="ix-grid one">'+items.map(idxCardHTML).join('')+'</div>';
+  var h=[0,0],col=[[],[]];
+  items.forEach(function(it){
+    var m=(h[1]<h[0])?1:0;
+    col[m].push(idxCardHTML(it));
+    h[m]+= 110 + it.title.length*0.6 + it.lead.length*0.33 + ((IDXIMG&&it.img)?190:0);
+  });
+  return '<div class="ix-grid two">'+col.map(function(c){
+    return '<div class="ix-col">'+c.join('')+'</div>';}).join('')+'</div>';
+}
+function idxHTML(key){
+  var items=idxItems(key),pub=0,ghosts=0,demos=0;
+  items.forEach(function(it){
+    if(it.state==='Circulación'||it.state==='Publicado')pub++;
+    if(nodeByNid(it.nid)<0)ghosts++;
+    if(it.demo)demos++;
+  });
+  var esLab=(key==='LAB');
+  var recuento=esLab
+    ? (items.length+' artefactos · '+demos+' jugables · '+ghosts+' sin nodo')
+    : (items.length+' notas · '+pub+' en circulación · '+ghosts+' sin nodo');
+  var todos=IDX[key].items;
+  var opTema=['<option value=""'+(IDXTEMA?'':' selected')+'>Todas las temáticas ('+todos.length+')</option>']
+    .concat(temasDe(todos).map(function(t){
+      var c=todos.filter(function(x){return x.tema===t;}).length;
+      return '<option value="'+esc(t)+'"'+(IDXTEMA===t?' selected':'')+'>'+esc(t)+' ('+c+')</option>';
+    })).join('');
+  return '<div class="ix">'+
+    '<p class="ix-dek">'+esc(IDX[key].dek)+'</p>'+
+    '<div class="ix-bar">'+
+      '<span class="ix-count">'+recuento+'</span>'+
+      '<span class="ix-ctl">'+
+        '<select class="ix-sel" id="ix-ord" aria-label="Ordenar por fecha">'+
+          '<option value="desc"'+(IDXORD==='desc'?' selected':'')+'>Más reciente primero</option>'+
+          '<option value="asc"'+(IDXORD==='asc'?' selected':'')+'>Más antigua primero</option>'+
+        '</select>'+
+        '<select class="ix-sel" id="ix-tema" aria-label="Filtrar por temática">'+opTema+'</select>'+
+        '<span class="ix-seg">'+
+          '<button data-c="1" aria-pressed="'+(IDXCOLS===1)+'">1 col</button>'+
+          '<button data-c="2" aria-pressed="'+(IDXCOLS===2)+'">2 col</button>'+
+          '<button data-c="img" aria-pressed="'+IDXIMG+'">img</button>'+
+        '</span>'+
+      '</span>'+
+    '</div>'+
+    (items.length?idxGridHTML(items)
+      :'<p class="ix-empty">No hay notas en esta temática todavía.</p>')+
+  '</div>';
+}
+
+/* ── PANEL · pieza con su cuerpo, portada de sección, o artefacto ── */
+function renderPanel(){
+  if(sel===null)return;
+  var n=N[sel],d=DOC[sel],key=n[0],isIdx=(n[1]===1&&IDX[key]),isDemo=!!IDXDEMO;
+  document.getElementById('p-k').textContent=isDemo?('Artefacto · /'+(IDXDEMO.key||'lab').toLowerCase())
+    :(isIdx?('Índice · /'+key.toLowerCase()):(d?d.kick:kickOf(sel)));
+  document.getElementById('p-t').textContent=isDemo?IDXDEMO.t
+    :(isIdx?('/'+key.toLowerCase()):n[0]);
+  document.getElementById('p-d').textContent=(isIdx||isDemo)?'':n[3];
+  /* PIEZA con artefacto: la lanzadera va lo primero, antes del cuerpo */
+  var mm=(!isIdx&&!isDemo)?itemByNode(sel):null;
+  var lanza=(mm&&mm.it.demo)?lanzaderaHTML(mm.it):'';
+  document.getElementById('p-art').innerHTML=isDemo?demoHTML()
+    :(isIdx?idxHTML(key):(lanza+(d?('<div class="art">'+d.body+'</div>'):'')));
+  panel.classList.toggle('is-idx',!!isIdx&&!isDemo);
+  panel.classList.toggle('is-demo',isDemo);
+  /* la vista del artefacto se marca en el body: mueve panel, franja y HUD */
+  ['v-panel','v-ancho','v-pleno'].forEach(function(c){document.body.classList.remove(c);});
+  if(isDemo)document.body.classList.add('v-'+vistaActual());
+  panel.style.setProperty('--acc',PAL?hexOf(sel,mainOf(sel)):'#0B0B0B');
+  panel.scrollTop=0;
+  if(isDemo)requestAnimationFrame(ajustaEscala);
+}
+addEventListener('resize',function(){if(IDXDEMO)ajustaEscala();});
+/* los dos desplegables: fecha y temática */
+document.getElementById('p-art').addEventListener('change',function(e){
+  var t=e.target;
+  if(t.id==='ix-ord'){IDXORD=t.value;renderPanel();}
+  else if(t.id==='ix-tema'){IDXTEMA=t.value;renderPanel();}
+});
+/* clics dentro del índice: volver, conmutadores, fichas, artefactos */
+document.getElementById('p-art').addEventListener('click',function(e){
+  if(e.target.closest('#ix-back')){IDXDEMO=null;VMODO=null;renderPanel();return;}
+  if(e.target.closest('.ix-out'))return;              /* abrir aparte: que siga */
+  var vb=e.target.closest('.ix-vb');
+  if(vb){VMODO=vb.dataset.v;renderPanel();return;}
+  var s=e.target.closest('.ix-seg button');
+  if(s){
+    if(s.dataset.c==='img')IDXIMG=!IDXIMG; else IDXCOLS=+s.dataset.c;
+    renderPanel();return;
+  }
+  var c=e.target.closest('.ix-card')||e.target.closest('.ix-launch-b');
+  if(!c)return;
+  if(c.dataset.demo){                                  /* el artefacto manda */
+    IDXDEMO={src:c.dataset.demo,t:c.dataset.t,key:N[sel][0],
+             w:+c.dataset.w||0,vista:c.dataset.vista||'panel',
+             from:c.classList.contains('ix-launch-b')?'nodo':'indice'};
+    VMODO=null;                                        /* arranca en su vista declarada */
+    renderPanel();return;
+  }
+  var j=+c.dataset.j;if(j>=0){clearFilt();setSel(j);}
+});
+
+/* ── FRANJA · todo lo que es lista vive aquí ────────────────────── */
+var strip=document.getElementById('strip'),stCrumb=document.getElementById('st-crumb'),
+    stTags=document.getElementById('st-tags'),stBody=document.getElementById('st-body');
+function renderStrip(){
+  if(sel===null){closeStrip();return;}
+  var cs=nbrList(sel).filter(on_),tg=TAG[sel]||[];
+  /* ── BREADCRUMB · cada tramo navega, y lleva el color de su familia ──
+     El subrayado usa el main de la sección, no un gris genérico: la ruta
+     dice de dónde vienes también con el color. */
+  function seg(j,here){
+    var c=PAL?hexOf(j,mainOf(j)):'#0B0B0B';
+    return '<button class="cb'+(here?' here':'')+'" data-j="'+j+'" style="--cb:'+c+'"'+
+      (here?' aria-current="page" tabindex="-1"':'')+'>'+esc(N[j][0])+'</button>';
+  }
+  var sp='<span class="sep">›</span>',ruta;
+  if(sel===0)ruta=seg(0,true);
+  else if(N[sel][1]===1)ruta=seg(0)+sp+seg(sel,true);
+  else{
+    /* un híbrido cuelga de su NATURALEZA, igual que su color */
+    var h=HYB[sel],pad=h?h[0]:N[sel][4];
+    ruta=seg(0)+sp+seg(pad)+sp+seg(sel,true);
+    if(h&&h.length>1)ruta+='<span class="also">· también en '+
+      h.slice(1).map(function(x){return esc(N[x][0]);}).join(', ')+'</span>';
+  }
+  stCrumb.innerHTML=ruta;
+  stTags.innerHTML=tg.map(function(t){
+    return '<button class="tag" data-t="'+t+'" data-on="'+(FILT_TAG&&t===FILT_Q?'1':'0')+'">'+t+'</button>';}).join('');
+  stBody.innerHTML=cs.map(cellHTML).join('');
+  openStrip();
+}
+stBody.addEventListener('click',function(e){
+  var b=e.target.closest('.cell');if(!b)return;clearFilt();setSel(+b.dataset.j);
+});
+stCrumb.addEventListener('click',function(e){
+  var b=e.target.closest('.cb');if(!b||b.classList.contains('here'))return;
+  clearFilt();setSel(+b.dataset.j);
+});
+stTags.addEventListener('click',function(e){
+  var b=e.target.closest('.tag');if(!b)return;
+  if(FILT&&FILT_Q===b.dataset.t){clearFilt();q.value='';}
+  else{q.value=b.dataset.t;applyFilt(b.dataset.t);}
+  renderStrip();
+});
+
+/* ── LA LUPA NO SALTA: ILUMINA ──────────────────────────────────── */
+var FILT=null,FILT_Q='',FILT_TAG=false,qn=document.getElementById('qn');
+function isTag(v){return TAGS_ALL.indexOf(v)>=0;}
+function matches(i,v){
+  if(N[i][0].toLowerCase().indexOf(v)>=0)return true;
+  if(N[i][3].toLowerCase().indexOf(v)>=0)return true;
+  var tg=TAG[i];if(tg&&tg.join(' ').indexOf(v)>=0)return true;
+  var d=DOC[i];if(d&&d.body.toLowerCase().indexOf(v)>=0)return true;
+  return false;
+}
+/* La lupa no salta a un sitio ni apaga el resto: deja en pie solo lo que
+   responde, y el motor de fuerzas recoloca eso como constelación nueva.
+   El contador es toda la interfaz de resultados — no hay lista. */
+function applyFilt(v){
+  v=v.trim().toLowerCase();
+  if(!v){clearFilt();return;}
+  FILT={};FILT_Q=v;FILT_TAG=isTag(v);var n=0;
+  for(var i=0;i<N.length;i++){
+    var hit=FILT_TAG?((TAG[i]||[]).indexOf(v)>=0):matches(i,v);
+    if(hit){FILT[i]=1;n++;}
+  }
+  if(!n){FILT=null;ACT=null;qn.className='on';qn.innerHTML='Nada';return;}
+  ACT=FILT;
+  if(sel!==null&&!FILT[sel])setSel(null);
+  qn.className='on';
+  qn.innerHTML='<b>'+n+'</b> '+(n===1?'pieza':'piezas')+(FILT_TAG?' · categoría':'');
+}
+function clearFilt(){FILT=null;ACT=null;FILT_Q='';FILT_TAG=false;qn.className='';qn.innerHTML='';}
+function setSel(v){
+  IDXDEMO=null;                 /* cambiar de nodo cierra el artefacto abierto */
+  sel=v;SET=(sel!==null)?nbrs(sel):null;
+  /* v1.13 · EL GIRO GRANDE (obs. aicodingdictionary.com, 26-jul-2026):
+     al elegir un nodo la cámara no solo hace zoom — ROTA hasta el
+     acimut del elegido, recomponiendo la escena con él de sol.
+     Camino más corto para no dar la vuelta larga al heptágono. */
+  if(sel!==null){
+    var az=Math.atan2(P[sel].z,P[sel].x);
+    while(az-th>Math.PI)az-=6.28318;
+    while(th-az>Math.PI)az+=6.28318;
+    THT=az;
+  }
+  if(sel!==null){renderPanel();openPanel();renderStrip();blip();}
+  else{closePanel();closeStrip();}
+}
+
+/* (retirado) ── ancho del panel ────────────────────────────────── */
+
+var drag=false,moved=0,px=0,py=0;
+stage.addEventListener('pointerdown',function(e){drag=true;moved=0;px=e.clientX;py=e.clientY;stage.classList.add('drag');stage.setPointerCapture(e.pointerId);});
+stage.addEventListener('pointerup',function(e){
+  if(drag&&moved<6){var n=pick(e.clientX,e.clientY);setSel((n!==null&&n===sel)?null:n);stage.focus();}
+  drag=false;stage.classList.remove('drag');
+});
+stage.addEventListener('pointermove',function(e){
+  if(drag){
+    moved+=Math.abs(e.clientX-px)+Math.abs(e.clientY-py);
+    th-=(e.clientX-px)*0.006;ph=Math.max(0.06,Math.min(3.08,ph-(e.clientY-py)*0.006));
+    px=e.clientX;py=e.clientY;return;
+  }
+  if(e.pointerType!=='mouse')return;
+  hov=pick(e.clientX,e.clientY);
+  stage.classList.toggle('point',hov!==null);
+});
+stage.addEventListener('wheel',function(e){e.preventDefault();rad=Math.max(130,Math.min(1580,rad+e.deltaY*0.6));},{passive:false});
+
+var kbIdx=1;
+stage.addEventListener('keydown',function(e){
+  var ring=(sel===null)?[1,2,3,4,5,6,7]:nbrList(sel).concat([sel]);
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'){kbIdx=(kbIdx+1)%ring.length;hov=ring[kbIdx];e.preventDefault();}
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){kbIdx=(kbIdx-1+ring.length)%ring.length;hov=ring[kbIdx];e.preventDefault();}
+  else if(e.key==='Enter'||e.key===' '){if(hov!==null){setSel(hov);kbIdx=0;}e.preventDefault();}
+  else if(e.key==='Escape'){setSel(null);hov=null;e.preventDefault();}
+});
+
+var sb=document.getElementById('search'),q=document.getElementById('q'),res=document.getElementById('res');
+function openSearch(){sb.classList.add('open');q.focus();}
+function closeSearch(){sb.classList.remove('open');q.value='';clearFilt();if(sel!==null)renderStrip();}
+document.getElementById('btn-q').addEventListener('click',function(){
+  sb.classList.contains('open')?closeSearch():openSearch();});
+q.addEventListener('input',function(){applyFilt(q.value);if(sel!==null)renderStrip();});
+q.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){sb.classList.remove('open');stage.focus();}
+  if(e.key==='Escape'){clearFilt();q.value='';closeSearch();}
+});
+
+var vHelp=document.getElementById('veil-help'),vAbout=document.getElementById('veil-about');
+var si=0,slides=vHelp.querySelectorAll('.slide'),dots=document.getElementById('s-dots');
+for(var i=0;i<slides.length;i++){
+  var b=document.createElement('button');b.className='dot';b.dataset.on=i?'0':'1';
+  b.setAttribute('aria-label','Paso '+(i+1));b.dataset.i=i;dots.appendChild(b);
+}
+function goSlide(n){
+  si=Math.max(0,Math.min(slides.length-1,n));
+  for(var i2=0;i2<slides.length;i2++)slides[i2].classList.toggle('on',i2===si);
+  var ds=dots.children;for(var i2=0;i2<ds.length;i2++)ds[i2].dataset.on=(i2===si)?'1':'0';
+  document.getElementById('s-prev').disabled=(si===0);
+  document.getElementById('s-next').textContent=(si===slides.length-1)?'Empezar':'Siguiente';
+}
+dots.addEventListener('click',function(e){var b=e.target.closest('.dot');if(b)goSlide(+b.dataset.i);});
+document.getElementById('s-prev').addEventListener('click',function(){goSlide(si-1);});
+document.getElementById('s-next').addEventListener('click',function(){
+  if(si===slides.length-1)vHelp.classList.remove('open');else goSlide(si+1);});
+document.getElementById('btn-help').addEventListener('click',function(){goSlide(0);vHelp.classList.add('open');});
+document.getElementById('help-x').addEventListener('click',function(){vHelp.classList.remove('open');});
+document.getElementById('btn-i').addEventListener('click',function(){vAbout.classList.add('open');});
+document.getElementById('about-x').addEventListener('click',function(){vAbout.classList.remove('open');});
+[vHelp,vAbout].forEach(function(v){v.addEventListener('click',function(e){if(e.target===v)v.classList.remove('open');});});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){vHelp.classList.remove('open');vAbout.classList.remove('open');setSel(null);closeSearch();}
+  if(vHelp.classList.contains('open')){
+    if(e.key==='ArrowRight')goSlide(si+1);
+    if(e.key==='ArrowLeft')goSlide(si-1);
+  }
+  if(e.key==='/'&&document.activeElement!==q){e.preventDefault();openSearch();}
+});
+
+/* ── LA CASITA · asomarse sin moverse de sitio ────────────────────
+   Pasar por encima MUESTRA la posición de partida; al salir, la cámara
+   vuelve exactamente donde estaba. Funciona por lejos que estés: no es
+   un atajo de navegación, es un vistazo. El clic sí viaja. */
+var TH_HOME=0.75;
+/* v1.22 · estado del muelle de cámara + rampa de selección.
+   CAM_K rigidez · CAM_D amortiguación (casi crítica: 1−2√K ≈ 0.86).
+   SELW sube 0→1 en ~2 s tras cada selección: las fuerzas de recogida
+   entran en rampa, no de golpe — la patada del clic era esa conmutación. */
+var LOOKV=new THREE.Vector3(),RADV=0,THV=0,PHV=0;
+var CAM_K=0.0045,CAM_D=0.87,SELW=0;
+var PREV=false,THT=null,thBack=0;
+function homePreview(on){
+  if(on){
+    if(PREV)return;
+    PREV=true;thBack=th;THT=TH_HOME;
+    if(on_(0))hov=0;
+  }else{
+    if(!PREV)return;
+    PREV=false;THT=thBack;          /* el lerp la devuelve; al llegar suelta el timón */
+    if(hov===0)hov=null;
+  }
+}
+var bHome=document.getElementById('btn-home');
+bHome.addEventListener('mouseenter',function(){homePreview(true);});
+bHome.addEventListener('mouseleave',function(){homePreview(false);});
+bHome.addEventListener('focus',function(){homePreview(true);});
+bHome.addEventListener('blur',function(){homePreview(false);});
+bHome.addEventListener('click',function(){
+  PREV=false;THT=null;
+  setSel(null);hov=null;closeSearch();closePanel();closeStrip();th=TH_HOME;stage.focus();});
+document.getElementById('panel-x').addEventListener('click',function(){setSel(null);});
+document.getElementById('btn-snd').addEventListener('click',function(){
+  snd=!snd;this.dataset.on=snd?'1':'0';this.setAttribute('aria-pressed',snd?'true':'false');if(snd)blip();});
+document.getElementById('btn-pal').addEventListener('click',function(){
+  PAL=!PAL;this.dataset.on=PAL?'1':'0';this.setAttribute('aria-pressed',PAL?'true':'false');
+  if(sel!==null)renderPanel();});
+
+var vp=new THREE.Vector3(),T=0,boxes=[];
+function frame(){
+  T+=0.016;
+  SELW+=(((sel!==null)?1:0)-SELW)*0.022;   /* v1.22 · rampa de selección ~2 s */
+  step();
+  amb.intensity=0.92-0.20*LUZ;
+  dl.intensity=0.14+0.42*LUZ;
+  /* PREV = asomándose a la casa: manda la posición de partida, no la selección */
+  if(PREV||sel===null){lookT.set(0,0,0);}else{lookT.copy(P[sel]);}
+  /* v1.22 · LA CÁMARA RESPIRA (diagnóstico Patricia: «va a latigazos»):
+     el lerp exponencial arranca a velocidad máxima y muere gateando —
+     esa curva ES el látigo, a cualquier velocidad. Se sustituye por un
+     muelle con inercia casi crítico (v += (t−x)·K; v·=AMORT; x += v):
+     arranque suave, cresta a mitad de viaje, llegada suave. Curva en S. */
+  LOOKV.x+=(lookT.x-look.x)*CAM_K;LOOKV.y+=(lookT.y-look.y)*CAM_K;LOOKV.z+=(lookT.z-look.z)*CAM_K;
+  LOOKV.multiplyScalar(CAM_D);look.add(LOOKV);
+  var radT=(!PREV&&sel!==null)?(RAD_NAT*(1-ZOOM*0.72)):RAD_NAT;
+  if(!drag){RADV+=(radT-rad)*CAM_K;RADV*=CAM_D;rad+=RADV;}
+  if(!drag){PHV+=(PH_NAT-ph)*CAM_K;PHV*=CAM_D;ph+=PHV;}
+  ORBF+=(((hov!==null)?0:1)-ORBF)*0.07;
+  if(THT!==null&&!drag){
+    THV+=(THT-th)*CAM_K;THV*=CAM_D;th+=THV;
+    if(Math.abs(THT-th)<0.003&&Math.abs(THV)<0.0005){th=THT;THV=0;if(!PREV)THT=null;}
+  }else if(!drag)th+=0.0030*ORB*ORBF;
+  /* El panel y la franja no tapan el grafo: lo desplazan. Se hace moviendo
+     la ventana dentro del frustum (setViewOffset), que es una proyección
+     descentrada correcta — mover la cámara metía el grafo en el borde del
+     cono y lo deformaba. */
+  var wide=W>860;
+  var pxw=(wide&&panel.classList.contains('open'))?panel.getBoundingClientRect().width:0;
+  var shh=(wide&&strip.classList.contains('open'))?strip.getBoundingClientRect().height:0;
+  PANX+=((pxw*0.5)-PANX)*0.09;
+  PANY+=((shh*0.5)-PANY)*0.09;
+  if(PANX>0.5||PANY>0.5)cam.setViewOffset(W,H,PANX,PANY,W,H);else cam.clearViewOffset();
+  place();
+
+  /* v1.19 · HOME EN PERSONA (corrección de Patricia al faro-botón v1.17-18):
+     no un chip que lo representa — el NODO se muda. En activaciones no
+     primarias, el pin de HOME se recoloca cada frame en el punto del mundo
+     que se proyecta abajo-izquierda de la pantalla (NDC → unproject, a
+     distancia de cámara constante para tamaño estable). El simulador lo
+     lleva con su propio muelle y su propio éter: llega flotando, no
+     teletransportado. Al volver, el pin regresa al centro del mundo. */
+  if(sel!==null&&sel>7){
+    tD.set(-0.70,-0.58,0.5).unproject(cam);
+    tD.sub(cam.position).normalize();
+    PIN[0].copy(cam.position).addScaledVector(tD,rad*1.05);
+  }else{PIN[0].set(0,0,0);}
+
+  var focus=sel!==null?sel:hov;
+  var set=(sel!==null)?SET:(hov!==null?nbrs(hov):null);
+  var near=rad-RING*1.15,far=rad+RING*1.15,span=far-near;
+
+  /* v1.12 · PROX: cuánto se ha acercado la cámara respecto al radio natural.
+     0 en el encuadre de reposo → la jerarquía v1.11 manda intacta.
+     1 con la cámara muy dentro → el nodo más próximo reina. */
+  var PROX=Math.max(0,Math.min(1,(RAD_NAT*0.82-rad)/(RAD_NAT*0.48)));
+  var _bw=0,_bi=-1;
+
+  for(var i=0;i<meshes.length;i++){
+    var m=meshes[i];
+    m.visible=on_(i);
+    if(!m.visible)continue;
+    m.position.copy(P[i]);
+    var dep=Math.max(0,Math.min(1,(cam.position.distanceTo(P[i])-near)/span));
+    var tgtS=1+dep*dep*0.42*FOC;
+    var op=1-dep*0.34*FOC;
+    /* v1.15 · CORRECCIÓN DE CANAL (Patricia, 26-jul): la jerarquía por
+       alfa (v1.11) fallaba porque el croma domina — un teal 600 al 58%
+       grita más que un slate al 100%. La transparencia lava, no calla.
+       Regla nueva: la jerarquía en reposo va en el STOP de la rampa
+       (los menores bajan a stops pálidos cerca del papel, casi opacos);
+       el color saturado queda reservado al protagonismo (proximidad,
+       hover, selección). El alfa solo matiza. */
+    op*=(N[i][1]<=1?1:(N[i][1]===2?0.92:0.80));
+    var mn=mainOf(i),iNear=mn-2;
+    var idx=Math.round(iNear-(iNear-I_FAR)*dep),raw=false;
+    /* v1.15 · techo de stop por rango en reposo: piezas ≤3, terciarios ≤2
+       (pastel cerca del papel, con VOID_FLOOR respetado para «por escribir»).
+       El peso de proximidad w los devuelve a su main más abajo. */
+    if(N[i][1]>=2)idx=Math.max(N[i][2]?VOID_FLOOR:0,Math.min(idx,N[i][1]===2?3:2));
+    /* v1.20 · NEUTROS CON TINTA (Patricia, 26-jul: studio y galería no
+       parecían del menú principal — y son por lo que más la contratarían).
+       Los neutros no compiten por croma; compiten por VALOR: las secciones
+       slate/taupe reposan en el stop 8 (tinta), paridad de peso visual con
+       las secciones cromáticas. Stop de reposo propuesto, NO firmado —
+       los mains de slate/taupe siguen pendientes de firma en MUDA. */
+    if(N[i][1]<=1){var _f=famOf(i);if(_f==='slate'||_f==='taupe')idx=Math.min(10,idx+2);}
+    /* medusa: respiración de escala, ±2%, asíncrona */
+    if(MED)tgtS*=1+0.02*Math.sin(T*0.7+i*1.9);
+    /* v1.12 · peso de proximidad: cercanía a cámara al cuadrado (afila el
+       pico: solo la zona que miras gana peso), por el factor global PROX.
+       Easing 0.08 — el trono se cede, no se arrebata. */
+    var wT=(sel===null&&!set)?PROX*Math.pow(Math.max(0,1-(cam.position.distanceTo(P[i])-near)/(span*0.55)),2):0;
+    PW[i]+=(wT-PW[i])*0.055;
+    var w=PW[i];
+    if(w>_bw){_bw=w;_bi=i;}
+    if(i===sel){tgtS=1;op=1;idx=mn;raw=true;}
+    else if(i===hov){tgtS=1;op=1;idx=mn-1;raw=true;}
+    else if(set){op=set[i]?Math.max(op,0.9):(i===0?0.32:0.07);} /* v1.16: HOME nunca se apaga del todo */
+    else if(w>0.02){
+      /* el protagonismo continuo funde los tres canales a la vez:
+         opacidad hacia plena, escala hasta +32%, color hacia su main */
+      op+=(1-op)*w;
+      tgtS*=(1+0.32*w);
+      idx=Math.round(idx+(mn-idx)*Math.min(1,w*1.15));
+    }
+    SC[i]+=(tgtS-SC[i])*0.12;
+    m.scale.setScalar(SC[i]);
+    m.material.opacity=Math.max(0.02,op);
+
+    var hy=PAL?HYB[i]:null;
+    if(hy){
+      /* naturaleza = hy[0]; el resto es objetivo */
+      var otro=hy[1],tt=0.5;
+      if(i===sel){tt=0;}                                   // se mira a él: naturaleza pura
+      else if(sel!==null&&hy.indexOf(sel)>0){otro=sel;tt=BIAS;}   // desde un objetivo suyo
+      else if(sel===hy[0]){tt=0;}                          // desde su propia naturaleza
+      HT[i]+=(tt-HT[i])*0.07;
+      if(HT[i]<0.02){
+        m.material.color.lerp(stopOf(i,idx,raw),0.14);
+      }else{
+        mixStop(hexBySec(hy[0],idx),hexBySec(otro,idx),HT[i],_mixOut);
+        m.material.color.lerp(_mixOut,0.14);
+      }
+    }else{
+      m.material.color.lerp(stopOf(i,idx,raw),0.14);
+    }
+  }
+
+  /* v1.12 · coronación: solo hay protagonista si su peso supera 0.30.
+     PROTW amortiguado gobierna la gravedad local de step(). */
+  var nuevoProt=(_bw>0.30&&sel===null&&hov===null)?_bi:null;
+  if(nuevoProt!==PROT){PROT=nuevoProt;PROTN=PROT!==null?nbrs(PROT):null;}
+  PROTW+=((PROT!==null?_bw:0)-PROTW)*0.1;
+
+  if(focus!==null&&!on_(focus))focus=null;
+  if(focus!==null){
+    ringMesh.visible=true;ringMesh.position.copy(P[focus]);
+    ringMesh.quaternion.copy(cam.quaternion);
+    ringMesh.scale.setScalar(RAD[N[focus][1]]*SC[focus]*1.32);
+    ringMat.opacity+=((sel!==null?0.95:0.45)-ringMat.opacity)*0.25;
+    /* en modo color el aro toma la familia del nodo, en su main */
+    ringMat.color.lerp(PAL?stopOf(focus,mainOf(focus),true):CBLACK,0.22);
+  }else{
+    ringMat.opacity+=(0-ringMat.opacity)*0.25;
+    if(ringMat.opacity<0.02)ringMesh.visible=false;
+  }
+
+  var li=0,pi=0;
+  for(var k=0;k<L.length;k++){
+    var l=L[k];
+    if(!on_(l[0])||!on_(l[1])){for(var q3=0;q3<PPL;q3++)ppos[(pi+q3)*3+1]=99999;pi+=PPL;continue;}
+    var A=P[l[0]],B=P[l[1]];
+    ctrl(A,B,tC);
+    var on=set?(set[l[0]]&&set[l[1]]):false;
+    bez(A,tC,B,0,tP);
+    for(var s=1;s<=SEG;s++){
+      bez(A,tC,B,s/SEG,tB);
+      var o=li*6;
+      lpos[o]=tP.x;lpos[o+1]=tP.y;lpos[o+2]=tP.z;
+      lpos[o+3]=tB.x;lpos[o+4]=tB.y;lpos[o+5]=tB.z;
+      tP.copy(tB);li++;
+    }
+    var fwd=(!set)||(l[0]===focus);
+    for(var q2=0;q2<PPL;q2++){
+      var pix=pi+q2;
+      pt[pix]+=(on?0.0040:0.0016)*PAR;
+      if(pt[pix]>1)pt[pix]-=1;
+      if(set&&!on){ppos[pix*3+1]=99999;continue;}
+      var tt=fwd?pt[pix]:1-pt[pix];
+      bez(A,tC,B,tt,tA);
+      ppos[pix*3]=tA.x;ppos[pix*3+1]=tA.y;ppos[pix*3+2]=tA.z;
+    }
+    pi+=PPL;
+  }
+  lgeo.setDrawRange(0,li*2);lgeo.attributes.position.needsUpdate=true;
+  pgeo.attributes.position.needsUpdate=true;
+  lmat.opacity=set?TINTA*0.3:TINTA;
+  pmat.opacity=set?0.9:TINTA*2.2;
+
+  rnd.render(scene,cam);
+
+  var ord=[];
+  for(var q2=0;q2<labels.length;q2++){
+    var Lb=labels[q2],i=Lb.i;
+    if(!on_(i)){Lb.e.style.display='none';continue;}
+    vp.copy(P[i]).project(cam);
+    if(vp.z>1&&!(sel!==null&&sel>7&&i===0)){Lb.e.style.display='none';continue;}
+    var dep=Math.max(0,Math.min(1,(cam.position.distanceTo(P[i])-near)/span));
+    var o=Math.pow(1-dep,2.2);
+    if(N[i][1]<=1)o=Math.max(o,0.72);
+    if(N[i][2])o*=0.55;
+    /* v1.11 · etiquetas por nivel: secciones siempre; piezas solo por
+       proximidad de cámara; terciarios mudos en reposo (aparecen en hover
+       o subgrafo). Ilegible > invisible: nunca etiqueta a media tinta. */
+    /* v1.12 · el peso de proximidad también gobierna la etiqueta:
+       un terciario mudo en reposo habla cuando la cámara se arrima. */
+    var pw=PW[i]||0;
+    if(!set&&i!==hov&&i!==sel){
+      if(N[i][1]===2)o=Math.max(o*Math.max(0,1.3-dep*2.1),pw*0.95);
+      else if(N[i][1]>=3){
+        if(pw<0.30){Lb.e.style.display='none';continue;}
+        o=Math.max(o,pw*0.9);
+      }
+    }
+    if(set)o=set[i]?Math.max(o,0.92):0.03;
+    /* v1.16 · FARO DE HOME: con cualquier nodo activo, la etiqueta HOME
+       queda siempre a la vista (sutil, sin robar foco) y es clicable —
+       un clic devuelve a la vista general. Si HOME cae fuera de cuadro,
+       la etiqueta se ancla al borde de pantalla que le corresponde. */
+    /* solo en activaciones NO primarias: al elegir una sección (lab, notes,
+       studio…) HOME es vecino directo y se ve en el abanico — el faro sobra */
+    var faro=(sel!==null&&sel>7&&i===0);
+    if(faro)o=Math.max(o,0.55);
+    if(i===hov||i===sel)o=1;
+    if(o<0.18&&!faro){Lb.e.style.display='none';continue;}
+    var fx=(vp.x*.5+.5)*W,fy=(-vp.y*.5+.5)*H+RAD[N[i][1]]*SC[i]*1.4+15;
+    /* v1.19: el chip fijo (v1.17-18) se retira — ahora viaja el NODO
+       (pin reubicado en frame) y la etiqueta lo acompaña como a todos.
+       Sigue clicable: clic en la etiqueta HOME → vista general. */
+    ord.push({L:Lb,i:i,o:o,x:fx,y:fy,
+      pr:(i===sel?0:faro?0.5:i===hov?1:N[i][1]<=1?2:3+dep)});
+  }
+  ord.sort(function(a,b){return a.pr-b.pr;});
+  boxes.length=0;
+  for(var q2=0;q2<ord.length;q2++){
+    var it=ord[q2],hw=it.L.w/2,bx={x1:it.x-hw,x2:it.x+hw,y1:it.y-2,y2:it.y+14},ok=true;
+    for(var z=0;z<boxes.length;z++){
+      var o2=boxes[z];
+      if(bx.x1<o2.x2&&bx.x2>o2.x1&&bx.y1<o2.y2&&bx.y2>o2.y1){ok=false;break;}
+    }
+    if(!ok){it.L.e.style.display='none';continue;}
+    boxes.push(bx);
+    it.L.e.style.display='block';
+    it.L.e.style.opacity=it.o.toFixed(2);
+    it.L.e.style.left=it.x+'px';it.L.e.style.top=it.y+'px';
+  }
+  requestAnimationFrame(frame);
+}
+
+addEventListener('resize',function(){
+  W=innerWidth;H=innerHeight;cam.aspect=W/H;cam.clearViewOffset();cam.updateProjectionMatrix();rnd.setSize(W,H,false);});
+goSlide(0);place();frame();
+</script>
+</body>
+</html>
