@@ -1,13 +1,13 @@
 import { config, fields, collection } from '@keystatic/core';
 
 // Almacenamiento:
-// - En local (npm run dev) guarda los .md directamente en src/content/notes/.
-// - En producción (Vercel) usa GitHub: define PUBLIC_KEYSTATIC_GITHUB_REPO="usuario/repo"
-//   y las variables KEYSTATIC_GITHUB_CLIENT_ID / _SECRET / KEYSTATIC_SECRET que genera Keystatic.
-const repo = import.meta.env.PUBLIC_KEYSTATIC_GITHUB_REPO as `${string}/${string}` | undefined;
+// - En desarrollo (npm run dev) guarda los .md directamente en src/content/notes/.
+// - En producción (Cloudflare Pages) escribe en GitHub. Las claves de la GitHub App
+//   (KEYSTATIC_GITHUB_CLIENT_ID / _SECRET / KEYSTATIC_SECRET) van como secretos en Cloudflare.
+const repo = { owner: 'KoiSamsa', name: 'koisamsa-astro' };
 
 export default config({
-  storage: repo ? { kind: 'github', repo } : { kind: 'local' },
+  storage: import.meta.env.PROD ? { kind: 'github', repo } : { kind: 'local' },
   ui: {
     brand: { name: 'Cliente' },
   },
