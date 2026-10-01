@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.63 · KOI SAMSA · El responsive: crece hasta 1800, el encuadre del móvil y la cabecera que se aparta (demo)</title>
+<title>v1.64 · KOI SAMSA · La página de una pieza, centrada (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1111,6 +1111,11 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 /* la marginalia vuelve a ser un bloque: la revista de Notes (v1.61) se maquetó con .mg, que ya era la clase de la
    marginalia, y desde entonces cada nota al margen se repartía en la rejilla de la revista (2fr 1fr 1fr) */
 .art .mg{display:block}
+/* v1.64 · la página de una pieza, centrada (19:59, «B es lo adecuado»): el artículo, en el centro del bloque; el campo
+   alinea su contenido al mismo eje. Bajo ≈ 1000 px de hoja, el desplazamiento es 0. */
+#panel.carpeta.is-pieza .art{margin-inline:auto}
+#panel.carpeta.is-pieza .p-heroe{padding-left:calc(var(--cpx) + max(0px, (100% - 949px) / 2))}
+#panel.carpeta.is-pieza .p-heroe>.p-cab{max-width:949px}
 /* la prosa, a la «Lectura larga» de MUDA v0.9 (patrón sin firmar): body-l, 20 px, a 1,72 en 680 → ≈ 68 letras por línea.
    Iba a body-m (17 / 1,65): ≈ 80 letras por línea. En el móvil se queda en 17 / 1,65: ≈ 43 (propuesta de Claude). */
 @media (min-width:761px){#panel.carpeta .art{font-size:var(--muda-typography-size-body-l);line-height:1.72}}
