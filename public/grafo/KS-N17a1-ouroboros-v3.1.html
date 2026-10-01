@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N17.a1 · El Ouroboros Digital · v3.1 · Koi Samsa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+
+<style>
+/* ═══ KS TOKENS · v7.0 (subset canónico) ═══ */
+:root{
+  --ks-font-sans:"IBM Plex Sans",system-ui,sans-serif;
+  --ks-font-serif:"IBM Plex Serif",Georgia,serif;
+  --ks-font-mono:"IBM Plex Mono",monospace;
+
+  --ks-color-brand-teal:#00A6AB;
+  --ks-color-brand-blue:#335E82;
+  --ks-color-brand-red:#AC4952;
+  --ks-color-brand-beige:#D1CBBA;
+  --ks-color-brand-black:#2B200F;
+  --ks-color-ink:var(--ks-color-brand-black);
+
+  --ks-surface-bg:#FAF9F7;
+  --ks-surface-default:#FBFAF7;
+  --ks-surface-muted:#F6F6F3;
+  --ks-surface-paper:#FFFFFF;
+
+  --ks-tint-teal-05:#EAF2F2;
+  --ks-tint-teal-08:#DCE9EA;
+  --ks-tint-teal-22:#A6CECF;
+  --ks-tint-blue-05:#EEF1F5;
+  --ks-tint-blue-22:#B3C3D5;
+  --ks-tint-red-05:#F8EEEE;
+  --ks-tint-red-22:#E2B6B7;
+  --ks-tint-beige-10:#EFEEEA;
+
+  --ks-text-87:rgba(43,32,15,0.87);
+  --ks-text-72:rgba(43,32,15,0.72);
+  --ks-text-55:rgba(43,32,15,0.55);
+  --ks-text-45:rgba(43,32,15,0.45);
+  --ks-text-28:rgba(43,32,15,0.28);
+
+  --ks-border-soft:rgba(43,32,15,0.08);
+  --ks-border-default:rgba(43,32,15,0.10) /* reconciliado .12->.10 */;
+  --ks-border-strong:rgba(43,32,15,0.18);
+
+  --ks-radius-sm:5px;
+  --ks-radius-md:10px;
+  --ks-radius-lg:15px /* reconciliado 14->15 */;
+
+  --ks-shadow-card:0 0 0 1px rgba(43,32,15,0.07),0 1px 0 rgba(43,32,15,0.08);
+  --ks-shadow-float:0 4px 16px rgba(29,20,12,0.10);
+
+  --ks-motion-easing:cubic-bezier(0.4,0,0.2,1);
+  --ks-motion-duration:0.3s;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--ks-surface-bg);color:var(--ks-text-87);min-height:100vh}
+body{
+  font-family:var(--ks-font-sans);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:32px 16px 48px;
+  display:flex;
+  justify-content:center;
+}
+
+/* ═══ Scope KS ═══ */
+.ks-scope{width:100%;max-width:1320px}
+
+.ks-paper{
+  background:var(--ks-surface-paper);
+  border-radius:var(--ks-radius-lg);
+  box-shadow:var(--ks-shadow-card);
+  padding:36px 40px 32px;
+}
+
+/* ═══ Cabecera ═══ */
+.ks-head{margin-bottom:20px}
+.ks-overline{
+  font-family:var(--ks-font-mono);
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--ks-text-45);
+  margin-bottom:8px;
+}
+.ks-title{
+  font-family:var(--ks-font-serif);
+  font-weight:600;
+  font-size:clamp(24px,3vw,34px);
+  color:var(--ks-color-ink);
+  line-height:1.18;
+  letter-spacing:-0.005em;
+  margin:0 0 4px;
+}
+.ks-version{
+  display:inline-block;
+  font-family:var(--ks-font-mono);
+  font-size:10px;
+  padding:2px 8px;
+  border:1px solid var(--ks-border-strong);
+  border-radius:999px;
+  color:var(--ks-text-55);
+  margin-left:12px;
+  vertical-align:middle;
+  letter-spacing:0.04em;
+}
+.ks-actor{
+  font-family:var(--ks-font-sans);
+  font-size:14px;
+  color:var(--ks-text-55);
+  line-height:1.6;
+  max-width:780px;
+  margin-top:6px;
+}
+.ks-actor strong{color:var(--ks-text-87);font-weight:500}
+
+/* ═══ Selector de vistas ═══ */
+.ks-views{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:18px 0 22px;
+  padding-top:18px;
+  border-top:1px solid var(--ks-border-soft);
+}
+.ks-view-label{
+  font-family:var(--ks-font-mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--ks-text-45);
+  align-self:center;
+  margin-right:6px;
+}
+.ks-view{
+  font-family:var(--ks-font-sans);
+  font-size:12px;
+  padding:7px 14px;
+  border:1px solid var(--ks-border-strong);
+  border-radius:999px;
+  background:transparent;
+  color:var(--ks-text-72);
+  cursor:pointer;
+  transition:all var(--ks-motion-duration) var(--ks-motion-easing);
+  appearance:none;
+  font-weight:400;
+}
+.ks-view:hover{border-color:var(--ks-color-brand-teal);color:var(--ks-color-brand-teal)}
+.ks-view.on{
+  background:var(--ks-color-ink);
+  border-color:var(--ks-color-ink);
+  color:#fff;
+  font-weight:500;
+}
+
+/* ═══ Cuerpo: canvas + panel ═══ */
+.ks-body{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 320px;
+  gap:20px;
+  align-items:start;
+}
+@media(max-width:980px){
+  .ks-body{grid-template-columns:1fr}
+}
+
+.ks-canvas-wrap{
+  background:var(--ks-surface-muted);
+  border:1px solid var(--ks-border-soft);
+  border-radius:var(--ks-radius-md);
+  overflow:hidden;
+  position:relative;
+}
+.ks-canvas-wrap canvas{display:block;width:100%;height:auto;cursor:default}
+
+.ks-tooltip{
+  position:absolute;
+  background:var(--ks-color-ink);
+  color:#FAF9F7;
+  font-family:var(--ks-font-mono);
+  font-size:11px;
+  padding:8px 12px;
+  border-radius:var(--ks-radius-sm);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.12s;
+  max-width:280px;
+  line-height:1.5;
+  z-index:30;
+  letter-spacing:0.01em;
+  box-shadow:var(--ks-shadow-float);
+}
+.ks-tooltip.show{opacity:1}
+.ks-tooltip strong{
+  display:block;
+  font-family:var(--ks-font-sans);
+  font-weight:600;
+  font-size:12px;
+  margin-bottom:3px;
+  color:#fff;
+}
+
+/* ═══ Panel lateral ═══ */
+.ks-side{display:flex;flex-direction:column;gap:14px}
+.ks-panel{
+  background:var(--ks-surface-default);
+  border:1px solid var(--ks-border-soft);
+  border-radius:var(--ks-radius-md);
+  padding:20px 18px;
+  min-height:280px;
+}
+.panel-empty{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  font-family:var(--ks-font-mono);
+  font-size:11px;
+  color:var(--ks-text-45);
+  line-height:1.7;
+  min-height:240px;
+  padding:0 12px;
+  letter-spacing:0.02em;
+}
+.panel-empty em{
+  font-family:var(--ks-font-serif);
+  font-style:italic;
+  font-size:14px;
+  color:var(--ks-text-72);
+  display:block;
+  margin-bottom:10px;
+  line-height:1.5;
+}
+.panel-label{
+  font-family:var(--ks-font-mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--ks-text-45);
+  margin-bottom:5px;
+}
+.panel-name{
+  font-family:var(--ks-font-serif);
+  font-size:22px;
+  font-weight:600;
+  color:var(--ks-color-ink);
+  margin:0 0 4px;
+  line-height:1.2;
+  letter-spacing:-0.005em;
+}
+.panel-role{
+  font-family:var(--ks-font-mono);
+  font-size:11px;
+  color:var(--ks-color-brand-teal);
+  margin-bottom:14px;
+  line-height:1.5;
+  letter-spacing:0.02em;
+}
+.panel-desc{
+  font-family:var(--ks-font-serif);
+  font-size:14px;
+  color:var(--ks-text-87);
+  line-height:1.65;
+  margin:0 0 14px;
+}
+.panel-stats{
+  font-family:var(--ks-font-mono);
+  font-size:10.5px;
+  color:var(--ks-text-55);
+  padding:10px 12px;
+  background:var(--ks-surface-muted);
+  border-radius:var(--ks-radius-sm);
+  margin-top:12px;
+  line-height:1.7;
+  letter-spacing:0.01em;
+}
+.panel-stats strong{color:var(--ks-color-ink);font-weight:500}
+.panel-tags{margin-top:12px;display:flex;flex-wrap:wrap;gap:5px}
+.panel-tag{
+  display:inline-block;
+  font-family:var(--ks-font-mono);
+  font-size:10px;
+  padding:3px 9px;
+  border-radius:999px;
+  letter-spacing:0.04em;
+  text-transform:uppercase;
+}
+.tag-fracture{background:var(--ks-tint-red-05);color:var(--ks-color-brand-red)}
+.tag-ubiq{background:var(--ks-tint-teal-05);color:var(--ks-color-brand-teal)}
+.tag-monopoly{background:var(--ks-tint-blue-05);color:var(--ks-color-brand-blue)}
+.tag-entry{background:var(--ks-tint-beige-10);color:var(--ks-text-72)}
+
+.view-intro{
+  background:var(--ks-tint-teal-05);
+  border-radius:var(--ks-radius-md);
+  padding:14px 16px;
+  font-family:var(--ks-font-serif);
+  font-size:13.5px;
+  line-height:1.6;
+  color:var(--ks-text-87);
+  font-style:italic;
+}
+.view-intro strong{
+  font-style:normal;
+  font-family:var(--ks-font-sans);
+  font-weight:600;
+  color:var(--ks-color-ink);
+  display:block;
+  margin-bottom:4px;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.12em;
+}
+
+/* ═══ Leyendas horizontales abajo ═══ */
+.ks-legend-block{
+  margin-top:20px;
+  padding:18px 22px;
+  background:var(--ks-surface-muted);
+  border-radius:var(--ks-radius-md);
+  border:1px solid var(--ks-border-soft);
+}
+.ks-legend-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 22px;
+  align-items:center;
+  margin-bottom:10px;
+}
+.ks-legend-row:last-child{margin-bottom:0}
+.ks-legend-title{
+  font-family:var(--ks-font-mono);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:0.14em;
+  color:var(--ks-text-45);
+  min-width:120px;
+  margin-right:8px;
+}
+.ks-legend-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--ks-font-sans);
+  font-size:12px;
+  color:var(--ks-text-72);
+}
+.leg-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,0.05)}
+.leg-line{width:26px;height:0;flex-shrink:0}
+
+/* ═══ Footer ═══ */
+.ks-foot{
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid var(--ks-border-soft);
+  font-family:var(--ks-font-mono);
+  font-size:11px;
+  color:var(--ks-text-45);
+  letter-spacing:0.06em;
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.ks-foot a{color:var(--ks-text-55);text-decoration:none;border-bottom:1px solid transparent;transition:all 0.2s}
+.ks-foot a:hover{color:var(--ks-color-brand-teal);border-color:var(--ks-color-brand-teal)}
+
+/* ═══ Animación bucle ═══ */
+@keyframes flowDash{
+  to{stroke-dashoffset:-30}
+}
+
+/* ═══ Sin scroll horizontal en mobile ═══ */
+@media(max-width:640px){
+  body{padding:16px 8px 32px}
+  .ks-paper{padding:22px 18px}
+  .ks-title{font-size:22px}
+  .ks-view{font-size:11px;padding:6px 11px}
+  .ks-legend-title{min-width:auto;display:block;width:100%;margin-bottom:6px}
+}
+</style>
+</head>
+<body>
+
+<div class="ks-scope">
+<article class="ks-paper">
+
+  <!-- ═══ Cabecera ═══ -->
+  <header class="ks-head">
+    <div class="ks-overline">LAB · NODE 17 · TECNOFEUDALISMO · ARTEFACTO INTERACTIVO</div>
+    <h2 class="ks-title">El Ouroboros Digital<span class="ks-version">v3.1</span></h2>
+    <p class="ks-actor">
+      <strong>Actor:</strong> 22 actores, 65+ relaciones documentadas. La industria de la IA contada como un circuito cerrado donde el dinero circula sin salir. Cinco lecturas del mismo mapa — cada una corresponde a una sección del ensayo. Pasa el ratón sobre cualquier nodo o relación; haz clic para fijar el detalle.
+    </p>
+  </header>
+
+  <!-- ═══ Selector de vistas ═══ -->
+  <div class="ks-views">
+    <span class="ks-view-label">Lecturas</span>
+    <button class="ks-view" data-view="loop">El bucle</button>
+    <button class="ks-view" data-view="layers">Las 6 capas</button>
+    <button class="ks-view on" data-view="nvidia">NVIDIA al centro</button>
+    <button class="ks-view" data-view="fractures">Las 6 fracturas</button>
+    <button class="ks-view" data-view="societies">3 modelos de sociedad</button>
+  </div>
+
+  <!-- ═══ Cuerpo: canvas + panel ═══ -->
+  <div class="ks-body">
+    <div class="ks-canvas-wrap">
+      <canvas id="cv" width="900" height="640"></canvas>
+      <div class="ks-tooltip" id="tip"></div>
+    </div>
+    <aside class="ks-side">
+      <div class="view-intro" id="vi"></div>
+      <div class="ks-panel" id="panel">
+        <div class="panel-empty" id="pe">
+          <em>«Estamos dentro de un Ouroboros Digital — el inversor A financia al laboratorio B para que compre infraestructura al proveedor A, y el dinero nunca sale del circuito.»</em>
+          N17.n1 · v3.6<br>
+          Selecciona un nodo o relación
+        </div>
+        <div id="pc" style="display:none">
+          <div class="panel-label" id="plabel">Actor</div>
+          <h3 class="panel-name" id="pname"></h3>
+          <p class="panel-role" id="prole"></p>
+          <p class="panel-desc" id="pdesc"></p>
+          <div class="panel-stats" id="pstats"></div>
+          <div class="panel-tags" id="ptags"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ═══ Leyendas horizontales abajo ═══ -->
+  <div class="ks-legend-block">
+    <div class="ks-legend-row">
+      <span class="ks-legend-title">Actores</span>
+      <span class="ks-legend-item"><span class="leg-dot" style="background:#335E82"></span>Laboratorios</span>
+      <span class="ks-legend-item"><span class="leg-dot" style="background:#00A6AB"></span>Cloud / Servidores</span>
+      <span class="ks-legend-item"><span class="leg-dot" style="background:#AC4952"></span>Chips / Hardware</span>
+      <span class="ks-legend-item"><span class="leg-dot" style="background:#2B200F"></span>Capital / Estado</span>
+      <span class="ks-legend-item"><span class="leg-dot" style="background:#D1CBBA"></span>Tensión externa</span>
+      <span class="ks-legend-item"><span class="leg-dot" style="background:linear-gradient(135deg,#00A6AB 50%,#335E82 50%)"></span>Litografía (monopolio)</span>
+    </div>
+    <div class="ks-legend-row">
+      <span class="ks-legend-title">Relaciones</span>
+      <span class="ks-legend-item"><span class="leg-line" style="border-top:2px solid #335E82"></span>Capital / Inversión</span>
+      <span class="ks-legend-item"><span class="leg-line" style="border-top:2px dashed #00A6AB"></span>Cloud / Compute</span>
+      <span class="ks-legend-item"><span class="leg-line" style="border-top:2px solid #AC4952"></span>Chips / Hardware</span>
+      <span class="ks-legend-item"><span class="leg-line" style="border-top:2px dotted #555"></span>Tensión / Conflicto</span>
+    </div>
+  </div>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="ks-foot">
+    <span>Koi Samsa · NODE 17 · Tecnofeudalismo · v3.1 · 24 mayo 2026</span>
+    <span><a href="#" id="essayLink">Leer el ensayo N17.n1 →</a></span>
+  </footer>
+
+</article>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+const W=900,H=640;
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+const tip=document.getElementById('tip');
+
+// ═══ Tokens KS (referencia JS) ═══
+const C={
+  blue:'#335E82', teal:'#00A6AB', red:'#AC4952',
+  beige:'#D1CBBA', black:'#2B200F',
+  bg:'#FBFAF7', muted:'#F6F6F3',
+  textInk:'#2B200F',
+  text55:'rgba(43,32,15,0.55)',
+  text45:'rgba(43,32,15,0.45)',
+  text28:'rgba(43,32,15,0.28)',
+  borderSoft:'rgba(43,32,15,0.08)',
+};
+// Categoría de actor → color
+const CAT={
+  lab:C.blue, cloud:C.teal, chip:C.red, capital:C.black,
+  tension:C.beige, litho:'linear', /* gradient marker */
+};
+
+// ═══ Tipos de relación ═══
+const REL={
+  capital:{color:C.blue, dash:[]},
+  cloud:  {color:C.teal, dash:[6,5]},
+  chips:  {color:C.red,  dash:[]},
+  tension:{color:'#666', dash:[2,4]},
+};
+
+// ═══ ACTORES — 21 nodos (20 del dataset + Mistral) ═══
+// Cada actor tiene varias posiciones según la vista:
+//   layers: capas horizontales
+//   nvidia: anillos concéntricos
+//   societies: 3 columnas (Cal/Chi/Eur)
+// Las vistas "loop" y "fractures" usan posiciones layers.
+const N={
+  // ─── LABORATORIOS ───
+  openai:{
+    l:'OpenAI', cat:'lab',
+    r:34,
+    role:'Laboratorio · $852B valoración',
+    layer:'Laboratorios', society:'cal',
+    layers:{x:200,y:90},
+    nvidia:{angle:-100,radius:120},
+    societies:{x:180,y:120},
+    desc:'GPT. 900M usuarios semanales. $25B ARR. Mayor cliente de Azure. Microsoft puso $13B (créditos), Amazon $50B, NVIDIA $30B, SoftBank $41B. Comprometió $1,4T en 8 años con $25B de ingresos anuales.',
+    stats:'Valoración $852B · Run rate $25B · 900M usuarios/sem<br>Conexiones: 12',
+    tags:['fracture','entry']
+  },
+  anthropic:{
+    l:'Anthropic', cat:'lab',
+    r:30,
+    role:'Laboratorio · $30B ARR · superó a OpenAI',
+    layer:'Laboratorios', society:'cal',
+    layers:{x:360,y:90},
+    nvidia:{angle:-130,radius:200},
+    societies:{x:295,y:120},
+    desc:'Claude. $30B ARR en abril 2026. 5.000 empleados — el más eficiente del sector. Amazon $8B, Google $3B (14%), NVIDIA hasta $10B. Tres inversores rivales financian al competidor de OpenAI. Demandó al Pentágono por la Primera Enmienda — pero en mayo 2026 firma con SpaceX $1.250M/mes hasta 2029 ($45B total) por la capacidad de Colossus, el supercomputador de xAI. La rivalidad ideológica más limpia del sector se disuelve cuando hay GPUs encima de la mesa.',
+    stats:'ARR $30B · Empleados ~5.000 · 3 hyperscalers invertidos<br>Contrato Colossus: $1.250M/mes hasta 2029 · 220k GPUs<br>Conexiones: 8',
+    tags:['entry','fracture']
+  },
+  google:{
+    l:'Alphabet', cat:'cloud',
+    r:42,
+    role:'La mesa · presente en 5 de 6 capas',
+    layer:'Cloud/Servidores', society:'cal',
+    layers:{x:520,y:200},
+    nvidia:{angle:-60,radius:200},
+    societies:{x:410,y:120},
+    desc:'No juega la partida. Es la mesa. Tiene laboratorio (DeepMind/Gemini, 750M usuarios), nube (Google Cloud), hardware propio (TPUs — única alternativa real a NVIDIA), inversión (14% Anthropic), distribución (Siri/Apple). Capex 2026: hasta $190B, más del doble que 2025.',
+    stats:'Capex 2026 $175-190B · Cloud run rate $43,2B<br>Conexiones: 12',
+    tags:['ubiq']
+  },
+  meta:{
+    l:'Meta', cat:'lab',
+    r:24,
+    role:'Laboratorio · open source · $135B capex',
+    layer:'Laboratorios', society:'cal',
+    layers:{x:80,y:90},
+    nvidia:{angle:160,radius:220},
+    societies:{x:60,y:120},
+    desc:'Llama 4 open source — pero diciembre 2025 pivotó a cerrado ("Avocado"). Gasta $125-145B/año en infraestructura. Acuerdo AMD MI450 de 6 GW (mayo 2026): primera grieta real en monopolio NVIDIA. Plan B chino bloqueado por Pekín (abril 2026).',
+    stats:'Capex 2026 $125-145B · 30 data centers planeados<br>Conexiones: 3',
+    tags:[]
+  },
+  xai:{
+    l:'xAI', cat:'lab',
+    r:22,
+    role:'Laboratorio · Musk · $230B · Colossus',
+    layer:'Laboratorios', society:'cal',
+    layers:{x:440,y:90},
+    nvidia:{angle:-160,radius:230},
+    societies:{x:170,y:60},
+    desc:'Grok. Ronda $20B en enero 2026 con NVIDIA aportando $2B. Compra chips NVIDIA con dinero de NVIDIA vía SPV. Construyó Colossus en Memphis: 220.000 GPUs NVIDIA, 300 MW. SpaceX (también de Musk) alquila esa capacidad a Anthropic por $1.250M/mes hasta 2029. xAI cobra de su propio rival ideológico por la infraestructura del jefe.',
+    stats:'Valoración $230B · Colossus 220k GPUs / 300 MW<br>Conexiones: 5',
+    tags:[]
+  },
+  spacex:{
+    l:'SpaceX', cat:'capital',
+    r:24,
+    role:'Capital · canal Musk · alquila Colossus a Anthropic',
+    layer:'Capital/Estado', society:'cal',
+    layers:{x:570,y:320},
+    nvidia:{angle:-170,radius:280},
+    societies:{x:170,y:480},
+    desc:'Empresa de Elon Musk. En su S-1 IPO (20 mayo 2026) reveló que Anthropic le pagará $1.250M/mes hasta mayo 2029 — $45B totales — por la capacidad de Colossus, el supercomputador que xAI opera en Memphis. SpaceX cobra a Anthropic → SpaceX invierte en compute → xAI usa la infraestructura. Es el Ouroboros de Musk dentro del Ouroboros Digital. Acuerdo incluye explorar cómputo orbital sobre satélites.',
+    stats:'Contrato Anthropic $45B / 4 años · S-1 IPO mayo 2026<br>Compute orbital con Anthropic en estudio<br>Conexiones: 2',
+    tags:['fracture']
+  },
+  deepseek:{
+    l:'DeepSeek', cat:'tension',
+    r:22,
+    role:'Tensión · eficiencia vs fuerza bruta',
+    layer:'Tensiones', society:'chi',
+    layers:{x:780,y:90},
+    nvidia:{angle:140,radius:265},
+    societies:{x:560,y:120},
+    desc:'R1 entrenado con H800 limitados por <$6M. -$593B capitalización NVIDIA en un día (27 ene 2025). V4-Pro liberado 24 abril 2026: 1,6T parámetros, 49B activados, 27% FLOPs vs V3.2. Demuestra que el camino americano no es el único.',
+    stats:'Coste entrenamiento V3 ~$6M · -$593B NVIDIA 1 día<br>Conexiones: 3',
+    tags:['fracture']
+  },
+  mistral:{
+    l:'Mistral', cat:'lab',
+    r:18,
+    role:'Laboratorio · Europa · semi-outsider',
+    layer:'Laboratorios', society:'eur',
+    layers:{x:600,y:90},
+    nvidia:{angle:170,radius:255},
+    societies:{x:830,y:120},
+    desc:'Septiembre 2025: ASML lidera Serie C con 1.300M€ (11% accionarial, asiento estratégico). Marzo 2026: 830M$ deuda con 7 bancos europeos (sin un solo banco USA) para 13.800 GPUs NVIDIA Grace Blackwell. No escapa del Ouroboros: lo extiende a Europa con geometría política distinta.',
+    stats:'Serie C €1.700M · 13.800 GPUs GB300 · 0 bancos USA<br>Conexiones: 4',
+    tags:[]
+  },
+
+  // ─── CLOUD ───
+  microsoft:{
+    l:'Microsoft', cat:'cloud',
+    r:32,
+    role:'Hyperscaler · Azure · 27% de OpenAI',
+    layer:'Cloud/Servidores', society:'cal',
+    layers:{x:80,y:200},
+    nvidia:{angle:-30,radius:200},
+    societies:{x:60,y:200},
+    desc:'Dueño de Azure. $13B en OpenAI (mayoritariamente créditos Azure). 27% ownership, 20% revenue share. OpenAI gastó $12.430M en Azure (2024–Q3 2025). El dinero no sale del ecosistema: circula. $80B backlog Azure sin cubrir por falta de electricidad. Capex ~$150B run rate 2026.',
+    stats:'Capex run rate ~$150B · 400+ data centers<br>Conexiones: 5',
+    tags:['entry']
+  },
+  amazon:{
+    l:'Amazon', cat:'cloud',
+    r:30,
+    role:'Hyperscaler · AWS · invierte en los dos rivales',
+    layer:'Cloud/Servidores', society:'cal',
+    layers:{x:200,y:200},
+    nvidia:{angle:30,radius:180},
+    societies:{x:175,y:200},
+    desc:'AWS = mayor nube ($142B run rate). $8B en Anthropic (Claude usa AWS como proveedor principal) + $50B en OpenAI. Los dos laboratorios rivales financiados por el mismo inversor. Capex 2026: $200B, el mayor de todos los hyperscalers.',
+    stats:'AWS run rate $142B · Capex 2026 $200B (+56%)<br>Conexiones: 8',
+    tags:['entry']
+  },
+  oracle:{
+    l:'Oracle', cat:'cloud',
+    r:24,
+    role:'Cloud · Stargate · $300B en 5 años',
+    layer:'Cloud/Servidores', society:'cal',
+    layers:{x:680,y:200},
+    nvidia:{angle:60,radius:230},
+    societies:{x:295,y:200},
+    desc:'Contrato $300B/5 años con OpenAI para data centers Stargate. Co-fundador Stargate (7% + 7% MGX). Primer sitio Abilene Texas, 450.000 GPUs Blackwell. Acciones +43% en un día con el anuncio. Compra chips NVIDIA con ingresos Stargate. Stargate Abilene expansión cancelada en mayo 2026.',
+    stats:'Contrato OpenAI $300B/5años · Stargate Abilene 450k Blackwell<br>Conexiones: 5',
+    tags:['fracture']
+  },
+  coreweave:{
+    l:'CoreWeave', cat:'cloud',
+    r:20,
+    role:'Neocloud GPU · 67% de un cliente',
+    layer:'Cloud/Servidores', society:'cal',
+    layers:{x:790,y:200},
+    nvidia:{angle:80,radius:160},
+    societies:{x:410,y:200},
+    desc:'NVIDIA posee 13% ($4,3B) + $2B adicionales ene-2026. Le compró $320M en servicios y le garantiza compra de exceso ($6,3B hasta 2032). Q1 2026: $2.080M revenue (+111%), backlog $99.400M. 67% del revenue 2025 viene de Microsoft. Sigue perdiendo $589M netos/trimestre.',
+    stats:'Revenue Q1 2026 $2.080M · Backlog $99,4B · 67% un cliente<br>Conexiones: 3',
+    tags:['fracture']
+  },
+
+  // ─── CHIPS ───
+  nvidia:{
+    l:'NVIDIA', cat:'chip',
+    r:54,
+    role:'Nodo central · $5,7T · 85% mercado IA',
+    layer:'Chips', society:'all',
+    layers:{x:380,y:320},
+    nvidia:{angle:0,radius:0},
+    societies:{x:435,y:380},
+    desc:'La empresa más valiosa de la historia humana ($5,7T mayo 2026 — vale más que el PIB de Japón). 85% del mercado de chips IA. Invierte en OpenAI ($100B+), Anthropic ($10B), CoreWeave (13%), Intel ($5B), xAI ($2B), Mistral. Proveedor, inversor y cliente al mismo tiempo. Si cae NVIDIA, cae todo.',
+    stats:'Cap $5,7T · 85% mercado · 50+ startups invertidas<br>Conexiones: 20',
+    tags:['fracture']
+  },
+  amd:{
+    l:'AMD', cat:'chip',
+    r:26,
+    role:'Chips · primera grieta real en monopolio NVIDIA',
+    layer:'Chips', society:'cal',
+    layers:{x:240,y:320},
+    nvidia:{angle:-90,radius:220},
+    societies:{x:550,y:380},
+    desc:'Warrants 10% acciones a OpenAI por comprar Instinct. 6 GW MI450 con Meta (mayo 2026): primer hyperscaler grande con cheque material a alternativa a NVIDIA. ROCm v7 cerró parte del moat CUDA. Acciones +66% en 2026 vs +15% NVIDIA. Q1 2026: $10.250M revenue, data center +57%.',
+    stats:'Revenue Q1 $10,25B · Data center +57% · 6 GW Meta<br>Conexiones: 5',
+    tags:['fracture']
+  },
+  intel:{
+    l:'Intel', cat:'chip',
+    r:22,
+    role:'Chips · capital privado + subsidio público',
+    layer:'Chips', society:'cal',
+    layers:{x:530,y:320},
+    nvidia:{angle:90,radius:180},
+    societies:{x:380,y:380},
+    desc:'NVIDIA invirtió $5B por CPUs custom NVLink. Gobierno EE.UU. tomó 9,9% vía CHIPS Act ($8,9B). Única de las tres con fábricas propias, pero años por detrás de TSMC — fabrica parte de sus chips en TSMC también. Adquirió Nervana ($400M) y Habana ($2B): cero cuota.',
+    stats:'CHIPS Act $8,9B · Gobierno 9,9% · $2,4B en adquisiciones fallidas<br>Conexiones: 6',
+    tags:['entry']
+  },
+
+  // ─── LITOGRAFÍA ───
+  tsmc:{
+    l:'TSMC', cat:'chip',
+    r:32,
+    role:'Foundry · +90% chips vanguardia · Taiwan',
+    layer:'Litografía', society:'all',
+    layers:{x:340,y:430},
+    nvidia:{angle:0,radius:120},
+    societies:{x:435,y:480},
+    desc:'+60% ingresos globales foundry, +90% chips vanguardia. NVIDIA es mayor cliente 2026 (~$33B, 22% del total), superando a Apple. Revenue 2026 ~$150B. AMD es cliente cautivo desde 2009. Sin TSMC no hay NVIDIA. Taiwan es el eslabón material — terremoto, tensión con China, bloqueo y se para todo.',
+    stats:'Revenue 2026 ~$150B · NVIDIA $250B compromisos<br>Conexiones: 8',
+    tags:['fracture']
+  },
+  asml:{
+    l:'ASML', cat:'litho',
+    r:36,
+    role:'El cuello holandés · 100% EUV',
+    layer:'Litografía', society:'eur',
+    layers:{x:520,y:430},
+    nvidia:{angle:0,radius:230},
+    societies:{x:715,y:480},
+    desc:'Monopolio absoluto. 100% del mercado mundial de litografía EUV. Sin ASML, TSMC no puede fabricar chips <7nm. Cada máquina cuesta €200-400M; SK Hynix compró 30 por €8B. Revenue 2026: €34-39B. Lidera Serie C de Mistral con €1.300M (11%). Países Bajos resisten presiones de Washington para endurecer controles. Replicar EUV: 15-20 años + $10B.',
+    stats:'Cuota 100% EUV · Revenue €34-39B 2026 · 11% Mistral<br>Conexiones: 4',
+    tags:['fracture','monopoly']
+  },
+
+  // ─── ENERGÍA ───
+  energy:{
+    l:'Red eléctrica', cat:'tension',
+    r:28,
+    role:'Límite físico · 1.100 TWh · Japón entero',
+    layer:'Energía', society:'all',
+    layers:{x:440,y:540},
+    nvidia:{angle:130,radius:160},
+    societies:{x:435,y:560},
+    desc:'AIE: 1.100 TWh en 2026 = consumo total de Japón. 4,5 GW Stargate = Buenos Aires. Microsoft acuerdo nuclear 2 GW con Constellation hasta 2040 (mayor corporativo nuclear de la historia). $80B backlog Azure por falta de electricidad. Toca 14 de los 21 actores — segundo nodo más conectado después de NVIDIA.',
+    stats:'1.100 TWh 2026 · Acuerdos SMR: 25→45 GW en 18 meses<br>Conexiones: 14',
+    tags:['fracture']
+  },
+
+  // ─── CAPITAL/ESTADO ───
+  softbank:{
+    l:'SoftBank', cat:'capital',
+    r:18,
+    role:'Capital puro · $41B en OpenAI',
+    layer:'Capital/Estado', society:'cal',
+    layers:{x:760,y:320},
+    nvidia:{angle:50,radius:280},
+    societies:{x:120,y:380},
+    desc:'$41B en OpenAI (11%), $30B en ronda 2026. Co-fundador Stargate (40%). Capital puro sin laboratorios ni nube ni chips. Si el relato AGI se sostiene, gana. Si estalla, tiene la mayor exposición sin infraestructura física que vender.',
+    stats:'OpenAI $71B total · Stargate 40% · Sin infraestructura propia<br>Conexiones: 1',
+    tags:['entry']
+  },
+  stargate:{
+    l:'Stargate', cat:'capital',
+    r:22,
+    role:'Estado · $500B · subsidio público',
+    layer:'Capital/Estado', society:'cal',
+    layers:{x:660,y:320},
+    nvidia:{angle:120,radius:240},
+    societies:{x:240,y:380},
+    desc:'Anunciado por Trump 21 ene 2025 con Altman, Ellison, Son. JV $500B en 4 años. SoftBank+OpenAI 40% cada uno, Oracle+MGX 7%. Canaliza $8,9B CHIPS Act a Intel. Mayo 2026: OpenAI recortó compromiso de $1,4T a $600B; Abilene expansión cancelada por Oracle.',
+    stats:'Compromiso original $500B · 8 GW planeados · Recortado a $600B<br>Conexiones: 4',
+    tags:['entry','fracture']
+  },
+  pentagon:{
+    l:'Pentágono', cat:'capital',
+    r:18,
+    role:'Estado · ética · ultimátum a Anthropic',
+    layer:'Capital/Estado', society:'cal',
+    layers:{x:50,y:320},
+    nvidia:{angle:-120,radius:280},
+    societies:{x:65,y:380},
+    desc:'Contrato $200M con Anthropic vía Palantir+AWS. Feb 2026: ultimátum eliminar guardrails Claude (vigilancia masiva, armas autónomas). Anthropic se negó y demandó por Primera Enmienda. Injunction concedida; circuito DC la revocó en apelación. Canaliza $8,9B CHIPS Act a Intel.',
+    stats:'Anthropic $200M · CHIPS Act $8,9B · Caso vivo en apelación<br>Conexiones: 3',
+    tags:[]
+  },
+
+  // ─── EXTERNOS ───
+  apple:{
+    l:'Apple', cat:'capital',
+    r:24,
+    role:'Distribución · ancla TSMC · fuera del bucle capital',
+    layer:'Cloud/Servidores', society:'cal',
+    layers:{x:320,y:200},
+    nvidia:{angle:-90,radius:280},
+    societies:{x:60,y:60},
+    desc:'~$4T capitalización. No invierte en labs de IA. Pero es 18% de ingresos TSMC, +50% capacidad 2nm reservada para 2026, 100M chips Arizona. Sostiene la foundry que sostiene a todos. Desde enero 2026 usa Gemini para Siri ($1B/año); Google le paga $20B/año por búsqueda Safari. 2B dispositivos.',
+    stats:'Cap ~$4T · 18% TSMC · 2B dispositivos<br>Conexiones: 4',
+    tags:[]
+  },
+};
+
+// ═══ RELACIONES — 60+ aristas (todas las del dataset) ═══
+const E=[
+  // ─── NVIDIA al centro de todo ───
+  {f:'nvidia',t:'openai',type:'capital',label:'NVIDIA → OpenAI: hasta $100B + $30B ronda 2026',loop:'nv-oai'},
+  {f:'openai',t:'nvidia',type:'chips',  label:'OpenAI → NVIDIA: compra millones de GPUs Blackwell',loop:'nv-oai'},
+  {f:'nvidia',t:'anthropic',type:'capital',label:'NVIDIA → Anthropic: hasta $10B (ronda nov-2025)'},
+  {f:'nvidia',t:'coreweave',type:'capital',label:'NVIDIA → CoreWeave: 13% equity ($4,3B) + $2B ene-2026',loop:'nv-cw'},
+  {f:'coreweave',t:'nvidia',type:'cloud',label:'CoreWeave alquila GPUs NVIDIA; NVIDIA compra exceso ($6,3B hasta 2032)',loop:'nv-cw'},
+  {f:'nvidia',t:'intel',type:'capital',label:'NVIDIA → Intel: $5B por CPUs custom NVLink (217M acc. a $23,28)'},
+  {f:'intel',t:'nvidia',type:'chips',  label:'Intel → NVIDIA: fabrica CPUs custom'},
+  {f:'nvidia',t:'xai',type:'capital',label:'NVIDIA → xAI: $2B equity en ronda $20B'},
+  {f:'xai',t:'nvidia',type:'chips',label:'xAI → NVIDIA: compra GPUs con dinero de NVIDIA vía SPV',loop:'nv-xai'},
+  {f:'nvidia',t:'mistral',type:'capital',label:'NVIDIA → Mistral: 3 rondas (Serie A, B, C €1,7B)'},
+  {f:'mistral',t:'nvidia',type:'chips',label:'Mistral → NVIDIA: 13.800 GPUs Grace Blackwell GB300'},
+  {f:'nvidia',t:'tsmc',type:'chips',label:'NVIDIA → TSMC: mayor cliente 2026 (~$33B = 22% TSMC). $250B compromisos'},
+  {f:'tsmc',t:'nvidia',type:'chips',label:'TSMC → NVIDIA: fabrica todas las GPUs'},
+  {f:'microsoft',t:'nvidia',type:'chips',label:'Microsoft → NVIDIA: uno de los 4 mayores compradores (61% rev)'},
+  {f:'amazon',t:'nvidia',type:'chips',label:'Amazon → NVIDIA: compra masiva + Trainium/Graviton custom'},
+  {f:'meta',t:'nvidia',type:'chips',label:'Meta → NVIDIA: millones Blackwell. Capex $135B'},
+  {f:'google',t:'nvidia',type:'chips',label:'Alphabet → NVIDIA: compra masiva GPUs. Capex $175-185B'},
+  {f:'oracle',t:'nvidia',type:'chips',label:'Oracle → NVIDIA: chips con ingresos Stargate. 450k Blackwell Abilene'},
+  {f:'nvidia',t:'stargate',type:'capital',label:'NVIDIA → Stargate: $100B partnership (10 GW sistemas)'},
+  {f:'deepseek',t:'nvidia',type:'tension',label:'DeepSeek → NVIDIA: -$593B capitalización 1 día (27 ene 2025)'},
+  {f:'energy',t:'nvidia',type:'tension',label:'Energía: todos sus chips consumen. 1.100 TWh 2026'},
+
+  // ─── OpenAI ─── (ya cubiertas las de NVIDIA)
+  {f:'microsoft',t:'openai',type:'capital',label:'Microsoft → OpenAI: $13B (mayoritariamente créditos Azure)',loop:'ms-oai'},
+  {f:'openai',t:'microsoft',type:'cloud',label:'OpenAI → Azure: $12.430M en inference (2024-Q3 2025). Mayor cliente',loop:'ms-oai'},
+  {f:'amazon',t:'openai',type:'capital',label:'Amazon → OpenAI: $50B en ronda $122B'},
+  {f:'softbank',t:'openai',type:'capital',label:'SoftBank → OpenAI: $41B (11%), $30B ronda 2026'},
+  {f:'openai',t:'oracle',type:'cloud',label:'OpenAI → Oracle: $300B/5 años (data centers Stargate)'},
+  {f:'amd',t:'openai',type:'capital',label:'AMD → OpenAI: warrants 10% acciones por compra Instinct',loop:'amd-oai'},
+  {f:'openai',t:'amd',type:'chips',label:'OpenAI → AMD: 6 GW GPUs Instinct/MI450',loop:'amd-oai'},
+  {f:'xai',t:'openai',type:'tension',label:'Musk vs Altman: demanda $134B + conflicto DOGE'},
+
+  // ─── Bucle Musk (revelado por S-1 SpaceX mayo 2026) ───
+  {f:'anthropic',t:'spacex',type:'cloud',label:'Anthropic → SpaceX: $1.250M/mes hasta 2029 = $45B totales por Colossus',loop:'musk'},
+  {f:'spacex',t:'xai',type:'cloud',label:'SpaceX ↔ xAI: opera la capacidad de Colossus (220k GPUs, 300 MW)',loop:'musk'},
+  {f:'xai',t:'anthropic',type:'tension',label:'xAI vs Anthropic: rivalidad ideológica más limpia del sector · disuelta por contrato Colossus',loop:'musk'},
+  {f:'spacex',t:'nvidia',type:'chips',label:'SpaceX/xAI → NVIDIA: Colossus = 220.000 GPUs NVIDIA'},
+  {f:'deepseek',t:'openai',type:'tension',label:'DeepSeek: $6M vs $1,4T compromisos OpenAI'},
+  {f:'energy',t:'openai',type:'tension',label:'Energía: inference $12B+ = electricidad masiva'},
+
+  // ─── Anthropic ───
+  {f:'amazon',t:'anthropic',type:'capital',label:'Amazon → Anthropic: $8B inversión total',loop:'amz-ant'},
+  {f:'anthropic',t:'amazon',type:'cloud',label:'Anthropic → AWS: proveedor principal',loop:'amz-ant'},
+  {f:'google',t:'anthropic',type:'capital',label:'Alphabet → Anthropic: $3B, 14% ownership (+Side Letter)'},
+  {f:'anthropic',t:'google',type:'cloud',label:'Anthropic → Google Cloud: TPUs $decenas de miles M, hasta 1M TPUs',loop:'goo-ant'},
+  {f:'pentagon',t:'anthropic',type:'tension',label:'Pentágono: contrato $200M + ultimátum guardrails feb-2026'},
+  {f:'energy',t:'anthropic',type:'tension',label:'Energía: AWS + Google Cloud = consumo indirecto'},
+
+  // ─── Alphabet (la mesa) ───
+  {f:'google',t:'apple',type:'capital',label:'Alphabet → Apple: $20B/año (buscador Safari) + Gemini para Siri'},
+  {f:'apple',t:'google',type:'cloud',label:'Apple → Google: $1B/año licencia Gemini + $300M Google Cloud'},
+  {f:'google',t:'tsmc',type:'chips',label:'Alphabet → TSMC: fabrica TPUs'},
+  {f:'meta',t:'google',type:'cloud',label:'Meta → Google: alquiler TPUs 2026, compra 2027'},
+  {f:'google',t:'amazon',type:'cloud',label:'Alphabet ↔ Amazon: AWS Interconnect multicloud (abril 2026)'},
+  {f:'google',t:'oracle',type:'cloud',label:'Alphabet ↔ Oracle: Oracle Database en Google Cloud'},
+  {f:'google',t:'openai',type:'tension',label:'Alphabet vs OpenAI: Gemini vs GPT. OpenAI rechazó deal Siri'},
+  {f:'deepseek',t:'google',type:'tension',label:'DeepSeek: eficiencia amenaza $185B capex Alphabet'},
+  {f:'energy',t:'google',type:'tension',label:'Energía: $175-185B capex = data centers masivos + SMR nucleares'},
+
+  // ─── Microsoft ───
+  {f:'energy',t:'microsoft',type:'tension',label:'Energía: 400 DC + 2 GW nuclear Constellation. $80B backlog por falta de electricidad'},
+
+  // ─── Amazon ───
+  {f:'amazon',t:'oracle',type:'cloud',label:'Amazon ↔ Oracle: Oracle Database@AWS multicloud'},
+  {f:'energy',t:'amazon',type:'tension',label:'Energía: $200B capex. +4 GW capacidad en un año'},
+
+  // ─── Meta ───
+  {f:'energy',t:'meta',type:'tension',label:'Energía: $135B capex. 30 data centers planeados'},
+
+  // ─── Oracle ───
+  {f:'energy',t:'oracle',type:'tension',label:'Energía: data centers Stargate'},
+
+  // ─── CoreWeave ───
+  {f:'energy',t:'coreweave',type:'tension',label:'Energía: cloud GPU intensivo'},
+
+  // ─── AMD ───
+  {f:'tsmc',t:'amd',type:'chips',label:'TSMC → AMD: cliente cautivo desde 2009'},
+  {f:'energy',t:'amd',type:'tension',label:'Energía: chips data center'},
+
+  // ─── Intel ───
+  {f:'intel',t:'tsmc',type:'chips',label:'Intel → TSMC: fabrica parte de sus chips (no puede sola)'},
+  {f:'pentagon',t:'intel',type:'capital',label:'Pentágono → Intel: CHIPS Act $8,9B (gobierno 9,9%)'},
+  {f:'stargate',t:'intel',type:'capital',label:'CHIPS Act vía Stargate → Intel: subsidio público'},
+  {f:'energy',t:'intel',type:'tension',label:'Energía: fábricas propias = consumo industrial'},
+
+  // ─── xAI ───
+  {f:'energy',t:'xai',type:'tension',label:'Energía: Colossus 2 Memphis = consumo masivo'},
+
+  // ─── TSMC ───
+  {f:'apple',t:'tsmc',type:'chips',label:'Apple → TSMC: 18% ingresos (~$27B). +50% capacidad 2nm reservada'},
+  {f:'asml',t:'tsmc',type:'chips',label:'ASML → TSMC: 100% máquinas EUV. Sin ASML no hay TSMC <7nm'},
+  {f:'energy',t:'tsmc',type:'tension',label:'Energía: fábricas = electricidad + agua masiva'},
+
+  // ─── ASML ───
+  {f:'asml',t:'mistral',type:'capital',label:'ASML → Mistral: lidera Serie C €1.300M (11%, asiento estratégico)'},
+  {f:'energy',t:'asml',type:'tension',label:'Energía: producción industrial EUV'},
+
+  // ─── Stargate ───
+  {f:'pentagon',t:'stargate',type:'capital',label:'Trump anuncia Stargate ene-2025 (Musk en DOGE)'},
+  {f:'oracle',t:'stargate',type:'cloud',label:'Oracle construye data centers Stargate'},
+  {f:'energy',t:'stargate',type:'tension',label:'Energía: 4,5 GW = Buenos Aires entero'},
+
+  // ─── DeepSeek extras ───
+  // (ya cubiertas)
+];
+
+// ═══ Loops cerrados (los 6 ouroboros reales del ensayo) ═══
+const LOOPS={
+  'ms-oai':  {actors:['microsoft','openai'], label:'Microsoft ↔ OpenAI', desc:'Microsoft invierte créditos Azure → OpenAI los gasta en Azure → dinero regresa a Microsoft + 20% revenue share. $12.430M ya consumidos.'},
+  'nv-oai':  {actors:['nvidia','openai'], label:'NVIDIA ↔ OpenAI', desc:'NVIDIA invierte hasta $100B → OpenAI compra millones de GPUs NVIDIA. El anuncio mueve $170B en capitalización sin que cambie nada físico.'},
+  'nv-cw':   {actors:['nvidia','coreweave'], label:'NVIDIA ↔ CoreWeave', desc:'NVIDIA posee 13% + compra exceso de capacidad hasta 2032 → CoreWeave alquila GPUs NVIDIA a clientes que NVIDIA ya atiende. El círculo más explícito.'},
+  'amz-ant': {actors:['amazon','anthropic'], label:'Amazon ↔ Anthropic', desc:'Amazon invierte $8B → Anthropic usa AWS como proveedor principal → dinero regresa a Amazon como consumo de su nube.'},
+  'goo-ant': {actors:['google','anthropic'], label:'Alphabet ↔ Anthropic', desc:'Google invierte $3B (14%) → Anthropic firma acuerdo TPUs Google Cloud por decenas de miles de millones. Google financia al competidor de su propio Gemini.'},
+  'amd-oai': {actors:['amd','openai'], label:'AMD ↔ OpenAI', desc:'AMD da warrants sobre 10% de sus acciones a OpenAI → OpenAI despliega 6 GW de GPUs Instinct. AMD financia a su cliente para que le compre producto.'},
+  'nv-xai':  {actors:['nvidia','xai'], label:'NVIDIA ↔ xAI', desc:'NVIDIA aporta $2B equity → SPV compra GPUs y se las alquila a xAI. Musk demanda a OpenAI mientras compra chips a NVIDIA con dinero de NVIDIA.'},
+  'musk':    {actors:['anthropic','spacex','xai'], label:'Bucle Musk · Anthropic ↔ SpaceX ↔ xAI', desc:'Anthropic paga $1.250M/mes a SpaceX hasta 2029 ($45B totales) por la capacidad de Colossus, el supercomputador que xAI construyó. SpaceX y xAI son ambas de Musk. El laboratorio que demandó al Pentágono financia con $15B/año la infraestructura del CEO que más fuerte lo ataca. La rivalidad ideológica más limpia del sector se disuelve cuando hay GPUs encima de la mesa.'},
+};
+
+// ═══ 6 fracturas (sección VII del ensayo) ═══
+// Las cinco primeras son materiales (un actor concreto). La sexta es narrativa:
+// no apunta a un nodo sino a un bucle entero — el bucle Musk (Anthropic↔SpaceX↔xAI).
+const FRACTURES=[
+  {n:1, key:'nvidia', label:'NVIDIA', kind:'material', desc:'$5,7T — más que PIB de Japón. Si cae NVIDIA, cae el circuito entero. DeepSeek mostró el ensayo en miniatura: -$593B en un día.'},
+  {n:2, key:'amd', label:'AMD · 1bis', kind:'material', desc:'Primera grieta real: 6 GW Meta + 1 GW OpenAI + ROCm v7. Acciones +66% YTD vs +15% NVIDIA. NVIDIA mantiene 80-90%, pero los hyperscalers tienen segundo cheque.'},
+  {n:3, key:'energy', label:'Energía', kind:'material', desc:'1.100 TWh = Japón entero. La electricidad no se puede imprimir. $80B backlog Azure por falta de electricidad. La física no negocia.'},
+  {n:4, key:'asml', label:'TSMC + ASML', kind:'material', desc:'Dos cuellos geopolíticos. Taiwan +90% chips vanguardia. ASML 100% EUV. Replicar EUV: 15-20 años y $10B. No hay plan B.'},
+  {n:5, key:'oracle', label:'Demanda real', kind:'material', desc:'90% empresas sin impacto productividad. 3% usuarios paga. Sequoia: $500B revenue gap. Goldman: falta la mitad del billón anual. Stargate Abilene cancelado mayo 2026.'},
+  {n:6, key:'_musk', label:'El bucle disuelve los bandos', kind:'narrative', loopKey:'musk', actors:['anthropic','spacex','xai'], desc:'Fractura narrativa, no material. Las cinco anteriores describen puntos físicos donde el circuito puede romperse por presión externa. La sexta demuestra que el circuito no se romperá por presión interna: ningún actor dentro del bucle tiene incentivos para salir, ni siquiera quienes han hecho de la oposición su identidad pública. Anthropic ↔ SpaceX ↔ xAI: $45B totales hasta 2029 entre la rivalidad ideológica más limpia del sector.'},
+];
+
+// ═══ ESTADO ═══
+let activeView='nvidia';
+let activeNode=null;
+let hoverEdge=null;
+let animOffset=0;
+
+// ═══ ANIMACIÓN ═══
+let lastTime=0;
+function tick(t){
+  if(activeView==='loop'){
+    animOffset=(animOffset+0.6)%20;
+    draw();
+  }
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+// ═══ UTILIDADES ═══
+function getPos(actor){
+  if(activeView==='nvidia'){
+    const p=actor.nvidia;
+    if(p.radius===0)return{x:W/2,y:H/2};
+    const a=p.angle*Math.PI/180;
+    return{x:W/2+Math.cos(a)*p.radius, y:H/2+Math.sin(a)*p.radius};
+  }
+  if(activeView==='societies'){
+    return actor.societies;
+  }
+  return actor.layers;
+}
+
+function nodeColor(actor){
+  if(actor.cat==='litho')return null; // se dibuja con gradiente
+  return CAT[actor.cat];
+}
+
+function isInLoop(e){
+  return !!e.loop;
+}
+
+function isFractureActor(id){
+  return FRACTURES.some(f=>f.key===id);
+}
+
+// Devuelve true si el actor está implicado en alguna fractura (material o narrativa)
+function isInFractureView(id){
+  if(activeView!=='fractures')return false;
+  if(isFractureActor(id))return true;
+  // Fracturas narrativas: cualquier actor en su lista de `actors`
+  return FRACTURES.some(f=>f.kind==='narrative' && f.actors && f.actors.includes(id));
+}
+
+// Devuelve true si la arista forma parte del loop de alguna fractura narrativa
+function isInNarrativeFractureLoop(e){
+  return FRACTURES.some(f=>f.kind==='narrative' && f.loopKey && e.loop===f.loopKey);
+}
+
+function getSocietyColumn(society){
+  if(society==='cal')return{x:200,label:'Modelo californiano · libertario-tecnócrata',color:C.red};
+  if(society==='chi')return{x:550,label:'Modelo chino · dirigista estatal',color:C.blue};
+  if(society==='eur')return{x:800,label:'Modelo europeo · soberanía democrática',color:C.teal};
+  return null;
+}
+
+// ═══ DIBUJO ═══
+function draw(){
+  cx.clearRect(0,0,W,H);
+
+  // Fondo blanco
+  cx.fillStyle=C.bg;
+  cx.fillRect(0,0,W,H);
+
+  // ─── Capas o columnas según vista ───
+  drawBackgroundForView();
+
+  // ─── Aristas ───
+  drawEdges();
+
+  // ─── Nodos ───
+  drawNodes();
+
+  // ─── Anotaciones contextuales ───
+  drawAnnotations();
+}
+
+function drawBackgroundForView(){
+  cx.save();
+  cx.font='500 10px '+(typeof window!=='undefined'?'"IBM Plex Mono"':'monospace')+',monospace';
+
+  if(activeView==='layers'){
+    const layers=[
+      {y:60, h:80, label:'CAPA 2 · LABORATORIOS · 5 actores relevantes',bg:'rgba(51,94,130,0.04)'},
+      {y:170,h:90, label:'CAPA 3 · CLOUD/SERVIDORES · 5 hyperscalers',bg:'rgba(0,166,171,0.05)'},
+      {y:290,h:90, label:'CAPA 4 · CHIPS · 3 diseñadores',bg:'rgba(172,73,82,0.04)'},
+      {y:400,h:70, label:'CAPA 5 · LITOGRAFÍA · 1 foundry + 1 monopolio EUV',bg:'rgba(51,94,130,0.06)'},
+      {y:510,h:70, label:'CAPA 6 · ENERGÍA · 1 límite físico',bg:'rgba(43,32,15,0.04)'},
+    ];
+    layers.forEach(ly=>{
+      cx.fillStyle=ly.bg;
+      cx.fillRect(0,ly.y-ly.h/2,W,ly.h);
+      cx.fillStyle=C.text45;
+      cx.textAlign='left';cx.textBaseline='top';
+      cx.fillText(ly.label,18,ly.y-ly.h/2+8);
+    });
+    // Capa 1 invisible (usuarios)
+    cx.fillStyle=C.text28;
+    cx.textAlign='center';
+    cx.font='italic 11px "IBM Plex Serif",serif';
+    cx.fillText('↑ Capa 1 · 900M usuarios semanales · solo el 3% paga',W/2,20);
+    cx.fillText('↓ Más profunda la capa, mayor la concentración',W/2,H-10);
+  }
+  else if(activeView==='societies'){
+    [['cal','rgba(172,73,82,0.04)'],['chi','rgba(51,94,130,0.05)'],['eur','rgba(0,166,171,0.04)']].forEach(([s,bg])=>{
+      const c=getSocietyColumn(s);
+      cx.fillStyle=bg;
+      cx.fillRect(c.x-160,30,320,540);
+      cx.save();
+      cx.fillStyle=c.color;
+      cx.textAlign='center';
+      cx.font='600 11px "IBM Plex Mono",monospace';
+      cx.fillText(c.label,c.x,50);
+      cx.restore();
+    });
+    // Base material común
+    cx.save();
+    cx.fillStyle='rgba(43,32,15,0.05)';
+    cx.fillRect(0,440,W,80);
+    cx.fillStyle=C.text55;
+    cx.textAlign='center';
+    cx.font='italic 11px "IBM Plex Serif",serif';
+    cx.fillText('Base material compartida: todos compran chips a NVIDIA, fabricados en TSMC, con máquinas de ASML',W/2,530);
+    cx.restore();
+  }
+  else if(activeView==='nvidia'){
+    // Anillos concéntricos
+    [120,200,265].forEach((r,i)=>{
+      cx.beginPath();
+      cx.arc(W/2,H/2,r,0,Math.PI*2);
+      cx.strokeStyle='rgba(43,32,15,0.06)';
+      cx.lineWidth=1;
+      cx.setLineDash([2,4]);
+      cx.stroke();
+      cx.setLineDash([]);
+    });
+    cx.fillStyle=C.text28;
+    cx.textAlign='center';
+    cx.font='italic 10px "IBM Plex Mono",monospace';
+    cx.fillText('Dependencia → cuanto más cerca, mayor el agarre del nodo central',W/2,H-12);
+  }
+  else if(activeView==='fractures'){
+    // Capas + numerar fracturas
+    const layers=[
+      {y:60, h:80, bg:'rgba(43,32,15,0.02)'},
+      {y:170,h:90, bg:'rgba(43,32,15,0.02)'},
+      {y:290,h:90, bg:'rgba(43,32,15,0.02)'},
+      {y:400,h:70, bg:'rgba(43,32,15,0.02)'},
+      {y:510,h:70, bg:'rgba(43,32,15,0.02)'},
+    ];
+    layers.forEach(ly=>{
+      cx.fillStyle=ly.bg;
+      cx.fillRect(0,ly.y-ly.h/2,W,ly.h);
+    });
+    cx.fillStyle=C.text45;
+    cx.textAlign='center';
+    cx.font='italic 11px "IBM Plex Serif",serif';
+    cx.fillText('5 fracturas materiales (un nodo) + 1 narrativa (un bucle entero) · click en el número para detalle',W/2,H-10);
+  }
+  else if(activeView==='loop'){
+    // Indicar entrada de dinero / salida
+    cx.fillStyle=C.text45;
+    cx.textAlign='left';
+    cx.font='500 10px "IBM Plex Mono",monospace';
+    cx.fillText('↓ ENTRA · usuarios · inversores · hyperscalers · Estado',24,28);
+    cx.textAlign='right';
+    cx.fillText('SALE 3% paga · 90% sin impacto · $500B revenue gap ↓',W-24,28);
+
+    cx.fillStyle=C.text28;
+    cx.textAlign='center';
+    cx.font='italic 11px "IBM Plex Serif",serif';
+    cx.fillText('7 bucles cerrados · el bucle Musk (Anthropic ↔ SpaceX ↔ xAI) es la fractura narrativa nº 6',W/2,H-10);
+  }
+  cx.restore();
+}
+
+function drawEdges(){
+  E.forEach(e=>{
+    const src=N[e.f],dst=N[e.t];
+    if(!src||!dst)return;
+
+    const a=getPos(src),b=getPos(dst);
+    const r=REL[e.type];
+
+    // Visibilidad según vista
+    let alpha=1, weight=1.2;
+    const isHov=hoverEdge===e;
+    const isLoopEdge=isInLoop(e);
+
+    if(activeView==='loop'){
+      alpha = isLoopEdge ? 1 : 0.22;
+      weight = isLoopEdge ? 2.4 : 1;
+    }
+    else if(activeView==='fractures'){
+      const inv=isFractureActor(e.f)||isFractureActor(e.t);
+      const narr=isInNarrativeFractureLoop(e);
+      if(narr){alpha=1;weight=2.4}
+      else if(inv){alpha=0.5}
+      else{alpha=0.05}
+    }
+    else if(activeView==='societies'){
+      // Solo aristas dentro de misma sociedad o líneas a base material
+      const s1=src.society, s2=dst.society;
+      if(s1==='all'||s2==='all'){alpha=0.25;weight=1;}
+      else if(s1===s2){alpha=0.55;}
+      else{alpha=0.06;}
+    }
+    else if(activeNode){
+      const involved=e.f===activeNode||e.t===activeNode;
+      alpha = involved ? 1 : 0.07;
+      weight = involved ? 1.8 : 1;
+    }
+    else{
+      alpha=0.42;
+    }
+
+    if(isHov){alpha=1;weight=2.6}
+
+    // Curva
+    const dx=b.x-a.x, dy=b.y-a.y;
+    const len=Math.sqrt(dx*dx+dy*dy)||1;
+    const nx=-dy/len, ny=dx/len;
+    // Bias bidireccional: si esta arista tiene gemela inversa, separamos
+    const hasReverse = E.some(o=>o.f===e.t&&o.t===e.f);
+    const sep = hasReverse ? 6 : 0;
+    const ox=nx*sep, oy=ny*sep;
+
+    const sx=a.x+ox, sy=a.y+oy, ex=b.x+ox, ey=b.y+oy;
+    const ang=Math.atan2(ey-sy,ex-sx);
+    const x1=sx+Math.cos(ang)*(src.r+1), y1=sy+Math.sin(ang)*(src.r+1);
+    const x2=ex-Math.cos(ang)*(dst.r+7), y2=ey-Math.sin(ang)*(dst.r+7);
+
+    const midX=(x1+x2)/2, midY=(y1+y2)/2;
+    const curvature = activeView==='nvidia' ? 30 : 22;
+    const cpx=midX+nx*curvature, cpy=midY+ny*curvature;
+
+    cx.save();
+    cx.globalAlpha=alpha;
+    cx.strokeStyle=r.color;
+    cx.fillStyle=r.color;
+    cx.lineWidth=weight;
+
+    // Animación de flujo solo en vista bucle y aristas de loop
+    if(activeView==='loop' && isLoopEdge){
+      cx.setLineDash([10,6]);
+      cx.lineDashOffset=-animOffset;
+    } else if(r.dash.length){
+      cx.setLineDash(r.dash);
+    } else {
+      cx.setLineDash([]);
+    }
+
+    cx.beginPath();
+    cx.moveTo(x1,y1);
+    cx.quadraticCurveTo(cpx,cpy,x2,y2);
+    cx.stroke();
+
+    // Flecha en destino
+    cx.setLineDash([]);
+    const tang=Math.atan2(y2-cpy,x2-cpx);
+    cx.save();
+    cx.translate(x2,y2);cx.rotate(tang);
+    cx.beginPath();
+    cx.moveTo(0,0);cx.lineTo(-9,-4);cx.lineTo(-9,4);cx.closePath();
+    cx.fill();
+    cx.restore();
+
+    cx.restore();
+  });
+}
+
+function drawNodes(){
+  Object.entries(N).forEach(([id,n])=>{
+    const p=getPos(n);
+    const isAct=activeNode===id;
+    const isFracHi=isInFractureView(id);
+    const inLoop=Object.values(LOOPS).some(L=>L.actors.includes(id));
+
+    // Dim según vista
+    let alpha=1;
+    if(activeView==='loop'){
+      alpha = inLoop ? 1 : 0.6;
+    } else if(activeView==='fractures'){
+      alpha = isFracHi ? 1 : 0.25;
+    } else if(activeNode){
+      const linked = E.some(e=>(e.f===activeNode&&e.t===id)||(e.t===activeNode&&e.f===id));
+      alpha = (id===activeNode||linked) ? 1 : 0.22;
+    }
+
+    cx.save();
+    cx.globalAlpha=alpha;
+
+    // ─── Halo para activos / fracturas / ubicuos / monopolios ───
+    if(isAct){
+      cx.beginPath();
+      cx.arc(p.x,p.y,n.r+8,0,Math.PI*2);
+      cx.fillStyle='rgba(0,166,171,0.18)';
+      cx.fill();
+    }
+
+    // Halo Alphabet (ubicuo) — siempre
+    if(n.tags&&n.tags.includes('ubiq')){
+      cx.beginPath();
+      cx.arc(p.x,p.y,n.r+6,0,Math.PI*2);
+      cx.strokeStyle='rgba(0,166,171,0.55)';
+      cx.lineWidth=2;
+      cx.setLineDash([4,3]);
+      cx.stroke();
+      cx.setLineDash([]);
+      // Anillos multi-rol
+      cx.beginPath();
+      cx.arc(p.x,p.y,n.r+10,0,Math.PI*2);
+      cx.strokeStyle='rgba(51,94,130,0.32)';
+      cx.lineWidth=1.5;
+      cx.stroke();
+    }
+
+    // Halo ASML (monopolio absoluto) — siempre
+    if(n.tags&&n.tags.includes('monopoly')){
+      cx.beginPath();
+      cx.arc(p.x,p.y,n.r+5,0,Math.PI*2);
+      cx.strokeStyle='rgba(51,94,130,0.45)';
+      cx.lineWidth=2.5;
+      cx.stroke();
+      cx.beginPath();
+      cx.arc(p.x,p.y,n.r+9,0,Math.PI*2);
+      cx.strokeStyle='rgba(0,166,171,0.35)';
+      cx.lineWidth=1.5;
+      cx.setLineDash([3,3]);
+      cx.stroke();
+      cx.setLineDash([]);
+    }
+
+    // Halo fractura en vista fractures
+    if(activeView==='fractures' && isFracHi){
+      cx.beginPath();
+      cx.arc(p.x,p.y,n.r+10,0,Math.PI*2);
+      cx.fillStyle='rgba(172,73,82,0.18)';
+      cx.fill();
+    }
+
+    // ─── Cuerpo del nodo ───
+    if(n.cat==='litho'){
+      // Gradiente teal-blue para ASML (singularidad europea)
+      const g=cx.createLinearGradient(p.x-n.r,p.y-n.r,p.x+n.r,p.y+n.r);
+      g.addColorStop(0,C.teal);
+      g.addColorStop(1,C.blue);
+      cx.fillStyle=g;
+    } else {
+      cx.fillStyle=nodeColor(n);
+    }
+
+    cx.beginPath();
+    cx.arc(p.x,p.y,n.r,0,Math.PI*2);
+    cx.fill();
+
+    // Borde fractura
+    if(n.tags&&n.tags.includes('fracture')){
+      cx.strokeStyle='rgba(172,73,82,0.7)';
+      cx.lineWidth=1.5;
+      cx.stroke();
+    }
+
+    // Borde activo
+    if(isAct){
+      cx.strokeStyle='#FFFFFF';
+      cx.lineWidth=2.5;
+      cx.stroke();
+    }
+
+    // ─── Número de fractura en vista fractures ───
+    if(activeView==='fractures' && isFracHi){
+      // Buscar la fractura material (key === id) o la narrativa (actors[0] === id)
+      const f=FRACTURES.find(F=>F.key===id) ||
+              FRACTURES.find(F=>F.kind==='narrative' && F.actors && F.actors[0]===id);
+      if(f){
+        cx.save();
+        cx.fillStyle=C.red;
+        cx.beginPath();
+        cx.arc(p.x+n.r-4,p.y-n.r+4,11,0,Math.PI*2);
+        cx.fill();
+        cx.fillStyle='#fff';
+        cx.font='600 12px "IBM Plex Mono",monospace';
+        cx.textAlign='center';
+        cx.textBaseline='middle';
+        cx.fillText(f.n,p.x+n.r-4,p.y-n.r+5);
+        cx.restore();
+      }
+    }
+
+    // ─── Etiqueta del nodo ───
+    cx.fillStyle='#FFFFFF';
+    cx.textAlign='center';
+    cx.textBaseline='middle';
+    const fs=Math.max(10,Math.min(14,Math.round(n.r*0.36)));
+    cx.font=`500 ${fs}px "IBM Plex Sans",sans-serif`;
+    const lines=n.l.split(' / ');
+    if(lines.length>1&&n.r>22){
+      const lh=fs*1.15;
+      lines.forEach((ln,i)=>cx.fillText(ln,p.x,p.y-lh*(lines.length-1)/2+i*lh));
+    } else {
+      cx.fillText(n.l.replace(' / ','/'),p.x,p.y);
+    }
+
+    // Etiqueta especial ASML/Alphabet (siempre visibles fuera)
+    if(n.tags&&n.tags.includes('monopoly')&&activeView!=='nvidia'){
+      cx.fillStyle=C.text55;
+      cx.font='italic 10px "IBM Plex Serif",serif';
+      cx.fillText('100% EUV',p.x,p.y+n.r+14);
+    }
+    if(n.tags&&n.tags.includes('ubiq')&&activeView!=='nvidia'&&activeView!=='societies'){
+      cx.fillStyle=C.teal;
+      cx.font='italic 10px "IBM Plex Serif",serif';
+      cx.fillText('en 5 de 6 capas',p.x,p.y+n.r+16);
+    }
+
+    cx.restore();
+  });
+}
+
+function drawAnnotations(){
+  // Cifra clave en cada vista
+  cx.save();
+  cx.fillStyle=C.text45;
+  cx.font='500 10px "IBM Plex Mono",monospace';
+  cx.textAlign='right';
+  if(activeView==='loop'){
+    // (ya hay anotaciones arriba)
+  } else if(activeView==='nvidia'){
+    cx.fillText('NVIDIA · $5,7T · 85% mercado IA · 22 actores en su órbita',W-20,H-30);
+  } else if(activeView==='layers'){
+    cx.fillText('De millones (usuarios) a uno (ASML EUV)',W-20,H-30);
+  } else if(activeView==='fractures'){
+    cx.fillText('5 fracturas materiales + 1 narrativa',W-20,H-30);
+  } else if(activeView==='societies'){
+    cx.fillText('Mismo hardware · 3 proyectos políticos distintos',W-20,H-30);
+  }
+  cx.restore();
+}
+
+// ═══ HIT-TESTING ═══
+function getCanvasCoords(ev){
+  const r=cv.getBoundingClientRect();
+  return{x:(ev.clientX-r.left)*(W/r.width),y:(ev.clientY-r.top)*(H/r.height)};
+}
+function hitNode(x,y){
+  for(const[id,n] of Object.entries(N)){
+    const p=getPos(n);
+    if((x-p.x)**2+(y-p.y)**2 < (n.r+4)**2) return id;
+  }
+  return null;
+}
+function hitEdge(x,y){
+  let best=null, bestDist=12;
+  for(const e of E){
+    const src=N[e.f],dst=N[e.t];
+    if(!src||!dst)continue;
+    const a=getPos(src),b=getPos(dst);
+    const dx=b.x-a.x,dy=b.y-a.y;
+    const len2=dx*dx+dy*dy;
+    if(!len2)continue;
+    const t=Math.max(0,Math.min(1,((x-a.x)*dx+(y-a.y)*dy)/len2));
+    const px=a.x+t*dx, py=a.y+t*dy;
+    const d=Math.sqrt((x-px)**2+(y-py)**2);
+    if(d<bestDist){bestDist=d;best=e;}
+  }
+  return best;
+}
+
+// ═══ INTERACCIÓN ═══
+cv.addEventListener('mousemove',ev=>{
+  const{x,y}=getCanvasCoords(ev);
+  const nid=hitNode(x,y);
+  hoverEdge = nid ? null : hitEdge(x,y);
+  const wrap=cv.getBoundingClientRect();
+  const lx=ev.clientX-wrap.left+14, ly=ev.clientY-wrap.top-12;
+
+  if(nid){
+    const n=N[nid];
+    tip.innerHTML=`<strong>${n.l}</strong>${n.role}`;
+    tip.style.left=lx+'px';tip.style.top=ly+'px';
+    tip.classList.add('show');
+    cv.style.cursor='pointer';
+  } else if(hoverEdge){
+    tip.innerHTML=hoverEdge.label;
+    tip.style.left=lx+'px';tip.style.top=ly+'px';
+    tip.classList.add('show');
+    cv.style.cursor='crosshair';
+  } else {
+    tip.classList.remove('show');
+    cv.style.cursor='default';
+  }
+  draw();
+});
+
+cv.addEventListener('mouseleave',()=>{
+  hoverEdge=null;
+  tip.classList.remove('show');
+  draw();
+});
+
+cv.addEventListener('click',ev=>{
+  const{x,y}=getCanvasCoords(ev);
+  const nid=hitNode(x,y);
+  if(!nid){
+    activeNode=null;
+    renderPanel(null);
+    draw();
+    return;
+  }
+  activeNode = activeNode===nid ? null : nid;
+  renderPanel(activeNode);
+  draw();
+});
+
+// ═══ Panel lateral ═══
+function renderPanel(id){
+  const pe=document.getElementById('pe');
+  const pc=document.getElementById('pc');
+  if(!id){pe.style.display='flex';pc.style.display='none';return}
+  const n=N[id];
+  pe.style.display='none';pc.style.display='block';
+
+  document.getElementById('plabel').textContent='Actor seleccionado';
+  document.getElementById('pname').textContent=n.l;
+  document.getElementById('prole').textContent=n.role;
+  document.getElementById('pdesc').textContent=n.desc;
+  document.getElementById('pstats').innerHTML=n.stats;
+
+  const tags=document.getElementById('ptags');
+  tags.innerHTML='';
+  (n.tags||[]).forEach(t=>{
+    const sp=document.createElement('span');
+    sp.className='panel-tag tag-'+t;
+    sp.textContent={fracture:'Fractura',ubiq:'Ubicuo · la mesa',monopoly:'Monopolio absoluto',entry:'Entrada de dinero'}[t]||t;
+    tags.appendChild(sp);
+  });
+}
+
+// ═══ Intro contextual por vista ═══
+function setViewIntro(){
+  const intros={
+    loop:{title:'El bucle', text:'Los 7 circuitos cerrados donde el proveedor financia al cliente. El dinero entra por arriba (usuarios, inversores, Estado) y circula sin salir. El bucle Musk (Anthropic ↔ SpaceX ↔ xAI) revelado por el S-1 IPO de SpaceX en mayo 2026.'},
+    layers:{title:'Las 6 capas', text:'De arriba abajo: usuarios → laboratorios → cloud → chips → litografía → energía. En cada capa, mayor concentración. Al fondo: un solo monopolio.'},
+    nvidia:{title:'NVIDIA al centro', text:'Anillos por dependencia. Cuanto más cerca del centro, mayor el agarre. 22 actores giran alrededor del único cuyo colapso arrastraría al resto.'},
+    fractures:{title:'Las 6 fracturas', text:'Cinco materiales (NVIDIA, AMD, energía, TSMC+ASML, demanda real) + una narrativa (el bucle disuelve los bandos: Anthropic ↔ SpaceX ↔ xAI). Click en cualquier número para detalle.'},
+    societies:{title:'3 modelos de sociedad', text:'Mismo bucle material, tres proyectos políticos. Californiano (libertarismo industrial), chino (dirigista estatal), europeo (soberanía democrática). La pregunta no es quién compra chips. Es bajo qué modelo se decide qué hace la IA con las sociedades.'},
+  };
+  const i=intros[activeView];
+  document.getElementById('vi').innerHTML=`<strong>${i.title}</strong>${i.text}`;
+}
+
+// ═══ Selector de vistas ═══
+document.querySelectorAll('.ks-view').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.ks-view').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    activeView=btn.dataset.view;
+
+    // En vista fractures, autoseleccionar la primera fractura
+    if(activeView==='fractures'){
+      activeNode='nvidia';
+      renderPanel('nvidia');
+    } else if(activeView==='loop'){
+      activeNode=null;renderPanel(null);
+    }
+    setViewIntro();
+    draw();
+  });
+});
+
+// ═══ Enlace al ensayo ═══
+document.getElementById('essayLink').addEventListener('click',e=>{
+  e.preventDefault();
+  alert('Pendiente: enlace al post WP del ensayo N17.n1 cuando esté publicado.');
+});
+
+// ═══ Init ═══
+setViewIntro();
+draw();
+
+})();
+</script>
+
+</body>
+</html>

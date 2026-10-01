@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N20.a1 · KS Color Compass · v0.8.2 · Koi Samsa</title>
+<!-- Página anfitriona (grafo v1.44): hace de /lab. En la web, este fragmento vive dentro de un bloque de WordPress y es
+     el tema quien pone el papel, el margen y la letra; aquí lo pone esta página, con MUDA inyectado (regla del Lab,
+     27-jun). Lo que va dentro de <body> es el artefacto tal cual está en el Vault: no se ha tocado. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<base target="_blank">
+<style>
+:root{--ks-font-sans:"Albert Sans",system-ui,sans-serif;--ks-font-serif:"Newsreader",Georgia,serif;--ks-font-mono:"Fira Code",ui-monospace,monospace;color-scheme:light}
+html,body{margin:0;background:#FAF9F7;color:#2B200F}
+body{padding:24px;font-family:var(--ks-font-sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;font-synthesis:none}
+@media (max-width:640px){body{padding:16px}}
+</style>
+</head>
+<body>
+<style>
+  .ks-scope.ks-lab-ksca {
+    --ks-bg: #ffffff; --ks-surface: #ffffff; --ks-border: #e0dbd4;
+    --ks-text: #2a2926; --ks-muted: #6f6a63; --ks-radius: 18px;
+    --ks-shadow: 0 10px 30px rgba(0,0,0,.06); --ks-wheel-size: min(68vw, 520px);
+    color: var(--ks-text);
+    font-family: var(--ks-font-sans, "IBM Plex Sans", sans-serif);
+  }
+  .ks-scope.ks-lab-ksca *, .ks-scope.ks-lab-ksca *::before, .ks-scope.ks-lab-ksca *::after { box-sizing: border-box; }
+  .ks-scope.ks-lab-ksca button, .ks-scope.ks-lab-ksca input { font: inherit; letter-spacing: inherit; color: inherit; }
+
+  .ks-lab-ksca .ks-art { max-width: 1380px; margin: 0 auto; background: #ffffff; border: 1px solid var(--ks-border); border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,.04); overflow: hidden; }
+  .ks-lab-ksca .ks-art-head { padding: 24px 28px; border-bottom: 1px solid var(--ks-border); }
+  .ks-lab-ksca .ks-art-foot { padding: 16px 28px; border-top: 1px solid var(--ks-border); font-family: var(--ks-font-mono, "IBM Plex Mono", monospace); font-size: 11px; letter-spacing: .08em; color: var(--ks-muted); line-height: 1.5; }
+  .ks-lab-ksca .ks-overline { display: block; font-family: var(--ks-font-mono, "IBM Plex Mono", monospace); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ks-muted); margin-bottom: 10px; }
+  .ks-lab-ksca .ks-art-title--sm { margin: 0 0 8px; font-size: clamp(32px, 4vw, 48px); font-family: var(--ks-font-serif, "IBM Plex Serif", serif); font-weight: 700; line-height: 1.05; letter-spacing: 0.01em; color: var(--ks-text); }
+  .ks-lab-ksca .ks-subtitle { margin-top: 8px; font-family: var(--ks-font-sans, "IBM Plex Sans", sans-serif); font-size: 18px; font-weight: 400; line-height: 1.6; color: rgba(47,34,23,0.54) !important; }
+
+  /* ── Fila 1: rueda + controles ── */
+  .ks-lab-ksca .ks-row-1 { display: grid; grid-template-columns: 1fr 340px; border-bottom: 1px solid var(--ks-border); }
+  .ks-lab-ksca .ks-art-canvas { padding: 28px; display: grid; place-items: center; border-right: 1px solid var(--ks-border); background: #ffffff; }
+  .ks-lab-ksca .ks-art-controls { padding: 24px; display: grid; gap: 14px; align-content: start; background: #ffffff; }
+
+  /* ── Fila 2: paleta completa ── */
+  .ks-lab-ksca .ks-row-2 { padding: 24px 28px; border-bottom: 1px solid var(--ks-border); background: #ffffff; }
+
+  /* ── Fila 3: fórmula + lectura ── */
+  .ks-lab-ksca .ks-row-3 { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .ks-lab-ksca .ks-row-3-left  { padding: 24px 28px; border-right: 1px solid var(--ks-border); }
+  .ks-lab-ksca .ks-row-3-right { padding: 24px 28px; }
+
+  .ks-lab-ksca .ks-panel-card { border: 1px solid var(--ks-border); border-radius: var(--ks-radius); background: #ffffff; padding: 16px; }
+  .ks-lab-ksca .ks-panel-title { margin: 0 0 14px; font-family: var(--ks-font-mono, "IBM Plex Mono", monospace); font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: .10em; color: var(--ks-text); }
+  .ks-lab-ksca .ks-controls { display: grid; gap: 12px; }
+  .ks-lab-ksca .ks-field { display: grid; gap: 6px; }
+  .ks-lab-ksca label { font-size: 13px; color: var(--ks-muted); }
+  .ks-lab-ksca input[type="range"] { width: 100%; }
+  .ks-lab-ksca .ks-toggle-row, .ks-lab-ksca .ks-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ks-lab-ksca .ks-btn { border: 1px solid var(--ks-border); background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 13px; cursor: pointer; transition: background .16s, border-color .16s, transform .16s; }
+  .ks-lab-ksca .ks-btn:hover { background: #faf7f2; border-color: #c9c3b9; transform: translateY(-1px); }
+  .ks-lab-ksca .ks-btn.is-active { background: #2a2926; color: #fff; border-color: #2a2926; }
+
+  .ks-lab-ksca .ks-wheel-stage { width: 100%; display: grid; gap: 20px; justify-items: center; }
+  .ks-lab-ksca .ks-wheel-wrap { position: relative; width: var(--ks-wheel-size); height: var(--ks-wheel-size); max-width: 100%; aspect-ratio: 1/1; cursor: crosshair; }
+  .ks-lab-ksca .ks-wheel { position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at center, #808080 0%, #808080 4%, rgba(128,128,128,.92) 10%, rgba(128,128,128,.72) 20%, rgba(128,128,128,.42) 34%, rgba(128,128,128,.12) 50%, rgba(128,128,128,0) 62%), conic-gradient(hsl(0 80% 55%), hsl(20 88% 55%), hsl(40 92% 56%), hsl(60 86% 54%), hsl(80 70% 48%), hsl(100 62% 48%), hsl(120 56% 46%), hsl(140 58% 44%), hsl(160 64% 42%), hsl(180 70% 43%), hsl(200 72% 48%), hsl(220 62% 48%), hsl(240 50% 48%), hsl(260 48% 47%), hsl(280 52% 49%), hsl(300 62% 48%), hsl(320 72% 52%), hsl(340 84% 55%), hsl(360 80% 55%));
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.06); }
+  .ks-lab-ksca .ks-wheel::after { content: ""; position: absolute; inset: 8%; border-radius: 50%; border: 1px solid rgba(255,255,255,.28); pointer-events: none; z-index: 1; }
+  .ks-lab-ksca .ks-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 3; }
+  .ks-lab-ksca .ks-guide { stroke: rgba(0,0,0,.08); stroke-width: 1; fill: none; }
+  .ks-lab-ksca .ks-guide-ring { fill: none; stroke: rgba(42,41,38,.1); stroke-width: .8; stroke-dasharray: 2 8; }
+  .ks-lab-ksca .ks-arm-main  { stroke: rgba(42,41,38,.82); stroke-width: 3; stroke-linecap: round; }
+  .ks-lab-ksca .ks-arm-side  { stroke: rgba(42,41,38,.35); stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 4 5; }
+  .ks-lab-ksca .ks-arm-inner { stroke: rgba(42,41,38,.14); stroke-width: 1.2; stroke-linecap: round; stroke-dasharray: 2 5; }
+  .ks-lab-ksca .ks-node { cursor: grab; transition: transform .16s; }
+  .ks-lab-ksca .ks-node:hover { transform: scale(1.06); }
+  .ks-lab-ksca .ks-node-ring { fill: rgba(255,255,255,.22); stroke: rgba(255,255,255,.92); stroke-width: 2.2; }
+  .ks-lab-ksca .ks-node-core { stroke: rgba(42,41,38,.16); stroke-width: 1; }
+  .ks-lab-ksca .ks-node-label { font-size: 8px; font-weight: 500; text-anchor: middle; dominant-baseline: middle; fill: rgba(42,41,38,.82); pointer-events: none; }
+  .ks-lab-ksca .ks-node-a .ks-node-ring { stroke-width: 3; }
+  .ks-lab-ksca .ks-node-a .ks-node-label { font-size: 10px; font-weight: 600; }
+  .ks-lab-ksca .ks-node-q { opacity: .65; }
+  .ks-lab-ksca .ks-node-q .ks-node-ring { fill: rgba(255,255,255,.1); stroke: rgba(255,255,255,.5); stroke-width: 1.2; }
+  .ks-lab-ksca .ks-node-q .ks-node-label { font-size: 6.5px; font-weight: 400; fill: rgba(42,41,38,.65); }
+
+  .ks-lab-ksca .ks-swatches { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
+  .ks-lab-ksca .ks-swatch { display: grid; gap: 4px; }
+  .ks-lab-ksca .ks-swatch-chip { height: 44px; border-radius: 10px; border: 1px solid rgba(0,0,0,.06); }
+  .ks-lab-ksca .ks-swatch-meta { font-size: 13px; line-height: 1.4; color: var(--ks-muted); }
+  .ks-lab-ksca .ks-swatch-meta strong { display: block; color: var(--ks-text); font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .ks-lab-ksca .ks-formula { font-family: var(--ks-font-mono, "IBM Plex Mono", monospace); font-size: 11px; line-height: 1.65; color: var(--ks-muted); background: #ffffff; border: 1px solid var(--ks-border); border-radius: 12px; padding: 12px; white-space: pre-line; }
+  .ks-lab-ksca .ks-art-note { margin: 0; font-family: var(--ks-font-sans, "IBM Plex Sans", sans-serif); font-size: 18px; font-weight: 400; line-height: 1.7; color: var(--ks-muted); }
+  .ks-lab-ksca .ks-badge { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; background: #f7f4ef; border: 1px solid var(--ks-border); padding: 7px 12px; font-size: 12px; color: var(--ks-muted); }
+  .ks-lab-ksca .ks-dot { width: 8px; height: 8px; border-radius: 50%; background: #2a2926; flex-shrink: 0; }
+  @media (max-width: 1100px) {
+    .ks-lab-ksca .ks-swatches { grid-template-columns: repeat(4,1fr); }
+  }
+  @media (max-width: 860px) {
+    .ks-lab-ksca .ks-row-1 { grid-template-columns: 1fr; }
+    .ks-lab-ksca .ks-art-canvas { border-right: 0; border-bottom: 1px solid var(--ks-border); }
+    .ks-lab-ksca .ks-wheel-wrap { width: min(84vw,420px); height: min(84vw,420px); }
+    .ks-lab-ksca .ks-row-3 { grid-template-columns: 1fr; }
+    .ks-lab-ksca .ks-row-3-left { border-right: 0; border-bottom: 1px solid var(--ks-border); }
+    .ks-lab-ksca .ks-swatches { grid-template-columns: repeat(3,1fr); }
+  }
+</style>
+
+<div class="ks-scope ks-lab-ksca">
+  <div class="ks-art">
+    <header class="ks-art-head">
+      <div class="ks-overline">LAB · Artefacto 04 · KS Kolor System</div>
+      <h2 class="ks-art-title--sm">KS Color Compass v0.8.2</h2>
+      <p class="ks-subtitle">Elige un color de referencia y el compás genera automáticamente un grupo de doce colores con criterios curados para armonías. No te quedes con todos: usa los filtros para encontrar la combinación que mejor encaja con tu propósito.</p>
+    </header>
+
+    <!-- Fila 1: rueda + controles -->
+    <div class="ks-row-1">
+      <div class="ks-art-canvas">
+        <div class="ks-wheel-stage">
+          <div class="ks-wheel-wrap" id="ksWheelWrap">
+            <div class="ks-wheel"></div>
+            <svg class="ks-svg" viewBox="0 0 100 100" aria-hidden="true">
+              <line class="ks-guide" x1="50" y1="0" x2="50" y2="100"/>
+              <line class="ks-guide" x1="0" y1="50" x2="100" y2="50"/>
+              <circle class="ks-guide-ring" cx="50" cy="50" r="16"/>
+              <circle class="ks-guide-ring" cx="50" cy="50" r="27"/>
+              <line id="lAq"   class="ks-arm-inner" x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lBfq"  class="ks-arm-inner" x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lBcq"  class="ks-arm-inner" x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lCq"   class="ks-arm-inner" x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lCdfq" class="ks-arm-inner" x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lCdcq" class="ks-arm-inner" x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lA"    class="ks-arm-main"  x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lBf"   class="ks-arm-side"  x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lBc"   class="ks-arm-side"  x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lC"    class="ks-arm-main"  x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lCdf"  class="ks-arm-side"  x1="50" y1="50" x2="50" y2="50"/>
+              <line id="lCdc"  class="ks-arm-side"  x1="50" y1="50" x2="50" y2="50"/>
+              <g id="nAq"   class="ks-node ks-node-q"><circle class="ks-node-ring" cx="50" cy="50" r="2.6"/><circle class="ks-node-core" cx="50" cy="50" r="1.6"/><text class="ks-node-label" x="50" y="50">Aq</text></g>
+              <g id="nBfq"  class="ks-node ks-node-q"><circle class="ks-node-ring" cx="50" cy="50" r="2.2"/><circle class="ks-node-core" cx="50" cy="50" r="1.4"/><text class="ks-node-label" x="50" y="50">Bfq</text></g>
+              <g id="nBcq"  class="ks-node ks-node-q"><circle class="ks-node-ring" cx="50" cy="50" r="2.2"/><circle class="ks-node-core" cx="50" cy="50" r="1.4"/><text class="ks-node-label" x="50" y="50">Bcq</text></g>
+              <g id="nCq"   class="ks-node ks-node-q"><circle class="ks-node-ring" cx="50" cy="50" r="2.2"/><circle class="ks-node-core" cx="50" cy="50" r="1.4"/><text class="ks-node-label" x="50" y="50">Cq</text></g>
+              <g id="nCdfq" class="ks-node ks-node-q"><circle class="ks-node-ring" cx="50" cy="50" r="2.2"/><circle class="ks-node-core" cx="50" cy="50" r="1.4"/><text class="ks-node-label" x="50" y="50">Cdfq</text></g>
+              <g id="nCdcq" class="ks-node ks-node-q"><circle class="ks-node-ring" cx="50" cy="50" r="2.2"/><circle class="ks-node-core" cx="50" cy="50" r="1.4"/><text class="ks-node-label" x="50" y="50">Cdcq</text></g>
+              <g id="nA"    class="ks-node ks-node-a" tabindex="0"><circle class="ks-node-ring" cx="50" cy="50" r="5"/><circle class="ks-node-core" cx="50" cy="50" r="3.6"/><text class="ks-node-label" x="50" y="50">A</text></g>
+              <g id="nBf"   class="ks-node" tabindex="0"><circle class="ks-node-ring" cx="50" cy="50" r="3.8"/><circle class="ks-node-core" cx="50" cy="50" r="2.6"/><text class="ks-node-label" x="50" y="50">Bf</text></g>
+              <g id="nBc"   class="ks-node" tabindex="0"><circle class="ks-node-ring" cx="50" cy="50" r="3.8"/><circle class="ks-node-core" cx="50" cy="50" r="2.6"/><text class="ks-node-label" x="50" y="50">Bc</text></g>
+              <g id="nC"    class="ks-node" tabindex="0"><circle class="ks-node-ring" cx="50" cy="50" r="4"/><circle class="ks-node-core" cx="50" cy="50" r="2.8"/><text class="ks-node-label" x="50" y="50">C</text></g>
+              <g id="nCdf"  class="ks-node" tabindex="0"><circle class="ks-node-ring" cx="50" cy="50" r="3.8"/><circle class="ks-node-core" cx="50" cy="50" r="2.6"/><text class="ks-node-label" x="50" y="50">Cdf</text></g>
+              <g id="nCdc"  class="ks-node" tabindex="0"><circle class="ks-node-ring" cx="50" cy="50" r="3.8"/><circle class="ks-node-core" cx="50" cy="50" r="2.6"/><text class="ks-node-label" x="50" y="50">Cdc</text></g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="ks-art-controls">
+        <div class="ks-panel-card">
+          <h2 class="ks-panel-title">Controles</h2>
+          <div class="ks-controls">
+            <div class="ks-field">
+              <label for="ksAnchor">Elige tu color de referencia</label>
+              <input id="ksAnchor" type="color" value="#ff4fa0" style="width:100%;height:52px;border-radius:12px;border:1px solid var(--ks-border);cursor:pointer;padding:4px;"/>
+            </div>
+            <div class="ks-field">
+              <label for="ksDelta">Horquilla: <span id="ksDeltaValue">30°</span></label>
+              <input id="ksDelta" type="range" min="25" max="45" value="30" step="1"/>
+            </div>
+            <div class="ks-field">
+              <label for="ksLuminance">Brillo: <span id="ksLuminanceValue">66</span></label>
+              <input id="ksLuminance" type="range" min="20" max="88" value="66" step="1"/>
+            </div>
+            <div class="ks-field">
+              <label>Vista</label>
+              <div class="ks-toggle-row" id="ksModeRow">
+                <button type="button" class="ks-btn is-active" data-mode="all">Todo</button>
+                <button type="button" class="ks-btn" data-mode="cold">Familia fría</button>
+                <button type="button" class="ks-btn" data-mode="warm">Familia cálida</button>
+                <button type="button" class="ks-btn" data-mode="bright">Brillo alto</button>
+                <button type="button" class="ks-btn" data-mode="dark">Brillo bajo</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ks-actions">
+          <button type="button" id="ksReset" class="ks-btn">reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fila 2: paleta -->
+    <div class="ks-row-2">
+      <div class="ks-panel-title">Paleta</div>
+      <div class="ks-swatches" id="ksSwatches"></div>
+    </div>
+
+    <!-- Fila 3: fórmula + lectura -->
+    <div class="ks-row-3">
+      <div class="ks-row-3-left">
+        <div class="ks-panel-title">Fórmula</div>
+        <div id="ksFormula" class="ks-formula"></div>
+      </div>
+      <div class="ks-row-3-right">
+        <div class="ks-panel-title">Lectura</div>
+        <p id="ksReading" class="ks-art-note">Todos los colores que genera el compás a partir de tu referencia. Un punto de partida, no una paleta definitiva.</p>
+      </div>
+    </div>
+
+    <footer class="ks-art-foot">
+      KS Color Compass · Koi Samsa Color Algorithm · <a href="https://koisamsa.com/lab" style="color:inherit;text-decoration:underline;text-underline-offset:3px;">koisamsa.com/lab</a>
+    </footer>
+  </div>
+</div>
+
+<script>
+(() => {
+  const root = document.querySelector('.ks-scope.ks-lab-ksca');
+  if (!root) return;
+
+  const $ = id => root.querySelector('#'+id);
+  const anchorInput    = $('ksAnchor');
+  const deltaInput     = $('ksDelta');
+  const deltaValue     = $('ksDeltaValue');
+  const luminanceInput = $('ksLuminance');
+  const luminanceValue = $('ksLuminanceValue');
+  const modeRow        = $('ksModeRow');
+  const resetBtn       = $('ksReset');
+  const swatchesEl     = $('ksSwatches');
+  const formulaEl      = $('ksFormula');
+  const readingEl      = $('ksReading');
+  const wheelWrap      = $('ksWheelWrap');
+
+  const CX = 50, CY = 50, R_MAX = 37, Ri_RATIO = 0.595;
+
+  // Z: ancla original, solo cambia cuando el usuario mueve A conscientemente
+  const Z = { h: 330, s: 100, l: 66 };
+
+  // P: 12 colores fijos calculados desde Z. Nunca cambian al filtrar.
+  const P = {};
+
+  // state: geometría de la rueda + UI
+  const state = { h: 330, s: 100, rQ: 1.0, delta: 30, mode: 'all', lMod: 66 };
+
+  function norm(h) { const n = h % 360; return n < 0 ? n + 360 : n; }
+  function polar(h, r) { const a = (h-90)*Math.PI/180; return { x: CX+r*Math.cos(a), y: CY+r*Math.sin(a) }; }
+  function css(h,s,l)  { return `hsl(${Math.round(norm(+h))} ${Math.round(+s)}% ${Math.round(+l)}%)`; }
+
+  function hex(h,s,l) {
+    h=norm(+h); s=+s/100; l=+l/100;
+    const c=(1-Math.abs(2*l-1))*s, x=c*(1-Math.abs((h/60)%2-1)), m=l-c/2;
+    let r=0,g=0,b=0;
+    if(h<60)[r,g,b]=[c,x,0]; else if(h<120)[r,g,b]=[x,c,0];
+    else if(h<180)[r,g,b]=[0,c,x]; else if(h<240)[r,g,b]=[0,x,c];
+    else if(h<300)[r,g,b]=[x,0,c]; else[r,g,b]=[c,0,x];
+    const t=v=>Math.round((v+m)*255).toString(16).padStart(2,'0');
+    return `#${t(r)}${t(g)}${t(b)}`.toUpperCase();
+  }
+
+  function hexToHsl(hx) {
+    let r=parseInt(hx.slice(1,3),16)/255, g=parseInt(hx.slice(3,5),16)/255, b=parseInt(hx.slice(5,7),16)/255;
+    const max=Math.max(r,g,b), min=Math.min(r,g,b), l=(max+min)/2, d=max-min;
+    let h=0, s=0;
+    if(d) { s=d/(1-Math.abs(2*l-1)); switch(max){case r:h=60*(((g-b)/d)%6);break;case g:h=60*((b-r)/d+2);break;case b:h=60*((r-g)/d+4);break;} }
+    return { h:norm(h), s:Math.round(s*100), l:Math.round(l*100) };
+  }
+
+  // Calcula P desde Z — se llama solo al cambiar A o la horquilla
+  function calcP() {
+    const {h, s, l} = Z;
+    const bS = Math.round(Math.max(18, s*0.52));
+    const bL = Math.round(Math.min(64, l*0.88+9));
+    const hC   = norm(h+180);
+    const hBf  = norm(h-state.delta);
+    const hBc  = norm(h+state.delta);
+    const hCdf = norm(hC+state.delta);
+    const hCdc = norm(hC-state.delta);
+    P.A    = {label:'A',    h,      s,   l};
+    P.Aq   = {label:'Aq',   h,         s:bS, l:bL};
+    P.Bf   = {label:'Bf',   h:hBf,     s,    l};
+    P.Bfq  = {label:'Bfq',  h:hBf,     s:bS, l:bL};
+    P.Bc   = {label:'Bc',   h:hBc,     s,    l};
+    P.Bcq  = {label:'Bcq',  h:hBc,     s:bS, l:bL};
+    P.C    = {label:'C',    h:hC,      s,    l};
+    P.Cq   = {label:'Cq',   h:hC,      s:bS, l:bL};
+    P.Cdf  = {label:'Cdf',  h:hCdf,    s,    l};
+    P.Cdfq = {label:'Cdfq', h:hCdf,    s:bS, l:bL};
+    P.Cdc  = {label:'Cdc',  h:hCdc,    s,    l};
+    P.Cdcq = {label:'Cdcq', h:hCdc,    s:bS, l:bL};
+  }
+
+  function setLine(id,p1,p2) {
+    const el=root.querySelector('#'+id);
+    if(!el) return;
+    el.setAttribute('x1',p1.x); el.setAttribute('y1',p1.y);
+    el.setAttribute('x2',p2.x); el.setAttribute('y2',p2.y);
+  }
+
+  function setNode(id,p,fill) {
+    const g=root.querySelector('#'+id);
+    g.querySelector('.ks-node-ring').setAttribute('cx',p.x);
+    g.querySelector('.ks-node-ring').setAttribute('cy',p.y);
+    g.querySelector('.ks-node-core').setAttribute('cx',p.x);
+    g.querySelector('.ks-node-core').setAttribute('cy',p.y);
+    g.querySelector('.ks-node-core').setAttribute('fill',fill);
+    g.querySelector('.ks-node-label').setAttribute('x',p.x);
+    g.querySelector('.ks-node-label').setAttribute('y',p.y);
+  }
+
+  function showEl(id,v) { root.querySelector('#'+id).style.display=v?'block':'none'; }
+
+  function btnState(row,val,key) {
+    [...row.querySelectorAll('.ks-btn')].forEach(b=>b.classList.toggle('is-active',b.dataset[key]===val));
+  }
+
+  function buildSwatches(nodes) {
+    swatchesEl.innerHTML='';
+    nodes.forEach(({label,h,s,l})=>{
+      const d=document.createElement('div');
+      d.className='ks-swatch';
+      d.innerHTML=`<div class="ks-swatch-chip" style="background:${css(h,s,l)}"></div><div class="ks-swatch-meta"><strong>${label}</strong>${hex(h,s,l)}</div>`;
+      swatchesEl.appendChild(d);
+    });
+  }
+
+  function update() {
+    deltaValue.textContent    = `${state.delta}°`;
+    luminanceValue.textContent = state.lMod;
+    btnState(modeRow, state.mode, 'mode');
+
+    const m = state.mode, lM = state.lMod;
+    const R  = R_MAX * state.rQ;
+    const Ri = R * Ri_RATIO;
+    const O  = {x:CX, y:CY};
+
+    // Ángulos desde state.h (geometría libre de la rueda)
+    const hA   = norm(state.h);
+    const hC   = norm(hA+180);
+    const hBf  = norm(hA-state.delta);
+    const hBc  = norm(hA+state.delta);
+    const hCdf = norm(hC+state.delta);
+    const hCdc = norm(hC-state.delta);
+
+    const pA    = polar(hA,   R),  pBf  = polar(hBf,  R),  pBc  = polar(hBc,  R);
+    const pC    = polar(hC,   R),  pCdf = polar(hCdf, R),  pCdc = polar(hCdc, R);
+    const pAq   = polar(hA,   Ri), pBfq = polar(hBf,  Ri), pBcq = polar(hBc,  Ri);
+    const pCq   = polar(hC,   Ri), pCdfq= polar(hCdf, Ri), pCdcq= polar(hCdc, Ri);
+
+    const vis = {
+      A:true, Aq:true,
+      Bf:   m==='all'||m==='cold',
+      Bfq:  m==='all'||m==='cold'||m==='dark',
+      Bc:   m==='all'||m==='warm'||m==='bright',
+      Bcq:  m==='all'||m==='warm'||m==='bright'||m==='dark',
+      C:    m==='all'||m==='cold'||m==='warm'||m==='dark',
+      Cq:   m==='all'||m==='cold'||m==='warm'||m==='bright'||m==='dark',
+      Cdf:  m==='all'||m==='cold',
+      Cdfq: m==='all'||m==='cold'||m==='bright'||m==='dark',
+      Cdc:  m==='all'||m==='warm',
+      Cdcq: m==='all'||m==='warm',
+    };
+
+    // Colores de nodos en rueda: desde P con lMod para saturados
+    const nc = {
+      A:    css(P.A.h,    P.A.s,    lM),
+      Aq:   css(P.Aq.h,   P.Aq.s,   P.Aq.l),
+      Bf:   css(P.Bf.h,   P.Bf.s,   lM),
+      Bfq:  css(P.Bfq.h,  P.Bfq.s,  P.Bfq.l),
+      Bc:   css(P.Bc.h,   P.Bc.s,   lM),
+      Bcq:  css(P.Bcq.h,  P.Bcq.s,  P.Bcq.l),
+      C:    css(P.C.h,    P.C.s,    lM),
+      Cq:   css(P.Cq.h,   P.Cq.s,   P.Cq.l),
+      Cdf:  css(P.Cdf.h,  P.Cdf.s,  lM),
+      Cdfq: css(P.Cdfq.h, P.Cdfq.s, P.Cdfq.l),
+      Cdc:  css(P.Cdc.h,  P.Cdc.s,  lM),
+      Cdcq: css(P.Cdcq.h, P.Cdcq.s, P.Cdcq.l),
+    };
+
+    // Brazos
+    setLine('lA',   O, pA);    setLine('lC',    O, pC);
+    setLine('lAq',  O, pAq);   setLine('lCq',   O, pCq);
+    setLine('lBf',  O, pBf);   showEl('lBf',  vis.Bf);
+    setLine('lBc',  O, pBc);   showEl('lBc',  vis.Bc);
+    setLine('lCdf', O, pCdf);  showEl('lCdf', vis.Cdf);
+    setLine('lCdc', O, pCdc);  showEl('lCdc', vis.Cdc);
+    setLine('lBfq', O, pBfq);  showEl('lBfq', vis.Bfq);
+    setLine('lBcq', O, pBcq);  showEl('lBcq', vis.Bcq);
+    setLine('lCdfq',O, pCdfq); showEl('lCdfq',vis.Cdfq);
+    setLine('lCdcq',O, pCdcq); showEl('lCdcq',vis.Cdcq);
+
+    // Nodos exteriores
+    setNode('nA',   pA,   nc.A);
+    setNode('nC',   pC,   nc.C);
+    setNode('nBf',  pBf,  nc.Bf);  showEl('nBf',  vis.Bf);
+    setNode('nBc',  pBc,  nc.Bc);  showEl('nBc',  vis.Bc);
+    setNode('nCdf', pCdf, nc.Cdf); showEl('nCdf', vis.Cdf);
+    setNode('nCdc', pCdc, nc.Cdc); showEl('nCdc', vis.Cdc);
+
+    // Nodos interiores
+    setNode('nAq',   pAq,   nc.Aq);
+    setNode('nCq',   pCq,   nc.Cq);
+    setNode('nBfq',  pBfq,  nc.Bfq);  showEl('nBfq',  vis.Bfq);
+    setNode('nBcq',  pBcq,  nc.Bcq);  showEl('nBcq',  vis.Bcq);
+    setNode('nCdfq', pCdfq, nc.Cdfq); showEl('nCdfq', vis.Cdfq);
+    setNode('nCdcq', pCdcq, nc.Cdcq); showEl('nCdcq', vis.Cdcq);
+
+    // Swatches: siempre desde P, lMod solo en saturados
+    const aRef = m!=='all' ? [{label:'A ref', h:Z.h, s:Z.s, l:Z.l}] : [];
+    const allS = [
+      {label:'A',    h:P.A.h,    s:P.A.s,    l:lM},
+      {label:'Aq',   h:P.Aq.h,   s:P.Aq.s,   l:P.Aq.l},
+      {label:'Bf',   h:P.Bf.h,   s:P.Bf.s,   l:lM},
+      {label:'Bfq',  h:P.Bfq.h,  s:P.Bfq.s,  l:P.Bfq.l},
+      {label:'Bc',   h:P.Bc.h,   s:P.Bc.s,   l:lM},
+      {label:'Bcq',  h:P.Bcq.h,  s:P.Bcq.s,  l:P.Bcq.l},
+      {label:'C',    h:P.C.h,    s:P.C.s,    l:lM},
+      {label:'Cq',   h:P.Cq.h,   s:P.Cq.s,   l:P.Cq.l},
+      {label:'Cdf',  h:P.Cdf.h,  s:P.Cdf.s,  l:lM},
+      {label:'Cdfq', h:P.Cdfq.h, s:P.Cdfq.s, l:P.Cdfq.l},
+      {label:'Cdc',  h:P.Cdc.h,  s:P.Cdc.s,  l:lM},
+      {label:'Cdcq', h:P.Cdcq.h, s:P.Cdcq.s, l:P.Cdcq.l},
+    ];
+    buildSwatches([...aRef, ...allS.filter(n=>vis[n.label])]);
+
+    formulaEl.textContent =
+`A   = H ${Math.round(Z.h)}°
+C   = A + 180° = ${Math.round(norm(Z.h+180))}°
+
+Bf  = A − ${state.delta}° = ${Math.round(P.Bf.h)}°
+Bc  = A + ${state.delta}° = ${Math.round(P.Bc.h)}°
+Cdf = C + ${state.delta}° = ${Math.round(P.Cdf.h)}°
+Cdc = C − ${state.delta}° = ${Math.round(P.Cdc.h)}°
+
+P: 12 colores fijos · Z L ${Z.l}
+Brillo modulado: L ${lM}`;
+
+    readingEl.textContent =
+      m==='all'    ? 'Todos los colores que genera el compás a partir de tu referencia. Un punto de partida, no una paleta definitiva.' :
+      m==='cold'   ? 'Análogos y quebrados desplazados hacia el lado frío. Una selección construida sobre la geometría del compás y la coherencia cromática del sistema.' :
+      m==='warm'   ? 'Análogos y quebrados desplazados hacia el lado cálido. La misma lógica geométrica, en dirección opuesta.' :
+      m==='bright' ? 'Una selección curada para composiciones luminosas. Funciona bien en fondos claros según mi experiencia con este sistema.' :
+                     'Una selección curada para composiciones oscuras. Los colores que mejor aguantan en rangos bajos de luminancia.';
+  }
+
+  // Drag A en rueda
+  function ptrXY(e) {
+    const r = wheelWrap.getBoundingClientRect();
+    return { x:(e.clientX-r.left)/r.width*100, y:(e.clientY-r.top)/r.height*100 };
+  }
+
+  const nodeA = root.querySelector('#nA');
+  let drag = false;
+  nodeA.addEventListener('pointerdown', e => { drag=true; nodeA.setPointerCapture(e.pointerId); e.preventDefault(); });
+  wheelWrap.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const {x,y} = ptrXY(e);
+    const dx=x-CX, dy=y-CY;
+    state.rQ = Math.min(1, Math.max(0.05, Math.sqrt(dx*dx+dy*dy)/R_MAX));
+    state.h  = norm(Math.atan2(dy,dx)*180/Math.PI+90);
+    Z.h = state.h; Z.s = state.s; // Z.l no se toca
+    calcP();
+    anchorInput.value = hex(Z.h, Z.s, Z.l);
+    update();
+  });
+  wheelWrap.addEventListener('pointerup',     () => drag=false);
+  wheelWrap.addEventListener('pointercancel', () => drag=false);
+
+  // Doble clic en A → reset
+  nodeA.addEventListener('dblclick', () => {
+    Z.h=330; Z.s=100; Z.l=66;
+    state.h=330; state.s=100; state.rQ=1; state.delta=30; state.mode='all'; state.lMod=66;
+    anchorInput.value='#FF4FA0'; deltaInput.value='30'; luminanceInput.value='66';
+    calcP(); update();
+  });
+
+  anchorInput.addEventListener('input', e => {
+    const h = hexToHsl(e.target.value);
+    Z.h=h.h; Z.s=h.s; Z.l=h.l;
+    state.h=h.h; state.s=h.s; state.rQ=1;
+    if (state.mode!=='bright'&&state.mode!=='dark') state.lMod=h.l;
+    calcP(); update();
+  });
+
+  deltaInput.addEventListener('input', e => {
+    state.delta = Number(e.target.value);
+    calcP(); update();
+  });
+
+  luminanceInput.addEventListener('input', e => {
+    state.lMod = Number(e.target.value);
+    update();
+  });
+
+  modeRow.addEventListener('click', e => {
+    const b = e.target.closest('[data-mode]');
+    if (!b) return;
+    state.mode = b.dataset.mode;
+    if      (state.mode==='bright') state.lMod = 80;
+    else if (state.mode==='dark')   state.lMod = 40;
+    else                            state.lMod = Z.l;
+    luminanceInput.value       = state.lMod;
+    luminanceValue.textContent = state.lMod;
+    update();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    Z.h=330; Z.s=100; Z.l=66;
+    state.h=330; state.s=100; state.rQ=1; state.delta=30; state.mode='all'; state.lMod=66;
+    anchorInput.value='#FF4FA0'; deltaInput.value='30'; luminanceInput.value='66';
+    calcP(); update();
+  });
+
+  calcP();
+  update();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N07.a1 — Stakeholder Topology · piel MUDA v2 · KOI SAMSA</title>
+<!-- ═══════════════════════════════════════════════════════════════
+     N07.a1 · STAKEHOLDER TOPOLOGY · PIEL MUDA v2 · 2026-07-08
+     TEST DE CHASIS 1/2 (Storybook v2 → v3 exige 2 artefactos).
+     Migrado desde KS-stakeholder-topology-v1-reconciliado.html
+     (intacto al lado, con el v1 original — ese es el versionado).
+     REGLA: cero :root propio — muda.css F1 embebido literal abajo.
+     HALLAZGOS DEL TEST:
+     1. agente #9E9789 y aristas #b5b0a5 eran grises calidos FUERA
+        de canon → mapeados a rampa Silice 04-jul (#ADABA2 / #CBC9C0)
+        en hex directo porque la rampa AUN no tiene tokens (el
+        volcado 04-jul bloquea pieles — prueba de que es pendiente 0)
+     2. t60 no existe en la tinta muda → text-62
+     3. --ks-f6 #F4F3F0 ≈ surface-muted #F6F6F3 → adoptado el token
+     4. --ks-space-* y --ks-blue declarados y sin uso → mueren
+     5. radius 5/10 ya coincidia (reconciliado 24-jun) · sombra del
+        tooltip → shadow-float · IBM Plex → 4 voces muda
+     Todo lo demas lo cubre muda.css sin tocar: el chasis aguanta.
+     ═══════════════════════════════════════════════════════════════ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Albert+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500&family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style id="muda-css-f1">
+/* ══ MUDA.CSS · COPIA LITERAL de Vault95-Design-Systems/MUDA/_ARCHIVO/MUDA-v0-F1-2026-07-07/muda.css (F1) — si el canonico cambia, se recopia, no se edita aqui ══ */
+/* ═══════════════════════════════════════════════════════════════════
+   muda.css — tokens del theme FSE MUDA (salida F1)
+   ═══════════════════════════════════════════════════════════════════
+   GENERADO desde:
+     "MUDA · Tabla de relevo de tokens — v7.x → theme.json + muda.css (F1)"
+     (Vault03/08_WEB/00 DOCUMENTACIÓN/DISEÑO/ · firmada 2026-07-03 como
+     PUNTO DE PARTIDA DE MUDA, ver !DECISIÓN homónima)
+   Generado: 2026-07-07 · sesión F1 cierre
+   Regla: ningún token inventado — cada valor tiene fila en la tabla
+   y archivo fuente verificado (tokens.json v3 · v7.4.3 · rampas A).
+
+   DEUDAS DECLARADAS (8) — coordenadas: cabo # = "KS — Cabos sueltos
+   tras reconciliación MUDA (2026-07-02)" · maestra # = tabla maestra
+   de "!MUDA · Referencia canónica v1.0.html" (Gobernar):
+
+   @deuda cobre           cabo#1  maestra#1/C1  pieza entra sellada; rampa NO entra
+   @deuda firma-rampas    cabo#2  maestra#3,C5  no bloquea — valores = canon tokens.json
+   @deuda cobalto-B       cabo#6  maestra#7/C3  no entra (0 usos)
+   @deuda escala-M3       cabo#7  maestra#9     nombres actuales se conservan
+   @deuda quinta-voz      cabo#3  maestra#4     itálica display — no se toca
+   @deuda ritmo-prosa     cabo#4  maestra#5     press 1.45 vs 1.5 — prose-line 1.72 web intacto
+   @deuda dark-mode       cabo#14 maestra#8     tokens declarados SIN activar
+   @deuda fuentes         cabo#15 maestra#11    familias declaradas; .woff2 en F2
+   ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+
+  /* ── 01 · TIPOGRAFÍA — familias ─────────────────────────────────
+     FIRMADO !DECISIÓN tipográfica 27-jun.
+     @deuda fuentes (cabo#15 · maestra#11): F1 declara familias;
+     los .woff2 se embeben en F2 (@font-face propio, no Google Fonts). */
+  --muda-typography-family-serif:     "Newsreader", Georgia, serif;
+  --muda-typography-family-sans:      "Albert Sans", system-ui, sans-serif;
+  --muda-typography-family-mono:      "Fira Code", monospace;   /* solo código literal */
+  --muda-typography-family-condensed: "Fira Sans", sans-serif;
+
+  /* Leading — FIRMADO (tokens.json, dos cuerpos press/UI) */
+  --muda-typography-leading-serif: 1.4;
+  --muda-typography-leading-sans:  1.45;
+  --muda-typography-leading-tight: 1.15;
+
+  /* ── 02 · TIPOGRAFÍA — tamaños ──────────────────────────────────
+     FIRMADO (idénticos v7.4.3 y tokens.json). Relevo 1:1 mismo sufijo.
+     @deuda escala-M3 (cabo#7 · maestra#9): renombrado Material 3
+     (display-large…label-small) se ejecuta en bloque al firmarse. */
+  --muda-typography-size-body-l: 20px;
+  --muda-typography-size-body-m: 17px;
+  --muda-typography-size-body-s: 15px;
+
+  /* nombres h* = residuo Salient → pasarán a scope-wp al firmar #9 */
+  --muda-typography-size-h2: 36px;
+  --muda-typography-size-h3: 22px;
+  --muda-typography-size-h4: 14px;
+
+  --muda-typography-size-meta-l:  13px;
+  --muda-typography-size-meta-m:  12px;
+  --muda-typography-size-meta-s:  11px;
+  --muda-typography-size-meta-xs: 10px;
+
+  /* Prosa editorial web — FIRMADO.
+     @deuda ritmo-prosa (cabo#4 · maestra#5): press 1.45 vs 1.5 reabierto;
+     NO afecta al 1.72 editorial web. */
+  --muda-typography-prose-size: var(--muda-typography-size-body-l);
+  --muda-typography-prose-line: 1.72;
+  --muda-typography-prose-max:  680px;
+
+  --muda-size-hero-xl: clamp(48px, 13.6vw, 180px);
+  --muda-size-hero-l:  clamp(36px, 8vw,    96px);
+  --muda-size-hero-m:  clamp(28px, 5vw,    52px);
+  --muda-size-display: clamp(24px, 3.5vw,  40px);
+
+  /* ── 03 · COLOR — 14 piezas (primitivos) ────────────────────────
+     FIRMADO !DECISIÓN Sistema cromático MUDA 14 piezas v2.1,
+     hex verificados contra tokens.json (0 discrepancias). */
+  --muda-color-piece-hierro:  #2B200F;
+  --muda-color-piece-calcio:  #FAF9F7;
+  --muda-color-piece-niquel:  #B3B7B8;
+  --muda-color-piece-caliza:  #D1CBBA;
+
+  --muda-color-piece-turquesa: #00A6AB;
+  --muda-color-piece-cobalto:  #335E82;
+  --muda-color-piece-rojo:     #AC4952;
+
+  --muda-color-piece-goetita:            #FBE87E;
+  --muda-color-piece-verde-patina:       #9DC5B9;
+  --muda-color-piece-verde-teofrastita:  #2F8F67;
+
+  --muda-color-piece-terra-rossa:    #CE837A;
+  --muda-color-piece-malva-eritrina: #AE6586;
+  --muda-color-piece-marmol-rosa:    #EDC4BD;
+
+  /* @deuda cobre (cabo#1 · maestra#1/C1): provisional — 3 hex en
+     circulación, falta ancla NCS. Su rampa NO entra hasta firma. */
+  --muda-color-piece-cobre: #C67E3E;
+
+  /* Alias firmados */
+  --muda-color-ink:   var(--muda-color-piece-hierro);
+  --muda-color-paper: var(--muda-color-piece-calcio);
+
+  /* Polo — solo referencia, nunca marca */
+  --muda-color-brand-white: #FFFFFF;
+
+  /* ── 04 · COLOR — rampas 10 stops (canon 29-jun, CIELAB) ────────
+     FIRMADO — valores = canon tokens.json.
+     @deuda firma-rampas (cabo#2 · maestra#3): la !DECISIÓN rampas
+     sigue en borrador; no bloquea.
+     Equivalencias piezas↔stops: Pátina = verde-niquel-200 ·
+     Teofrastita = verde-niquel-700 · Turquesa = teal-500 ·
+     Goetita pieza = goetita-200. (La etiqueta `anchor` en verde 300
+     del tokens.json es resto de escala vieja — maestra C5; hex correctos.) */
+
+  /* verde-niquel · success/OK */
+  --muda-color-scale-verde-niquel-50:  #D6EDE6;
+  --muda-color-scale-verde-niquel-100: #BFDED4;
+  --muda-color-scale-verde-niquel-200: #9DC5B9;  /* = Pátina */
+  --muda-color-scale-verde-niquel-300: #82B6A5;
+  --muda-color-scale-verde-niquel-400: #66A891;
+  --muda-color-scale-verde-niquel-500: #4F9C7F;
+  --muda-color-scale-verde-niquel-600: #3F9573;
+  --muda-color-scale-verde-niquel-700: #2F8F67;  /* = Teofrastita */
+  --muda-color-scale-verde-niquel-800: #007A52;
+  --muda-color-scale-verde-niquel-900: #006443;
+
+  /* teal · corporativo */
+  --muda-color-scale-teal-50:  #9ED6D4;
+  --muda-color-scale-teal-100: #9BD6D4;
+  --muda-color-scale-teal-200: #82CBCA;
+  --muda-color-scale-teal-300: #5DBFC0;
+  --muda-color-scale-teal-400: #49B3B5;
+  --muda-color-scale-teal-500: #00A6AB;  /* = Turquesa */
+  --muda-color-scale-teal-600: #2398A0;
+  --muda-color-scale-teal-700: #008B96;
+  --muda-color-scale-teal-800: #1F7D8A;
+  --muda-color-scale-teal-900: #00707F;
+
+  /* cobalto · corporativo */
+  --muda-color-scale-cobalto-50:  #E2EAF1;
+  --muda-color-scale-cobalto-100: #D5E0EB;
+  --muda-color-scale-cobalto-200: #B2C5D9;
+  --muda-color-scale-cobalto-300: #90ABC7;
+  --muda-color-scale-cobalto-400: #3F6FA0;
+  --muda-color-scale-cobalto-500: #335E82;  /* = Cobalto pieza */
+  --muda-color-scale-cobalto-600: #2B5375;
+  --muda-color-scale-cobalto-700: #224869;
+  --muda-color-scale-cobalto-800: #1A3E5D;
+  --muda-color-scale-cobalto-900: #113451;
+
+  /* rojo · error/crítico */
+  --muda-color-scale-rojo-50:  #F3D7D0;
+  --muda-color-scale-rojo-100: #E7C1B9;
+  --muda-color-scale-rojo-200: #D7A59D;
+  --muda-color-scale-rojo-300: #CB8D85;
+  --muda-color-scale-rojo-400: #C06968;
+  --muda-color-scale-rojo-500: #AC4952;  /* = Rojo pieza */
+  --muda-color-scale-rojo-600: #993F4A;
+  --muda-color-scale-rojo-700: #873642;
+  --muda-color-scale-rojo-800: #742E3B;
+  --muda-color-scale-rojo-900: #612734;
+
+  /* goetita · warning */
+  --muda-color-scale-goetita-50:  #FFFDC6;
+  --muda-color-scale-goetita-100: #FFF6AE;
+  --muda-color-scale-goetita-200: #FBE87E;  /* = Goetita pieza */
+  --muda-color-scale-goetita-300: #F0D76E;
+  --muda-color-scale-goetita-400: #E4C65F;
+  --muda-color-scale-goetita-500: #D9B54F;
+  --muda-color-scale-goetita-600: #CDA440;
+  --muda-color-scale-goetita-700: #C19430;
+  --muda-color-scale-goetita-800: #B5841F;
+  --muda-color-scale-goetita-900: #A97409;
+
+  /* @deuda cobre (cabo#1): rampa candidata sin NCS — NO entra */
+
+  /* Acción WCAG — FIRMADO 29-jun (turquesa marca no pasa 3:1 con blanco).
+     Estados saltan de 2 en 2 stops · disabled = stop 100. */
+  --muda-color-action: #009999;
+
+  /* ── 05 · COLOR — escala Método B (5 pasos pictóricos) ──────────
+     Poda bonsái: entra SOLO turquesa (única en uso en la piel MVP).
+     El resto de familias queda en canon (tokens.json/iter11) sin volcar.
+     Cobalto-B = @deuda (cabo#6 · maestra#7/C3), no entra (0 usos). */
+  --muda-color-scale-turquesa-luz-2: #9BD6D4;
+  --muda-color-scale-turquesa-luz-1: #5DBFC0;
+  --muda-color-scale-turquesa-base:  #00A6AB;
+  --muda-color-scale-turquesa-som-1: #008B96;
+  --muda-color-scale-turquesa-som-2: #00707F;
+
+  /* ── 06 · SUPERFICIES, TINTA, BORDES ──────────────────────────── */
+  --muda-surface-bg:      #FAF9F7;  /* FIRMADO */
+  --muda-surface-default: #FBFAF7;  /* FIRMADO */
+  --muda-surface-muted:   #F6F6F3;  /* FIRMADO */
+  --muda-surface-elevated: #FFFFFF; /* CANDIDATO — en uso (10×) en v7.4.3, no está en tokens.json */
+
+  /* La tinta atenuada (rgba hierro), no grises sueltos — FIRMADO */
+  --muda-color-text-87: rgba(43, 32, 15, 0.87);
+  --muda-color-text-78: rgba(43, 32, 15, 0.78);
+  --muda-color-text-72: rgba(43, 32, 15, 0.72);
+  --muda-color-text-62: rgba(43, 32, 15, 0.62);
+  --muda-color-text-55: rgba(43, 32, 15, 0.55);
+  --muda-color-text-52: rgba(43, 32, 15, 0.52);
+  --muda-color-text-45: rgba(43, 32, 15, 0.45);
+  --muda-color-text-38: rgba(43, 32, 15, 0.38);
+  --muda-color-text-28: rgba(43, 32, 15, 0.28);
+  --muda-color-text-04: rgba(43, 32, 15, 0.04);  /* CANDIDATO — en uso (aside-concept--quiet), sin firma */
+
+  --muda-color-border-default: rgba(43, 32, 15, 0.10);  /* FIRMADO */
+  --muda-color-border-strong:  rgba(43, 32, 15, 0.17);  /* FIRMADO */
+
+  /* Dark mode (grafito templado) — FIRMADO como tokens declarados.
+     @deuda dark-mode (cabo#14 · maestra#8): SIN activar — la
+     implementación queda fuera del MVP. */
+  --muda-color-dark-canvas:  #161819;
+  --muda-color-dark-page:    #1B1D1E;
+  --muda-color-dark-panel:   #212425;
+  --muda-color-dark-surface: #2A2D2E;
+  --muda-color-dark-elevado: #34383A;
+
+  /* ── 07 · SOMBRAS, RADIOS, ESPACIADO, GRADIENTES, MOTION ──────── */
+  --muda-shadow-card:  0 0 0 1px rgba(43, 32, 15, 0.07), 0 1px 0 rgba(43, 32, 15, 0.08);  /* FIRMADO · anillo+hairline */
+  --muda-shadow-float: 0 4px 16px rgba(29, 20, 12, 0.10);                                  /* FIRMADO */
+
+  --muda-radius-sm: 5px;   /* FIRMADO (reafirmado 27-jun contra 3/6/10) */
+  --muda-radius-md: 10px;
+  --muda-radius-lg: 15px;
+
+  /* Base-8 — 32/24 sostienen el ritmo vertical firmado */
+  --muda-space-xs:  8px;
+  --muda-space-sm:  12px;
+  --muda-space-md:  18px;
+  --muda-space-lg:  24px;
+  --muda-space-xl:  32px;
+  --muda-space-2xl: 48px;
+  --muda-space-3xl: 72px;
+  /* --muda-space-4xl: 100px;  CANDIDATO en reserva — 0 usos hoy, cierra la escala de 8 pasos */
+
+  /* Únicos gradientes permitidos (doctrina) — FIRMADO */
+  --muda-gradient-teal:      linear-gradient(160deg, #FFFFFF 0%, #D9E8E9 50%, #00A6AB 100%);
+  --muda-gradient-teal-blue: linear-gradient(160deg, #FFFFFF 0%, #D9E8E9 35%, #00A6AB 65%, #335E82 100%);
+
+  --muda-motion-easing-default:   cubic-bezier(0.4, 0, 0.2, 1);  /* FIRMADO */
+  --muda-motion-duration-default: 0.3s;                           /* FIRMADO */
+
+  /* Artefactos embebidos — CANDIDATO (no son Salient, son del componente artefacto) */
+  --muda-size-embed-min:    500px;  /* min-height artefacto embebido */
+  --muda-size-embed-iframe: 600px;  /* alto por defecto iframe artefacto */
+}
+
+/* ── 08 · NOTAS TIPOGRÁFICAS FIRMADAS que viajan al theme ─────────
+   Ratio 0.90 de Plex: ELIMINADO (no existe token).
+   Itálica por `opsz`, sin síntesis del navegador.
+   @deuda quinta-voz (cabo#3 · maestra#4): itálica display — no se toca. */
+html {
+  font-synthesis: none;
+  font-optical-sizing: auto;
+}
+
+/* ── 09 · TOKENS DE COMPONENTE (tabla §7) ─────────────────────────
+   "Dicen ser primitivos pero son de componente": salen de :root y
+   viven junto a la pieza que los usa. Consumidores verificados por
+   grep en v7.4.3 — en F2 cada componente hereda estos tokens junto
+   a su CSS. Selectores ks-* = alias legacy hasta F3. */
+
+/* Tints funcionales → callouts / notices / asides / chips */
+.muda-notice, .muda-callout, .muda-aside-concept, .muda-revisado-strip,
+.muda-highlight, .muda-tag, .muda-article-meta,
+.ks-notice, .ks-callout, .ks-aside-concept, .ks-revisado-strip,
+.ks-highlight, .ks-tag--node, .ks-article-meta {
+  --muda-color-tint-teal-05:  #EAF2F2;  /* FIRMADO → componente */
+  --muda-color-tint-teal-22:  #A6CECF;
+  --muda-color-tint-red-05:   #F8EEEE;
+  --muda-color-tint-red-22:   #E2B6B7;
+  --muda-color-tint-beige-10: #EFEEEA;
+  --muda-color-tint-beige-50: #D0CCBF;
+
+  /* alias legacy — PODA F3 */
+  --ks-color-tint-teal-05:  var(--muda-color-tint-teal-05);
+  --ks-color-tint-teal-22:  var(--muda-color-tint-teal-22);
+  --ks-color-tint-red-05:   var(--muda-color-tint-red-05);
+  --ks-color-tint-red-22:   var(--muda-color-tint-red-22);
+  --ks-color-tint-beige-10: var(--muda-color-tint-beige-10);
+  --ks-color-tint-beige-50: var(--muda-color-tint-beige-50);
+}
+
+/* Cobre de scope → .muda-aside-derivada (color = función, no énfasis).
+   @deuda cobre (cabo#1): si la pieza cambia, estos valores se rederivan. */
+.muda-aside-derivada, .ks-aside-derivada {
+  --muda-color-copper-surface: #F7F2EC;  /* fondo · cobre ~6%  */
+  --muda-color-copper-rule:    #F0E0D2;  /* filete · cobre ~20% */
+  --muda-color-copper-label:   #C67E3E;  /* label · cobre vivo  */
+  --muda-color-copper-link:    #B06A2E;
+  --muda-color-copper-hover:   #8F551F;
+
+  /* alias legacy — PODA F3 */
+  --ks-color-copper-surface: var(--muda-color-copper-surface);
+  --ks-color-copper-rule:    var(--muda-color-copper-rule);
+  --ks-color-copper-label:   var(--muda-color-copper-label);
+  --ks-color-copper-link:    var(--muda-color-copper-link);
+  --ks-color-copper-hover:   var(--muda-color-copper-hover);
+}
+
+/* ── 10 · ALIAS LEGACY ks-* ───────────────────────────────────────
+   Cubre el contenido vivo con clases/vars ks-* (post 2802 y hermanos)
+   mientras Fase 3 no migre los posts. TODO ESTE BLOQUE SE PODA EN F3.
+   Solo se alian tokens que ENTRAN al theme — los MUERE no tienen alias
+   (brand-teal/blue/red/beige/black · tints sin uso · scope Salient ·
+   rampas Método A · shadow-soft · shadow-column-elevated). */
+:root {
+  --ks-typography-family-serif:     var(--muda-typography-family-serif);
+  --ks-typography-family-sans:      var(--muda-typography-family-sans);
+  --ks-typography-family-mono:      var(--muda-typography-family-mono);
+  --ks-typography-family-condensed: var(--muda-typography-family-condensed);
+
+  --ks-typography-size-body-l: var(--muda-typography-size-body-l);
+  --ks-typography-size-body-m: var(--muda-typography-size-body-m);
+  --ks-typography-size-body-s: var(--muda-typography-size-body-s);
+  --ks-typography-size-h2: var(--muda-typography-size-h2);
+  --ks-typography-size-h3: var(--muda-typography-size-h3);
+  --ks-typography-size-h4: var(--muda-typography-size-h4);
+  --ks-typography-size-meta-l:  var(--muda-typography-size-meta-l);
+  --ks-typography-size-meta-m:  var(--muda-typography-size-meta-m);
+  --ks-typography-size-meta-s:  var(--muda-typography-size-meta-s);
+  --ks-typography-size-meta-xs: var(--muda-typography-size-meta-xs);
+  --ks-typography-prose-size: var(--muda-typography-prose-size);
+  --ks-typography-prose-line: var(--muda-typography-prose-line);
+  --ks-typography-prose-max:  var(--muda-typography-prose-max);
+  --ks-size-hero-xl: var(--muda-size-hero-xl);
+  --ks-size-hero-l:  var(--muda-size-hero-l);
+  --ks-size-hero-m:  var(--muda-size-hero-m);
+  --ks-size-display: var(--muda-size-display);
+  --ks-size-embed-min:    var(--muda-size-embed-min);
+  --ks-size-embed-iframe: var(--muda-size-embed-iframe);
+
+  --ks-color-brand-hierro:  var(--muda-color-piece-hierro);
+  --ks-color-brand-calcio:  var(--muda-color-piece-calcio);
+  --ks-color-brand-niquel:  var(--muda-color-piece-niquel);
+  --ks-color-brand-caliza:  var(--muda-color-piece-caliza);
+  --ks-color-brand-turquesa: var(--muda-color-piece-turquesa);
+  --ks-color-brand-cobalto:  var(--muda-color-piece-cobalto);
+  --ks-color-brand-rojo:     var(--muda-color-piece-rojo);
+  --ks-color-brand-terra-rossa:    var(--muda-color-piece-terra-rossa);
+  --ks-color-brand-malva-eritrina: var(--muda-color-piece-malva-eritrina);
+  --ks-color-brand-marmol-rosa:    var(--muda-color-piece-marmol-rosa);
+  --ks-color-brand-verde-patina:   var(--muda-color-piece-verde-patina);
+  --ks-color-brand-white: var(--muda-color-brand-white);
+  --ks-color-ink:   var(--muda-color-ink);
+  --ks-color-paper: var(--muda-color-paper);
+
+  --ks-color-scale-turquesa-luz-2: var(--muda-color-scale-turquesa-luz-2);
+  --ks-color-scale-turquesa-luz-1: var(--muda-color-scale-turquesa-luz-1);
+  --ks-color-scale-turquesa-base:  var(--muda-color-scale-turquesa-base);
+  --ks-color-scale-turquesa-som-1: var(--muda-color-scale-turquesa-som-1);
+  --ks-color-scale-turquesa-som-2: var(--muda-color-scale-turquesa-som-2);
+
+  --ks-color-text-87: var(--muda-color-text-87);
+  --ks-color-text-78: var(--muda-color-text-78);
+  --ks-color-text-72: var(--muda-color-text-72);
+  --ks-color-text-62: var(--muda-color-text-62);
+  --ks-color-text-55: var(--muda-color-text-55);
+  --ks-color-text-52: var(--muda-color-text-52);
+  --ks-color-text-45: var(--muda-color-text-45);
+  --ks-color-text-38: var(--muda-color-text-38);
+  --ks-color-text-28: var(--muda-color-text-28);
+  --ks-color-text-04: var(--muda-color-text-04);
+  --ks-color-border-default: var(--muda-color-border-default);
+  --ks-color-border-strong:  var(--muda-color-border-strong);
+
+  --ks-surface-bg:       var(--muda-surface-bg);
+  --ks-surface-default:  var(--muda-surface-default);
+  --ks-surface-muted:    var(--muda-surface-muted);
+  --ks-surface-elevated: var(--muda-surface-elevated);
+
+  --ks-shadow-card:  var(--muda-shadow-card);
+  --ks-shadow-float: var(--muda-shadow-float);
+  --ks-radius-sm: var(--muda-radius-sm);
+  --ks-radius-md: var(--muda-radius-md);
+  --ks-radius-lg: var(--muda-radius-lg);
+  --ks-space-xs:  var(--muda-space-xs);
+  --ks-space-sm:  var(--muda-space-sm);
+  --ks-space-md:  var(--muda-space-md);
+  --ks-space-lg:  var(--muda-space-lg);
+  --ks-space-xl:  var(--muda-space-xl);
+  --ks-space-2xl: var(--muda-space-2xl);
+  --ks-space-3xl: var(--muda-space-3xl);
+  --ks-gradient-teal:      var(--muda-gradient-teal);
+  --ks-gradient-teal-blue: var(--muda-gradient-teal-blue);
+  --ks-motion-easing-default:   var(--muda-motion-easing-default);
+  --ks-motion-duration-default: var(--muda-motion-duration-default);
+}
+
+</style>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* :root propio ELIMINADO — los tokens vienen de muda.css (abajo) */
+
+body {
+  background: var(--muda-color-paper);
+  font-family: var(--muda-typography-family-sans);
+  color: var(--muda-color-text-87);
+  overflow: hidden;
+}
+
+/* ── Layout: 3D left + FAQ right ──────────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  height: 100vh;
+  width: 100vw;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 55vh 1fr;
+  }
+  .faq-panel { max-height: 45vh; }
+}
+
+/* ── 3D Canvas ────────────────────────────────────────────────── */
+#canvas-container {
+  position: relative;
+  cursor: grab;
+  overflow: hidden;
+}
+#canvas-container:active { cursor: grabbing; }
+
+#label {
+  position: absolute;
+  display: none;
+  background: var(--muda-color-paper);
+  border: 1px solid var(--muda-color-border-default);
+  box-shadow: var(--muda-shadow-float);
+  color: var(--muda-color-text-87);
+  padding: 8px 14px;
+  border-radius: var(--muda-radius-sm);
+  font-size: 13px;
+  font-family: var(--muda-typography-family-sans);
+  line-height: 1.7;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+}
+#label strong { font-weight: 500; }
+#label .type-tag {
+  font-family: var(--muda-typography-family-mono);
+  font-size: 11px;
+  color: var(--muda-color-text-45);
+  display: block;
+}
+#label .conn-tag { font-size: 11px; color: var(--muda-color-text-45); }
+
+#header {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--muda-color-border-default);
+  pointer-events: none;
+  background: rgba(250,249,247,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 5;
+}
+#header-overline {
+  font-family: var(--muda-typography-family-condensed);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muda-color-piece-turquesa);
+  margin-bottom: 2px;
+}
+#header-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muda-color-text-87);
+}
+#header-hint {
+  font-family: var(--muda-typography-family-mono);
+  font-size: 11px;
+  color: var(--muda-color-text-28);
+}
+
+#legend {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  background: rgba(250,249,247,0.92);
+  border: 1px solid var(--muda-color-border-default);
+  padding: 6px 16px;
+  border-radius: var(--muda-radius-sm);
+  pointer-events: none;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-family: var(--muda-typography-family-condensed);
+  letter-spacing: 0.06em;
+  color: var(--muda-color-text-45);
+}
+.legend-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── FAQ Panel ────────────────────────────────────────────────── */
+.faq-panel {
+  border-left: 1px solid var(--muda-color-border-default);
+  overflow-y: auto;
+  padding: 0;
+  background: var(--muda-color-paper);
+}
+
+.faq-header {
+  position: sticky;
+  top: 0;
+  background: rgba(250,249,247,0.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--muda-color-border-default);
+  padding: 16px 24px;
+  z-index: 5;
+}
+.faq-header-overline {
+  font-family: var(--muda-typography-family-condensed);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muda-color-piece-turquesa);
+  margin-bottom: 2px;
+}
+.faq-header-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muda-color-text-87);
+}
+
+.faq-section {
+  padding: 0 24px;
+}
+
+.faq-section-title {
+  font-family: var(--muda-typography-family-condensed);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--muda-color-text-45);
+  padding: 20px 0 8px;
+  border-bottom: 1px solid var(--muda-color-border-default);
+  margin-bottom: 0;
+}
+
+/* Accordion */
+.faq-item {
+  border-bottom: 1px solid var(--muda-color-border-default);
+}
+
+.faq-question {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  width: 100%;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--muda-typography-family-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muda-color-text-87);
+  line-height: 1.5;
+}
+.faq-question:hover { color: var(--muda-color-ink); }
+.faq-question:focus { outline: none; }
+.faq-question:focus-visible { outline: 2px solid var(--muda-color-piece-turquesa); outline-offset: 2px; border-radius: 2px; }
+
+.faq-q-mark {
+  color: inherit;
+  font-weight: 600;
+  flex-shrink: 0;
+  font-size: 15px;
+}
+
+.faq-chevron {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.25s ease;
+  color: var(--muda-color-text-45);
+  stroke-width: 2.5;
+}
+.faq-question:hover .faq-chevron { color: var(--muda-color-text-87); }
+.faq-item.open .faq-chevron {
+  transform: rotate(180deg);
+  color: var(--muda-color-text-87);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+.faq-item.open .faq-answer {
+  max-height: 600px;
+}
+
+.faq-answer-inner {
+  padding: 0 0 16px 20px;
+  font-family: var(--muda-typography-family-serif);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muda-color-text-62);
+}
+.faq-answer-inner code {
+  font-family: var(--muda-typography-family-mono);
+  font-size: 12px;
+  background: var(--muda-surface-muted);
+  border: 1px solid var(--muda-color-border-default);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.faq-answer-inner em { color: var(--muda-color-text-45); font-style: italic; }
+
+/* ── Scrollbar sutil ─────────────────────────────────────────── */
+.faq-panel::-webkit-scrollbar { width: 4px; }
+.faq-panel::-webkit-scrollbar-track { background: transparent; }
+.faq-panel::-webkit-scrollbar-thumb { background: var(--muda-color-text-28); border-radius: 2px; }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.faq-footer {
+  padding: 16px 24px;
+  font-family: var(--muda-typography-family-mono);
+  font-size: 10px;
+  color: var(--muda-color-text-28);
+  border-top: 1px solid var(--muda-color-border-default);
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ═══ 3D Canvas ═══ -->
+<div id="canvas-container">
+  <div id="label"></div>
+
+  <div id="header">
+    <div>
+      <div id="header-overline">N07.a1 · Stakeholder Topology</div>
+      <div id="header-title">Gobernanza de marca — mapa de agentes</div>
+    </div>
+    <div id="header-hint">arrastra · hover · scroll zoom</div>
+  </div>
+
+  <div id="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--muda-color-piece-turquesa)"></div>categoría
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--muda-color-piece-rojo)"></div>tensión
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:#ADABA2"></div>agente
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background:var(--muda-color-piece-caliza)"></div>emergente
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FAQ Panel ═══ -->
+<div class="faq-panel">
+  <div class="faq-header">
+    <div class="faq-header-overline">Visual Guidelines v6 · Part VIII</div>
+    <div class="faq-header-title">Casuística 3D — preguntas</div>
+  </div>
+
+  <!-- ── Sección: Material y superficie ── -->
+  <div class="faq-section">
+    <div class="faq-section-title">Material y superficie</div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Por qué MeshToonMaterial y no MeshStandardMaterial?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          El principio de diseño «color material» exige superficies opacas cuyo color se perciba íntegramente. MeshToonMaterial aplica cel-shading — una transición discreta entre zonas de luz y sombra, sin reflejos especulares. Esto preserva la fidelidad cromática: un nodo <code>#00A6AB</code> se lee como teal en cualquier ángulo, sin blanqueos ni brillos que alteren la percepción del color. MeshStandardMaterial, por el contrario, introduce componentes PBR (roughness, metalness) que generan reflejos dependientes del punto de vista, rompiendo la premisa de color material.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Cuál es el ratio de iluminación canónico y por qué 4:1?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          AmbientLight a intensidad 0.88 más DirectionalLight a 0.22 produce un ratio de 4:1. La luz ambiental alta garantiza que ninguna zona quede en sombra profunda — todo el volumen del nodo permanece legible. La direccional a 0.22 aporta suficiente modelado tridimensional para que el ojo distinga la forma esférica, sin crear contrastes duros. Posición de la luz: <code>(3, 5, 6)</code> — ligeramente arriba y a la derecha, coherente con la lectura occidental izquierda-derecha.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Se pueden usar transparencias en nodos 3D?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Solo en el tipo «emergente» (cabo suelto), a opacidad 0.50. Es la única excepción al principio de color material y su función es semántica: un nodo a media opacidad comunica que aún no está consolidado en la topología. Los tipos marca, categoría y agente siempre van a opacidad 1.0. Si necesitas diferenciar jerarquía, usa tamaño (radio topológico) — nunca opacidad.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sección: Estructura hub-spoke ── -->
+  <div class="faq-section">
+    <div class="faq-section-title">Estructura hub-spoke</div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Por qué una topología hub-spoke y no una red libre?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          El hub-spoke establece una jerarquía gravitacional: la marca es el centro de masas, los stakeholders orbitan alrededor. Esto no es decorativo — refleja el modelo de gobernanza cogobernada de N07, donde la marca es un espacio de negociación entre agentes, no una propiedad unilateral. Una red libre (force-directed) esconde esa jerarquía y dificulta la lectura de las órbitas de influencia. Hub central a <code>(0, 0, 0)</code>, categorías a r≈6, agentes a r≈8–9, emergentes a r≥10.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Cómo se calcula el tamaño de cada nodo?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          El radio es topológico, no arbitrario. Se computa por tipo de nodo más número de conexiones: marca = 1.4 fijo; categoría = <code>0.62 + conexiones × 0.055</code>; agente = <code>0.28 + conexiones × 0.068</code>; emergente = 0.26 fijo. Así, un agente con más relaciones crece visualmente — el peso perceptual refleja su peso real en la topología de gobernanza.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Qué significan las aristas de color teal entre categorías?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Las aristas teal son puentes inter-categoría: conexiones que atraviesan las órbitas de stakeholder. En el mapa de gobernanza representan las tensiones y sinergias entre agentes de distintos ámbitos — por ejemplo, Regulador↔Tecnología (la regulación condiciona la plataforma) o Audiencia↔Cultura (la recepción del público depende del contexto cultural). Se renderizan a opacidad 0.28 para no competir con las aristas troncales (hub→categoría, a 0.50).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sección: Color y paleta ── -->
+  <div class="faq-section">
+    <div class="faq-section-title">Color en contexto 3D</div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Cómo se asigna color a los tipos de nodo?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Cada tipo de nodo tiene un color semántico fijo de la paleta corporativa: marca = <code>#2B200F</code> (negro KS, autoridad), categoría = <code>#00A6AB</code> (teal, estructura activa), tensión = <code>#AC4952</code> (rojo, fricción), agente = <code>#ADABA2</code> (gris cálido — stop 5 de la rampa Sílice firmada 04-jul; el #9E9789 anterior no estaba en el canon), emergente = <code>#D1CBBA</code> (beige, potencial). Nunca se mezclan colores entre tipos ni se usan degradados dentro de un nodo — el color es plano, material, unívoco.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>El fondo #FAF9F7 es obligatorio en 3D?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Sí. <code>#FAF9F7</code> es el fondo canónico de todo artefacto KS — tanto en 2D como en 3D. Es un blanco roto cálido que asegura contraste suficiente con todos los colores de la paleta sin la dureza de un blanco puro. Funciona como «aire» — el espacio entre nodos es tan significativo como los nodos mismos. Cambiar el fondo a oscuro alteraría la percepción de todos los colores de la paleta, que están calibrados para este blanco cálido específico.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Puede un nodo tener un color fuera de la paleta KS?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          No. En un artefacto KS, el color del nodo siempre procede del mapa de tipos definido en el design system. Si se necesita un nuevo tipo semántico (como «tensión» en esta topología), se asigna uno de los colores existentes de la paleta corporativa — en este caso <code>#AC4952</code> (rojo), que ya tenía el significado de fricción/señal en la home. No se inventan colores nuevos: se reutilizan los que existen con nueva carga semántica.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Sección: Interacción ── -->
+  <div class="faq-section">
+    <div class="faq-section-title">Interacción y animación</div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Qué animaciones son permisibles en artefactos 3D?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Auto-rotación lenta (<code>rotY += 0.0012</code> por frame) como estado idle. Pulso sutil en hub central (<code>scale ±3%</code> a 1.2Hz) y en categorías (<code>±2.5%</code> a 1.0Hz, desfasadas por ID). Hover: opacidad reducida a 0.70. Todas las animaciones son sustractivas — nunca suman brillo, escala o color. La rotación se detiene al arrastrar. No hay transiciones de entrada (fade-in, bounce) porque el artefacto es un instrumento de consulta, no una presentación.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>El usuario puede hacer zoom? Hay límites?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Sí, scroll-wheel mueve la cámara en el eje Z. Rango limitado: <code>z ∈ [12, 50]</code>. El límite inferior evita que el usuario entre «dentro» de la malla y pierda contexto; el superior impide alejarse tanto que los nodos se conviertan en puntos ilegibles. La posición por defecto es <code>z = 26</code>, que muestra la topología completa con suficiente detalle para distinguir todos los nodos.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span class="faq-q-mark">¿</span>
+        <span>Qué información muestra el tooltip de hover?</span>
+        <span class="faq-q-mark">?</span>
+        <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          Nombre del nodo (peso 500), categoría de stakeholder (mono, t45), y número de conexiones (mono, t45). Si el nodo es emergente, sustituye el conteo por la etiqueta «emergente» en cursiva y t28. El tooltip sigue al cursor con offset <code>(+16px, −10px)</code>, no tiene flecha, y desaparece instantáneamente al salir del nodo. El diseño del tooltip es el mismo del design system 2D: fondo bg, borde border, sombra <code>0 4px 16px rgba(29,20,12,0.10)</code>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-footer">
+    KOI SAMSA · Visual Guidelines v6 · Part VIII · 2026-04-18 · piel MUDA v2 (muda.css F1, test de chasis 1/2) · 2026-07-08
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── Datos: Stakeholder Topology (N07.a1) ─────────────────────────
+// Hub = Marca. Categorías = tipos de stakeholder. Agentes = actores concretos.
+// Tensiones = puntos de fricción entre ámbitos. Emergentes = agentes incipientes.
+
+const NODES = [
+  // Categorías (órbita r≈6)
+  { id: 0,  label: "Audiencia",            cat: "Audiencia",    pos: [ 6.0,  0.3,  0.0], type: "categoria" },
+  { id: 1,  label: "Equipo",              cat: "Equipo",       pos: [ 4.2, -0.4,  4.2], type: "categoria" },
+  { id: 2,  label: "Cultura",             cat: "Cultura",      pos: [ 0.0,  0.8,  6.0], type: "categoria" },
+  { id: 3,  label: "Tecnología",          cat: "Tecnología",   pos: [-4.2,  0.4,  4.2], type: "categoria" },
+  { id: 4,  label: "Regulación",          cat: "Regulación",   pos: [-6.0, -0.6,  0.0], type: "categoria" },
+  { id: 5,  label: "Competencia",         cat: "Competencia",  pos: [-4.2,  0.6, -4.2], type: "categoria" },
+  { id: 6,  label: "Mercado",             cat: "Mercado",      pos: [ 0.0, -0.3, -6.0], type: "categoria" },
+  { id: 7,  label: "Comunidad",           cat: "Comunidad",    pos: [ 4.2,  0.1, -4.2], type: "categoria" },
+
+  // Audiencia — agentes
+  { id: 8,  label: "Usuarios actuales",    cat: "Audiencia",    pos: [ 8.2,  1.0,  0.6], type: "agente" },
+  { id: 9,  label: "Usuarios potenciales", cat: "Audiencia",    pos: [ 7.8, -0.5, -1.2], type: "agente" },
+  { id: 10, label: "Prescriptores",        cat: "Audiencia",    pos: [ 7.4,  1.8, -0.3], type: "agente" },
+
+  // Equipo — agentes
+  { id: 11, label: "Fundador/a",           cat: "Equipo",       pos: [ 5.8, -1.4,  5.8], type: "agente" },
+  { id: 12, label: "Colaboradores",        cat: "Equipo",       pos: [ 4.8,  0.8,  6.4], type: "agente" },
+  { id: 13, label: "IA co-creadora",       cat: "Equipo",       pos: [ 6.4, -2.0,  4.8], type: "agente" },
+
+  // Cultura — agentes
+  { id: 14, label: "Zeitgeist",            cat: "Cultura",      pos: [ 1.0,  2.3,  8.2], type: "agente" },
+  { id: 15, label: "Academia",             cat: "Cultura",      pos: [-1.2,  1.6,  8.0], type: "agente" },
+  { id: 16, label: "Referentes visuales",  cat: "Cultura",      pos: [ 0.4,  0.0,  8.8], type: "agente" },
+
+  // Tecnología — agentes
+  { id: 17, label: "Plataformas",          cat: "Tecnología",   pos: [-5.8,  1.8,  5.8], type: "agente" },
+  { id: 18, label: "Algoritmos",           cat: "Tecnología",   pos: [-6.4, -0.3,  4.8], type: "agente" },
+  { id: 19, label: "Infraestructura",      cat: "Tecnología",   pos: [-4.8,  2.2,  6.4], type: "agente" },
+
+  // Regulación — agentes
+  { id: 20, label: "GDPR / privacidad",    cat: "Regulación",   pos: [-8.2,  0.0,  0.8], type: "agente" },
+  { id: 21, label: "Propiedad intelectual",cat: "Regulación",   pos: [-8.0, -1.6, -0.6], type: "agente" },
+  { id: 22, label: "Accesibilidad WCAG",   cat: "Regulación",   pos: [-7.6,  0.9, -1.0], type: "agente" },
+
+  // Competencia — agentes
+  { id: 23, label: "Competidores directos",cat: "Competencia",  pos: [-5.8,  2.0, -5.8], type: "agente" },
+  { id: 24, label: "Sustitutos",           cat: "Competencia",  pos: [-4.8,  0.8, -6.4], type: "agente" },
+
+  // Mercado — agentes
+  { id: 25, label: "Clientes B2B",         cat: "Mercado",      pos: [ 1.0, -1.8, -8.2], type: "agente" },
+  { id: 26, label: "Ecosistema freelance", cat: "Mercado",      pos: [-1.2, -1.2, -8.0], type: "agente" },
+  { id: 27, label: "Tendencias sectoriales",cat: "Mercado",     pos: [ 0.6,  0.5, -8.6], type: "agente" },
+
+  // Comunidad — agentes
+  { id: 28, label: "Redes propias",         cat: "Comunidad",    pos: [ 5.8,  1.4, -5.8], type: "agente" },
+  { id: 29, label: "Open source / commons", cat: "Comunidad",    pos: [ 6.4, -0.4, -4.8], type: "agente" },
+
+  // Tensiones — fricción inter-categoría
+  { id: 30, label: "Autoría vs IA",        cat: "Tensión",      pos: [ 5.5, -1.0,  2.8], type: "tension" },
+  { id: 31, label: "Privacidad vs personalización", cat: "Tensión", pos: [-5.0, -1.2,  2.0], type: "tension" },
+  { id: 32, label: "Escala vs artesanía",  cat: "Tensión",      pos: [ 2.5, -1.8, -4.0], type: "tension" },
+
+  // Emergentes
+  { id: 33, label: "Modelos de IA propios",cat: "–",            pos: [-8.8, -3.2, -2.0], type: "emergente" },
+  { id: 34, label: "DAO / gobernanza distribuida", cat: "–",    pos: [ 1.2, -7.0,  2.2], type: "emergente" },
+];
+
+const EDGES = [
+  // Categoría → agentes
+  [0,8],[0,9],[0,10],
+  [1,11],[1,12],[1,13],
+  [2,14],[2,15],[2,16],
+  [3,17],[3,18],[3,19],
+  [4,20],[4,21],[4,22],
+  [5,23],[5,24],
+  [6,25],[6,26],[6,27],
+  [7,28],[7,29],
+
+  // Cross-categoría — puentes de influencia
+  [13,3],            // IA co-creadora ↔ Tecnología
+  [11,0],            // Fundador ↔ Audiencia
+  [18,4],            // Algoritmos ↔ Regulación
+  [15,6],            // Academia ↔ Mercado
+  [22,2],            // WCAG ↔ Cultura
+  [28,0],            // Redes propias ↔ Audiencia
+  [29,3],            // Open source ↔ Tecnología
+
+  // Tensiones
+  [30,1],[30,3],     // Autoría vs IA: Equipo ↔ Tecnología
+  [31,4],[31,3],     // Privacidad vs personalización: Regulación ↔ Tecnología
+  [32,6],[32,7],     // Escala vs artesanía: Mercado ↔ Comunidad
+
+  // Emergentes
+  [33,3],            // Modelos propios → Tecnología
+  [34,7],            // DAO → Comunidad
+];
+
+// ── Colores por tipo ─────────────────────────────────────────────
+const TYPE_COLOR = {
+  categoria:  "#00A6AB",
+  tension:    "#AC4952",
+  agente:     "#ADABA2", // Silice stop 5 (04-jul) — antes #9E9789 fuera de canon
+  emergente:  "#D1CBBA",
+};
+const TYPE_OPACITY = {
+  categoria:  1.0,
+  tension:    1.0,
+  agente:     1.0,
+  emergente:  0.50,
+};
+
+// ── Adjacencia ───────────────────────────────────────────────────
+const ADJ = {};
+NODES.forEach(n => { ADJ[n.id] = []; });
+EDGES.forEach(([a,b]) => { ADJ[a].push(b); ADJ[b].push(a); });
+
+// ── Tamaño topológico ───────────────────────────────────────────
+function computeNodeSize(node) {
+  const c = ADJ[node.id].length;
+  switch (node.type) {
+    case "emergente":  return 0.26;
+    case "tension":    return 0.34 + c * 0.04;
+    case "categoria":  return 0.62 + c * 0.055;
+    case "agente":     return 0.28 + c * 0.068;
+    default:           return 0.35;
+  }
+}
+
+// ── Setup Three.js (r128 — misma config que Cognitiva v3) ────────
+const container = document.getElementById('canvas-container');
+let W = container.clientWidth, H = container.clientHeight;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(W, H);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#FAF9F7');
+
+const camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 400);
+camera.position.set(0, 2, 26);
+
+// Luz canónica — ratio 4:1
+scene.add(new THREE.AmbientLight(0xffffff, 0.88));
+const dir = new THREE.DirectionalLight(0xffffff, 0.22);
+dir.position.set(3, 5, 6);
+scene.add(dir);
+
+// ── Grupo ────────────────────────────────────────────────────────
+const group = new THREE.Group();
+const nodeMeshes = [];
+
+NODES.forEach(node => {
+  const geo = new THREE.SphereGeometry(computeNodeSize(node), 48, 48);
+  const mat = new THREE.MeshToonMaterial({
+    color: new THREE.Color(TYPE_COLOR[node.type]),
+    transparent: true,
+    opacity: TYPE_OPACITY[node.type],
+  });
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.set(...node.pos);
+  mesh.userData = { ...node };
+  group.add(mesh);
+  nodeMeshes.push(mesh);
+});
+
+// ── Aristas ──────────────────────────────────────────────────────
+EDGES.forEach(([a, b]) => {
+  const nA = NODES[a], nB = NODES[b];
+  const isEmerge  = nA.type === "emergente" || nB.type === "emergente";
+  const isTension = nA.type === "tension"  || nB.type === "tension";
+  const isCross   = !isEmerge && !isTension
+                    && nA.cat !== nB.cat
+                    && nA.type !== "categoria" && nB.type !== "categoria";
+
+  let color, opacity;
+  if (isEmerge)      { color = 0xd1cbba; opacity = 0.28; }
+  else if (isTension){ color = 0xAC4952; opacity = 0.35; }
+  else if (isCross)  { color = 0x00A6AB; opacity = 0.28; }
+  else               { color = 0xCBC9C0; opacity = 0.35; } // Silice stop 4 — antes 0xb5b0a5 fuera de canon
+
+  const geo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(...nA.pos),
+    new THREE.Vector3(...nB.pos),
+  ]);
+  group.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity })));
+});
+
+scene.add(group);
+
+// ── Hover ────────────────────────────────────────────────────────
+const labelEl = document.getElementById('label');
+const raycaster = new THREE.Raycaster();
+const mouse2D = new THREE.Vector2();
+let hoveredMesh = null;
+
+// ── Órbita + Zoom ───────────────────────────────────────────────
+let isDragging = false, prevX = 0, prevY = 0, rotY = 0, rotX = 0;
+
+container.addEventListener('mousemove', e => {
+  const rect = container.getBoundingClientRect();
+  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+
+  if (isDragging) {
+    rotY += (e.clientX - prevX) * 0.005;
+    rotX = Math.max(-0.85, Math.min(0.85, rotX + (e.clientY - prevY) * 0.005));
+    prevX = e.clientX; prevY = e.clientY;
+  }
+
+  mouse2D.x = (cx / W) * 2 - 1;
+  mouse2D.y = -(cy / H) * 2 + 1;
+  raycaster.setFromCamera(mouse2D, camera);
+  const hits = raycaster.intersectObjects(nodeMeshes);
+
+  if (hits.length > 0) {
+    const mesh = hits[0].object;
+    if (mesh !== hoveredMesh) {
+      if (hoveredMesh) hoveredMesh.material.opacity = TYPE_OPACITY[hoveredMesh.userData.type];
+      hoveredMesh = mesh;
+      mesh.material.opacity = 0.70;
+    }
+    const nd = mesh.userData;
+    const conns = ADJ[nd.id].length;
+    const connStr = nd.type === 'emergente'
+      ? '<span style="color:var(--muda-color-text-28);font-size:11px;font-style:italic">emergente</span>'
+      : `<span class="conn-tag">${conns} conexión${conns > 1 ? 'es' : ''}</span>`;
+    const catStr = nd.cat !== '–'
+      ? `<span class="type-tag">${nd.cat}</span>`
+      : '<span class="type-tag" style="color:var(--muda-color-text-28)">sin categoría</span>';
+    labelEl.innerHTML = `<strong>${nd.label}</strong>${catStr}${connStr}`;
+    labelEl.style.display = 'block';
+    labelEl.style.left = (e.clientX + 16) + 'px';
+    labelEl.style.top  = (e.clientY - 10) + 'px';
+    container.style.cursor = 'pointer';
+  } else {
+    if (hoveredMesh) {
+      hoveredMesh.material.opacity = TYPE_OPACITY[hoveredMesh.userData.type];
+      hoveredMesh = null;
+    }
+    labelEl.style.display = 'none';
+    container.style.cursor = isDragging ? 'grabbing' : 'grab';
+  }
+});
+
+container.addEventListener('mousedown', e => {
+  isDragging = true; prevX = e.clientX; prevY = e.clientY;
+  container.style.cursor = 'grabbing';
+});
+window.addEventListener('mouseup', () => { isDragging = false; container.style.cursor = 'grab'; });
+
+// Scroll zoom
+container.addEventListener('wheel', e => {
+  e.preventDefault();
+  camera.position.z = Math.max(12, Math.min(50, camera.position.z + e.deltaY * 0.04));
+}, { passive: false });
+
+window.addEventListener('resize', () => {
+  W = container.clientWidth; H = container.clientHeight;
+  camera.aspect = W / H; camera.updateProjectionMatrix();
+  renderer.setSize(W, H);
+});
+
+// ── Animación ────────────────────────────────────────────────────
+const clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+
+  if (!isDragging) rotY += 0.0012;
+  group.rotation.y = rotY;
+  group.rotation.x = rotX;
+
+  // Pulso categorías (hub oculto — sin pulso)
+  nodeMeshes.forEach(mesh => {
+    if (mesh.userData.type === 'categoria' && mesh !== hoveredMesh) {
+      mesh.scale.setScalar(1 + Math.sin(t * 1.0 + mesh.userData.id * 0.9) * 0.025);
+    }
+  });
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// ── FAQ Accordion ────────────────────────────────────────────────
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    // Close all in same section
+    item.closest('.faq-section').querySelectorAll('.faq-item.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+    });
+    // Toggle current
+    if (!wasOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</script>
+</body>
+</html>

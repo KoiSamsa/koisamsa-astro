@@ -1,0 +1,132 @@
+<svg viewBox="0 0 680 560" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@300;400;500;600&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap');
+      text { font-family: "IBM Plex Sans", system-ui, sans-serif; }
+    </style>
+    <linearGradient id="tealFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#00A6AB" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#00A6AB" stop-opacity="0.01"/>
+    </linearGradient>
+    <linearGradient id="blueFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#335E82" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#335E82" stop-opacity="0.01"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="680" height="560" rx="15" fill="#FAF9F7"/>
+  <rect x="0" y="0" width="680" height="4" rx="2" fill="#00A6AB"/>
+
+  <!-- Header -->
+  <text x="340" y="34" text-anchor="middle" font-family="IBM Plex Sans Condensed" font-size="17" font-weight="600" fill="#2B200F" letter-spacing="0.3">LO QUE SE QUEMA vs. LO QUE SE INVIERTE</text>
+  <text x="340" y="51" text-anchor="middle" font-size="12" fill="rgba(43,32,15,0.55)">Consumo electrico data centers (TWh) vs. capex combinado Big Tech ($B)</text>
+  <line x1="40" y1="64" x2="640" y2="64" stroke="rgba(43,32,15,0.10)" stroke-width="0.5"/>
+
+  <!-- Chart area: y=80 (top) to y=400 (bottom), x=50 to x=640 -->
+  <!-- 12 points (2015-2026), step = 590/11 = 53.6 -->
+  <!-- Energy Y: 400 (0) to 80 (1200 TWh), range=320. 1 TWh = 0.267px -->
+  <!-- Capex Y: 400 (0) to 80 (700B), range=320. 1B = 0.457px -->
+
+  <!-- Y axis left: Energy TWh -->
+  <text x="46" y="84" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#00A6AB">1.200</text>
+  <text x="46" y="137" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#00A6AB">1.000</text>
+  <text x="46" y="191" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#00A6AB">800</text>
+  <text x="46" y="244" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#00A6AB">600</text>
+  <text x="46" y="298" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#00A6AB">400</text>
+  <text x="46" y="351" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#00A6AB">200</text>
+  <text x="46" y="404" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.35)">0</text>
+
+  <!-- Y axis right: Capex $B -->
+  <text x="644" y="84" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$700B</text>
+  <text x="644" y="130" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$600B</text>
+  <text x="644" y="176" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$500B</text>
+  <text x="644" y="222" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$400B</text>
+  <text x="644" y="267" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$300B</text>
+  <text x="644" y="313" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$200B</text>
+  <text x="644" y="359" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="#335E82">$100B</text>
+
+  <!-- Grid -->
+  <line x1="50" y1="80" x2="640" y2="80" stroke="rgba(43,32,15,0.04)" stroke-width="0.5"/>
+  <line x1="50" y1="133" x2="640" y2="133" stroke="rgba(43,32,15,0.04)" stroke-width="0.5"/>
+  <line x1="50" y1="187" x2="640" y2="187" stroke="rgba(43,32,15,0.04)" stroke-width="0.5"/>
+  <line x1="50" y1="240" x2="640" y2="240" stroke="rgba(43,32,15,0.04)" stroke-width="0.5"/>
+  <line x1="50" y1="293" x2="640" y2="293" stroke="rgba(43,32,15,0.04)" stroke-width="0.5"/>
+  <line x1="50" y1="347" x2="640" y2="347" stroke="rgba(43,32,15,0.04)" stroke-width="0.5"/>
+  <line x1="50" y1="400" x2="640" y2="400" stroke="rgba(43,32,15,0.10)" stroke-width="0.5"/>
+
+  <!-- X positions: 50, 104, 157, 211, 264, 318, 371, 425, 478, 532, 585, 640 -->
+
+  <!-- Regime backgrounds -->
+  <rect x="50" y="72" width="214" height="22" rx="4" fill="rgba(0,166,171,0.08)"/>
+  <text x="157" y="86" text-anchor="middle" font-family="IBM Plex Sans Condensed" font-size="8" font-weight="500" fill="rgba(43,32,15,0.30)">PLANO</text>
+
+  <rect x="425" y="72" width="215" height="22" rx="4" fill="rgba(172,73,82,0.05)"/>
+  <text x="532" y="86" text-anchor="middle" font-family="IBM Plex Sans Condensed" font-size="8" font-weight="500" fill="rgba(172,73,82,0.40)">VERTICAL</text>
+
+  <!-- ChatGPT divider at 2022 (x=425) -->
+  <line x1="425" y1="72" x2="425" y2="400" stroke="rgba(43,32,15,0.18)" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="425" y="100" text-anchor="middle" font-family="IBM Plex Sans Condensed" font-size="10" font-weight="600" fill="#AC4952">ChatGPT</text>
+
+  <!-- Energy area fill -->
+  <!-- TWh: 200,200,200,200,200,270,305,340,400,460,700,1100 -->
+  <!-- Y = 400 - (TWh * 320/1200) = 400 - (TWh * 0.267) -->
+  <!-- 200→347, 270→328, 305→319, 340→309, 400→293, 460→277, 700→213, 1100→107 -->
+  <path d="M50,347 L104,347 L157,347 L211,347 L264,347 L318,328 L371,319 L425,309 L478,293 L532,277 L585,213 L640,107 L640,400 L50,400 Z" fill="url(#tealFill)"/>
+  <path d="M50,347 L104,347 L157,347 L211,347 L264,347 L318,328 L371,319 L425,309 L478,293 L532,277 L585,213 L640,107" fill="none" stroke="#00A6AB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Capex area fill -->
+  <!-- $B: 30,35,45,55,65,80,110,130,165,250,405,650 -->
+  <!-- Y = 400 - (B * 320/700) = 400 - (B * 0.457) -->
+  <!-- 30→386, 35→384, 45→379, 55→375, 65→370, 80→363, 110→350, 130→341, 165→325, 250→286, 405→215, 650→103 -->
+  <path d="M50,386 L104,384 L157,379 L211,375 L264,370 L318,363 L371,350 L425,341 L478,325 L532,286 L585,215 L640,103 L640,400 L50,400 Z" fill="url(#blueFill)"/>
+  <path d="M50,386 L104,384 L157,379 L211,375 L264,370 L318,363 L371,350 L425,341 L478,325 L532,286 L585,215 L640,103" fill="none" stroke="#335E82" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Energy data points -->
+  <circle cx="50" cy="347" r="5" fill="#00A6AB" stroke="#FAF9F7" stroke-width="2"/>
+  <circle cx="318" cy="328" r="5" fill="#00A6AB" stroke="#FAF9F7" stroke-width="2"/>
+  <circle cx="532" cy="277" r="5" fill="#00A6AB" stroke="#FAF9F7" stroke-width="2"/>
+  <circle cx="640" cy="107" r="5" fill="#00A6AB" stroke="#FAF9F7" stroke-width="2"/>
+
+  <!-- Capex data points -->
+  <circle cx="50" cy="386" r="4" fill="#335E82" stroke="#FAF9F7" stroke-width="1.5"/>
+  <circle cx="532" cy="286" r="4" fill="#335E82" stroke="#FAF9F7" stroke-width="1.5"/>
+  <circle cx="585" cy="215" r="4" fill="#335E82" stroke="#FAF9F7" stroke-width="1.5"/>
+  <circle cx="640" cy="103" r="5" fill="#335E82" stroke="#FAF9F7" stroke-width="2"/>
+
+  <!-- Value labels -->
+  <text x="50" y="340" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.40)">~200</text>
+  <text x="640" y="98" text-anchor="end" font-family="IBM Plex Mono" font-size="11" font-weight="500" fill="#2B200F">1.100</text>
+  <text x="50" y="380" text-anchor="start" font-family="IBM Plex Mono" font-size="9" fill="rgba(51,94,130,0.50)">$30B</text>
+  <text x="635" y="96" text-anchor="start" font-family="IBM Plex Mono" font-size="11" font-weight="500" fill="#335E82">$650B</text>
+
+  <!-- Multiplier annotation -->
+  <text x="495" y="248" text-anchor="middle" font-size="9" fill="rgba(43,32,15,0.35)">energia x5,5</text>
+  <text x="495" y="260" text-anchor="middle" font-size="9" fill="rgba(43,32,15,0.35)">capex x22</text>
+
+  <!-- X axis labels -->
+  <text x="50" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.45)">2015</text>
+  <text x="157" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.45)">2017</text>
+  <text x="264" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.45)">2019</text>
+  <text x="371" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.45)">2021</text>
+  <text x="425" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#AC4952" font-weight="500">2022</text>
+  <text x="532" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.45)">2024</text>
+  <text x="640" y="418" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" font-weight="500" fill="#2B200F">2026</text>
+
+  <!-- Legend -->
+  <line x1="50" y1="440" x2="640" y2="440" stroke="rgba(43,32,15,0.10)" stroke-width="0.5"/>
+  <line x1="50" y1="458" x2="68" y2="458" stroke="#00A6AB" stroke-width="2.5"/>
+  <text x="74" y="461" font-size="10" fill="rgba(43,32,15,0.55)">Consumo electrico data centers (TWh) — eje izquierdo</text>
+  <line x1="380" y1="458" x2="398" y2="458" stroke="#335E82" stroke-width="2.5"/>
+  <text x="404" y="461" font-size="10" fill="rgba(43,32,15,0.55)">Capex Big Tech ($B) — eje derecho</text>
+
+  <!-- Note -->
+  <text x="340" y="484" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.35)">Big Tech = Amazon + Microsoft + Google + Meta + Apple. 2026: proyeccion (earnings guidance).</text>
+
+  <!-- Callout -->
+  <text x="340" y="510" text-anchor="middle" font-size="12" fill="rgba(43,32,15,0.62)">Misma inflexion. Mismo momento.</text>
+  <text x="340" y="526" text-anchor="middle" font-size="12" fill="rgba(43,32,15,0.62)">Cada dolar que entra al circuito se convierte en <tspan font-weight="600" fill="#AC4952">electricidad que no vuelve.</tspan></text>
+
+  <!-- Footer -->
+  <text x="50" y="550" font-family="IBM Plex Mono" font-size="9" fill="rgba(43,32,15,0.38)">Fuentes: IEA Energy and AI 2026 | IO Fund / Goldman Sachs capex analysis | Company earnings</text>
+  <text x="640" y="550" text-anchor="end" font-family="IBM Plex Sans Condensed" font-size="9" font-weight="500" fill="rgba(43,32,15,0.28)" letter-spacing="0.8">KOI SAMSA</text>
+</svg>
