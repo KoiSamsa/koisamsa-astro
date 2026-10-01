@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.62 · KOI SAMSA · Lab a lo Quantum: teselas con la vista previa de cada artefacto (demo)</title>
+<title>v1.63 · KOI SAMSA · El responsive: crece hasta 1800, el encuadre del móvil y la cabecera que se aparta (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -96,7 +96,7 @@ body.strip-on #hud-br,body.strip-on #logo{bottom:calc(var(--strip-h) + 24px)}
 .tx:hover{background:rgba(11,11,11,.045)}
 .tx[disabled]{opacity:.3;cursor:default}
 kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--line);padding:1px 5px;background:rgba(11,11,11,.03)}
-@media (max-width:720px){#panel{width:100%}#search.open{width:calc(100vw - 110px)}#res{width:calc(100vw - 56px)}#p-c{grid-template-columns:1fr}}
+@media (max-width:760px){#panel{width:100%}#search.open{width:calc(100vw - 110px)}#res{width:calc(100vw - 56px)}#p-c{grid-template-columns:1fr}}
 
 /* ═══ v1.3 · TRES REGIONES ═══════════════════════════════════════
    grafo = estructura · panel = UNA pieza · franja = listas          */
@@ -250,7 +250,7 @@ body.v-pleno #strip{display:none}
 body.v-pleno #hud-tl,body.v-pleno #hud-tr,body.v-pleno #hud-br,body.v-pleno #logo,
 body.v-pleno #search{display:none}
 body.v-pleno #panel-x{z-index:13}
-@media(max-width:860px){
+@media (max-width:760px){
   body.v-ancho{--panel-w:100vw}
   .ix-nat{display:none}
 }
@@ -301,7 +301,7 @@ body.v-pleno #panel-x{z-index:13}
 .ix-serie.aqui .ix-st{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:5px}
 .ix-foot{font:400 10px ui-monospace,monospace;color:var(--ink-3)}
 .ix-foot em{font-style:normal;color:var(--acc,var(--ink-3))}
-@media(max-width:860px){
+@media (max-width:760px){
   .ix-grid.two{display:block}
   .ix-grid.two .ix-col{display:block}
 }
@@ -338,8 +338,7 @@ body.strip-on #panel{bottom:var(--strip-h)}   /* v1.24 · el panel termina encim
 #st-body:empty{display:none}
 #strip .none{font-size:13px;color:var(--ink-3);padding:var(--sp-sm) 0}
 
-@media (max-width:1100px){:root{--panel-w:min(94vw,580px)}}
-@media (max-width:860px){
+@media (max-width:760px){
   :root{--panel-w:100vw;--strip-h:0px}
   .art{padding-right:0}
   .art .mg{float:none;width:auto;margin:var(--sp-md) 0}
@@ -352,7 +351,7 @@ body.strip-on #panel{bottom:var(--strip-h)}   /* v1.24 · el panel termina encim
   body.panel-on #hud-br{right:28px}
   body.strip-on #hud-br,body.strip-on #logo{bottom:26px}
 }
-@media (max-width:720px){
+@media (max-width:760px){
   /* la búsqueda sigue siendo el cuarto icono, pero al abrirse cubre la fila */
   #search.open{left:28px;right:28px;width:auto}
   #res{left:28px;width:calc(100vw - 56px)}
@@ -424,7 +423,7 @@ body.panel-on #logo,body.panel-on #hud-br{opacity:0;pointer-events:none}
 #cp-p1{display:none}
 body.v-pleno #hud-tl,body.v-pleno #hud-tr,body.v-pleno #search{display:flex}   /* la carpeta deja el menú arriba también con un artefacto a pleno */
 @media (prefers-reduced-motion:reduce){.cp-hoja,#panel.carpeta{transition:none}.cp-hoja.sube{animation:none}}
-@media (max-width:720px){
+@media (max-width:760px){
   :root{--carpeta-top:140px;--cp-hh:48px}
   .cp-cab{padding:0 var(--sp-md)}
   .cp-cuerpo{padding:var(--sp-sm) var(--sp-md) var(--sp-xl)}
@@ -458,7 +457,7 @@ body.v-pleno #hud-tl,body.v-pleno #hud-tr,body.v-pleno #search{display:flex}   /
 @keyframes cz-in{from{opacity:0}to{opacity:1}}
 @keyframes tramo-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 @media (prefers-reduced-motion:reduce){#cadena.llega *{animation:none!important}.cz .bola{transition:none}}
-@media (max-width:720px){#cadena{top:82px;left:28px;right:28px}.tramo{flex-basis:24px;margin:0 8px}}
+@media (max-width:760px){#cadena{top:82px;left:28px;right:28px}.tramo{flex-basis:24px;margin:0 8px}}
 /* con la carpeta abierta, el grafo se desvanece bajo el menú y la cadena: nada cruza por detrás de ellos.
    Va por debajo del grano (z 2), así el papel sigue siendo el mismo papel. */
 #velo-top{position:fixed;left:0;right:0;top:0;height:calc(var(--carpeta-top) + var(--cp-hh));z-index:1;pointer-events:none;opacity:0;transition:opacity .38s ease;background:var(--papel)}
@@ -503,7 +502,7 @@ body.panel-on #pie{transform:translateY(0)}
 .pie-logo:focus-visible{outline:2px solid #008186;outline-offset:4px}
 #pie #btn-snd{flex:0 0 auto;width:34px;height:34px;border:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-@media (max-width:720px){
+@media (max-width:760px){
   #pie{padding:0 16px env(safe-area-inset-bottom,0px);gap:13px}
   .pie-fila,.pie-nav{gap:16px}
   .pie-q input{width:120px}
@@ -531,7 +530,7 @@ body.panel-on #pie{transform:translateY(0)}
   --muda-stroke-1:1px;--muda-stroke-3:3px;
   --muda-duration-8f:133ms;--muda-duration-21f:350ms;--muda-duration-34f:567ms;--muda-motion-easing-default:cubic-bezier(.4,0,.2,1);
   --hoja:var(--muda-color-bg-surface);--cp-hh:55px}
-@media (max-width:720px){:root{--cp-hh:48px}}
+@media (max-width:760px){:root{--cp-hh:48px}}
 /* foco MUDA en toda la interfaz nueva y en los iconos */
 .ico:focus-visible,.cz:focus-visible,.pie-n:focus-visible,.pie-l:focus-visible,.pie-logo:focus-visible,#logo:focus-visible,.cp-t:focus-visible{
   outline:var(--muda-stroke-3) solid var(--muda-color-focus);outline-offset:2px;border-radius:var(--muda-radius-xs)}
@@ -567,7 +566,7 @@ body.panel-on #pie{transform:translateY(0)}
 #panel.carpeta .mg .mgl{font:500 var(--muda-typography-size-meta-s)/1.2 var(--muda-typography-family-fira);letter-spacing:.06em;text-transform:uppercase}
 #panel.carpeta .ix-dek{font-family:var(--muda-typography-family-serif);color:var(--muda-color-text-sub)}
 #panel.carpeta .ix-count{font-family:var(--muda-typography-family-mono)}
-@media (max-width:720px){.cp-cab{padding:0 var(--muda-space-lg)}.cp-cuerpo{padding:var(--muda-space-lg) var(--muda-space-lg) var(--muda-space-xl)}}
+@media (max-width:760px){.cp-cab{padding:0 var(--muda-space-lg)}.cp-cuerpo{padding:var(--muda-space-lg) var(--muda-space-lg) var(--muda-space-xl)}}
 /* ── cadena: los nombres de nodo, en la mono de MUDA ── */
 .cz{color:var(--muda-color-text-sub)}
 .cz .et{font-family:var(--muda-typography-family-mono);font-size:var(--muda-typography-size-meta-s)}
@@ -586,7 +585,7 @@ body.panel-on #pie{transform:translateY(0)}
   padding:0 var(--muda-space-md);font:400 var(--muda-typography-size-meta-l) var(--muda-typography-family-sans);color:var(--muda-color-text-ink)}
 .pie-q input::placeholder{color:var(--muda-color-text-soft)}
 .pie-q input:focus{outline:var(--muda-stroke-3) solid var(--muda-color-focus);outline-offset:2px;border-color:var(--muda-color-stroke-soft)}
-@media (max-width:720px){#pie{padding:0 var(--muda-space-md) env(safe-area-inset-bottom,0px);gap:var(--muda-space-md)}.pie-fila,.pie-nav{gap:var(--muda-space-md)}}
+@media (max-width:760px){#pie{padding:0 var(--muda-space-md) env(safe-area-inset-bottom,0px);gap:var(--muda-space-md)}.pie-fila,.pie-nav{gap:var(--muda-space-md)}}
 /* ── las etiquetas de los nodos del grafo, también en Fira Code ── */
 .lb{font-family:var(--muda-typography-family-mono)}
 .lb.vb{font-size:9.5px!important;letter-spacing:.12em}   /* v1.60 · en la vista menú, las piezas hablan en voz baja */
@@ -597,14 +596,14 @@ body.panel-on #pie{transform:translateY(0)}
    text-sub. Sin sombra: la profundidad la dicen el velo de lo de detrás y el filete, como en las pestañas.
    Dentro de la hoja, 34 arriba y abajo y 55 a los lados (21 · 34 en móvil).                                      */
 :root{--muda-size-control:40px;--cp-hh:var(--muda-size-control)}
-@media (max-width:720px){:root{--cp-hh:40px}}
+@media (max-width:760px){:root{--cp-hh:40px}}
 .cp-cab{padding:0 var(--muda-space-lg);border-radius:var(--muda-radius-md) var(--muda-radius-md) 0 0;
   border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft);box-shadow:none}
 .cp-hoja.delante .cp-cab{box-shadow:none}
 .cp-t .n{color:var(--muda-color-text-sub)}
 #panel.carpeta #panel-x{top:calc(var(--cp-hh) + (var(--cp-hh) - 32px) / 2);right:var(--muda-space-sm);width:32px;height:32px;border:0;background:transparent}
 #panel.carpeta #panel-x:hover{background:var(--muda-color-bg-recessed)}
-@media (max-width:720px){.cp-cab{padding:0 var(--muda-space-lg)}}
+@media (max-width:760px){.cp-cab{padding:0 var(--muda-space-lg)}}
 
 /* ═══ v1.31 · LAS PORTADAS DE SECCIÓN (Patricia, 28-sep, 09:52) ═══════════════════════════════════════════
    Todas como /notes y /lab: el título en minúsculas, en Newsreader 700, grande; y la cuadrícula de piezas.
@@ -632,11 +631,11 @@ button.pie-ic{border:0;background:transparent;padding:0;cursor:pointer;font:inhe
   border-radius:var(--muda-radius-sm);background:transparent;color:var(--muda-color-text-ink);cursor:pointer;white-space:nowrap}
 .ct-copia:hover{color:var(--muda-color-text-ink);background:var(--muda-color-bg-recessed)}
 .ct-fila dd a:focus-visible,.ct-copia:focus-visible{outline:var(--muda-stroke-3) solid var(--muda-color-focus);outline-offset:2px;border-radius:var(--muda-radius-xs)}
-@media (max-width:520px){.ct-fila{grid-template-columns:1fr;gap:var(--muda-space-xs)}}
+@media (max-width:640px){.ct-fila{grid-template-columns:1fr;gap:var(--muda-space-xs)}}
 
 /* ═══ v1.61 · LA CABECERA DE LA HOJA ════════════════════════════════════════════════════════════════════════════ */
 .cp-cuerpo{--cpy:34px;--cpx:55px}
-@media (max-width:720px){.cp-cuerpo{--cpy:21px;--cpx:21px}}
+@media (max-width:760px){.cp-cuerpo{--cpy:21px;--cpx:21px}}
 .p-heroe>*{max-width:none}
 .p-cab{display:flex;align-items:center;gap:var(--muda-space-sm);margin:0 0 var(--muda-space-sm);min-height:32px}
 .p-cab .kicker{margin:0!important;flex:0 1 auto;min-width:0}
@@ -852,7 +851,7 @@ button.pie-ic{border:0;background:transparent;padding:0;cursor:pointer;font:inhe
 #panel.carpeta .art sup.fn-sep{color:var(--muda-color-focus)}
 /* ═══ v1.33 · PIE EN MÓVIL: a 390 px las secciones se cortaban («ACADEMI») y el correo, Instagram y el sonido quedaban
    fuera, al final de la tira. Ahora solo se desplazan los nombres, con un fundido que dice «hay más»; los iconos, fijos. */
-@media (max-width:720px){
+@media (max-width:760px){
   .pie-fila{overflow:visible}
   .pie-nav{flex:1 1 auto;min-width:0;overflow-x:auto;scrollbar-width:none;align-self:stretch;padding-right:var(--muda-space-lg);
     -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - var(--muda-space-xl)),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - var(--muda-space-xl)),transparent)}
@@ -912,7 +911,7 @@ body.hermanas-on #panel.carpeta{bottom:calc(var(--pie-h) + var(--her-h));
 #hermanas .her-rel{min-width:0;display:flex;align-items:center;gap:var(--muda-space-sm);overflow:hidden;white-space:nowrap}
 #hermanas.tienda .her-a{flex:0 1 auto;height:auto}
 #hermanas .her-sep{color:var(--muda-color-text-soft)}
-@media (max-width:720px){
+@media (max-width:760px){
   #hermanas{padding:0 var(--muda-space-md);gap:var(--muda-space-sm)}
   #hermanas .her-n,#hermanas .her-pv .her-l,#hermanas .her-nx .her-l{display:none}
 }
@@ -1091,7 +1090,7 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 #qn{top:calc(26px + 44px + var(--muda-space-xs));left:calc(140px + var(--muda-space-md));font:400 var(--muda-typography-size-meta-m)/1.3 var(--muda-typography-family-fira);
   letter-spacing:normal;text-transform:none;color:var(--muda-color-text-sub)}
 #qn b{font-weight:400;color:var(--muda-color-text-ink)}
-@media (max-width:720px){#qn{left:calc(28px + var(--muda-space-md))}}
+@media (max-width:760px){#qn{left:calc(28px + var(--muda-space-md))}}
 #q-avisos{display:flex;gap:5px;margin:0 var(--muda-space-md) 0 var(--muda-space-sm);flex:0 0 auto}
 #q-avisos i{width:7px;height:7px;border-radius:50%;border:var(--muda-stroke-1) solid var(--muda-color-text-sub)}
 #q-avisos i.on{background:var(--muda-color-text-ink);border-color:var(--muda-color-text-ink)}
@@ -1100,6 +1099,40 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 #q-avisos[hidden],#q-reabre[hidden]{display:none!important}
 #search:not(.open) #q-avisos,#search:not(.open) #q-reabre{display:none!important}
 #search.cerrado #q{color:var(--muda-color-text-soft)}
+
+/* ═══ v1.63 · EL RESPONSIVE (Patricia, 1-oct, 11:10) ══════════════════════════════════════════════════════════════
+   Cortes: los dos de MUDA, 640 · 760. Las composiciones se reparten por su contenedor, no por el dispositivo. */
+/* 1 · PANTALLA ANCHA: crece hasta 1800 y centra. La prosa no crece: la sujetan sus propias medidas (680, 46ch…). */
+.cp-pan{max-width:1800px;margin-inline:auto}
+/* la página de una pieza: el artículo se reparte en 60 unidades (texto 43 · medianil 2 · marginalia 15). Antes, las 60 eran
+   el ancho de la hoja y el texto crecía con ella (≈ 800 px a 1120; ≈ 1290 a 1800). Ahora se componen como mucho sobre
+   680 × 60 / 43 ≈ 949 px: el texto se queda en la medida de MUDA y la marginalia guarda su proporción. */
+#panel.carpeta .art{--u:calc(min(100cqi, 949px) / 60);max-width:calc(60 * var(--u))}
+/* la marginalia vuelve a ser un bloque: la revista de Notes (v1.61) se maquetó con .mg, que ya era la clase de la
+   marginalia, y desde entonces cada nota al margen se repartía en la rejilla de la revista (2fr 1fr 1fr) */
+.art .mg{display:block}
+/* la prosa, a la «Lectura larga» de MUDA v0.9 (patrón sin firmar): body-l, 20 px, a 1,72 en 680 → ≈ 68 letras por línea.
+   Iba a body-m (17 / 1,65): ≈ 80 letras por línea. En el móvil se queda en 17 / 1,65: ≈ 43 (propuesta de Claude). */
+@media (min-width:761px){#panel.carpeta .art{font-size:var(--muda-typography-size-body-l);line-height:1.72}}
+/* 2 · MÓVIL, LEYENDO: al bajar, la carpeta sube hasta tapar sus cabeceras; menú y cadena se apartan. Al subir, vuelven. */
+#hud-tl,#hud-tr,#search{transition:opacity .2s ease,width .28s cubic-bezier(.4,0,.2,1)}
+@media (max-width:760px){
+  body.cp-lee{--carpeta-top:calc(env(safe-area-inset-top,0px) - 2 * var(--cp-hh))}
+  body.cp-lee #cadena,body.cp-lee #hud-tl,body.cp-lee #hud-tr,body.cp-lee #search{opacity:0;pointer-events:none}
+}
+/* 3 · MÓVIL, EL PIE: el fundido, por el lado donde hay más; 55 px, para que se vea */
+@media (max-width:760px){
+  #pie .pie-nav{padding-right:0;-webkit-mask-image:none;mask-image:none}
+  #pie .pie-nav.m-der{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 55px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 55px),transparent)}
+  #pie .pie-nav.m-izq{-webkit-mask-image:linear-gradient(90deg,transparent,#000 55px);mask-image:linear-gradient(90deg,transparent,#000 55px)}
+  #pie .pie-nav.m-izq.m-der{-webkit-mask-image:linear-gradient(90deg,transparent,#000 55px,#000 calc(100% - 55px),transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 55px,#000 calc(100% - 55px),transparent)}
+}
+/* 4 · LA CADENA, APRETADA: las migas de antes, solo su bola; la última, con su nombre, recortado si no cabe */
+#cadena.apretada .cz:not(.here) .et{display:none}
+#cadena.apretada .tramo{flex-basis:13px;margin:0 5px}
+#cadena.apretada .cz.here{flex:0 1 auto;min-width:0}
+#cadena.apretada .cz.here .et{min-width:0;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
@@ -5066,7 +5099,7 @@ function ajustaHero(){   /* el hero de las secciones (/notes, /lab…), a todo e
   var h=document.getElementById('p-t');if(!panel.classList.contains('is-idx')){h.style.fontSize='';return;}
   var box=document.getElementById('cp-p0'),W=box.clientWidth;if(!W)return;
   h.style.fontSize='100px';var r=document.createRange();r.selectNodeContents(h);var w=r.getBoundingClientRect().width;if(!w)return;
-  var f=100*W/w*0.97,tope=Math.max(64,Math.min(280,CP0.clientHeight*0.40));
+  var f=100*W/w*0.97,tope=Math.max(64,Math.min(377,CP0.clientHeight*0.40));   /* v1.63 · 280 → 377 */
   h.style.fontSize=Math.max(52,Math.min(tope,f)).toFixed(1)+'px';
 }
 function mezclaHex(a,b,t){a=a.replace('#','');b=b.replace('#','');var o='#';
@@ -5202,7 +5235,7 @@ function renderCadena(){
   if(sel!==0){if(N[sel][1]===1)ruta.push(sel);else{var h0=HYB[sel];ruta.push(h0?h0[0]:N[sel][4],sel);}}
   var html=ruta.map(function(j,k){return (k?'<span class="tramo" aria-hidden="true"></span>':'')+bolaHTML(j,k===ruta.length-1,false);}).join('');
   /* v1.28 · solo migas de pan (Patricia, 28-sep): el «también» de los híbridos sale */
-  cadena.innerHTML=html;cadena.hidden=false;
+  cadena.innerHTML=html;cadena.hidden=false;cadenaAjusta();   /* v1.63 */
   vuela(ruta,desdeGrafo,viejas,panel.classList.contains('open')&&CPT===1);
 }
 cadena.addEventListener('click',function(e){
@@ -5924,7 +5957,7 @@ function frame(){
      la ventana dentro del frustum (setViewOffset), que es una proyección
      descentrada correcta — mover la cámara metía el grafo en el borde del
      cono y lo deformaba. */
-  var wide=W>860;
+  var wide=W>760;   /* v1.63 · el corte de MUDA */
   var pxw=0;   /* v1.26 · ya no hay panel lateral */
   /* v1.28 · el centro del grafo: con la carpeta abierta, el de la ventana de Conexiones (cuerpo de la hoja de delante);
      explorando, el del hueco que deja el pie */
@@ -6271,6 +6304,50 @@ document.getElementById('p-enlace').addEventListener('click',function(){
   try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,mal);else mal();}catch(_e){mal();}
 });
 goSlide(0);place();frame();
+
+/* ═══ v1.63 · EL RESPONSIVE ═══════════════════════════════════════════════════════════════════════════════════════ */
+var MOV=matchMedia('(max-width:760px)');
+/* la cadena, apretada si no cabe (solo en el móvil) */
+function cadenaAjusta(){
+  cadena.classList.remove('apretada');
+  if(MOV.matches&&!cadena.hidden&&cadena.scrollWidth>cadena.clientWidth+1)cadena.classList.add('apretada');
+}
+/* el encuadre de la home: por debajo de ENC_A (ancho / alto), la cámara abre el encuadre lo que estrecha la pantalla */
+var ENC_A=1.25;
+function encuadre(){var a=innerWidth/innerHeight;cam.zoom=a<ENC_A?a/ENC_A:1;cam.updateProjectionMatrix();}
+encuadre();
+addEventListener('resize',function(){encuadre();cadenaAjusta();pieBordes();});
+/* móvil, leyendo: la cabecera se aparta al bajar y vuelve al subir */
+var CPL=document.getElementById('cp-c0'),CPY=0;
+function cabeceraVuelve(){document.body.classList.remove('cp-lee');CPY=0;}
+CPL.addEventListener('scroll',function(){
+  if(!MOV.matches){cabeceraVuelve();return;}
+  var y=CPL.scrollTop;
+  if(y>CPY+4&&y>89)document.body.classList.add('cp-lee');
+  else if(y<CPY-4||y<34)document.body.classList.remove('cp-lee');
+  CPY=y;
+},{passive:true});
+(function(){
+  var _pl=paginaLista;paginaLista=function(){cabeceraVuelve();return _pl.apply(this,arguments);};
+  var _cp=closePanel;closePanel=function(){cabeceraVuelve();return _cp.apply(this,arguments);};
+  document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('.cp-t'))cabeceraVuelve();},true);
+})();
+/* móvil, el pie: el fundido por el lado donde hay más, y la sección activa, a la vista */
+var PNAV=document.querySelector('#pie .pie-nav');
+function pieBordes(){
+  if(!PNAV)return;var m=MOV.matches;
+  PNAV.classList.toggle('m-izq',m&&PNAV.scrollLeft>2);
+  PNAV.classList.toggle('m-der',m&&PNAV.scrollLeft+PNAV.clientWidth<PNAV.scrollWidth-2);
+}
+function pieCentra(){
+  if(!PNAV||!MOV.matches)return;var b=PNAV.querySelector('.pie-n[aria-current="true"]');
+  if(b)PNAV.scrollTo({left:b.offsetLeft-PNAV.offsetLeft-(PNAV.clientWidth-b.offsetWidth)/2,behavior:RM?'auto':'smooth'});
+}
+if(PNAV){
+  PNAV.addEventListener('scroll',pieBordes,{passive:true});
+  new MutationObserver(function(){pieCentra();}).observe(PNAV,{subtree:true,attributes:true,attributeFilter:['aria-current']});
+  pieBordes();
+}
 </script>
 </body>
 </html>
