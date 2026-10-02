@@ -22,10 +22,15 @@ export const prerender = false;
 const WORKERS_AI: Record<string, string> = {
   mistral: '@cf/mistralai/mistral-small-3.1-24b-instruct',
   qwen: '@cf/qwen/qwen3-30b-a3b-fp8',
+  // En pruebas (2-oct): candidatos de EE. UU., fuera del desplegable hasta medirlos
+  llama3b: '@cf/meta/llama-3.2-3b-instruct',
+  gptoss: '@cf/openai/gpt-oss-20b',
 };
 const NOMBRE: Record<string, string> = {
   mistral: 'Mistral Small',
   qwen: 'Qwen 3',
+  llama3b: 'Llama 3.2 3B',
+  gptoss: 'gpt-oss-20b',
 };
 
 const MAX_ENTRADA = 16000;      // caracteres por petición
@@ -76,7 +81,10 @@ async function conWorkersAi(ai: any, modelo: string, turnos: Turno[], temperatur
     ? turnos.map((t, i) => (i === turnos.length - 1 ? { ...t, content: t.content + '\n\n/no_think' } : t))
     : turnos;
   const d: any = await ai.run(WORKERS_AI[modelo], { messages: mensajes, max_tokens: qwen ? MAX_SALIDA * 3 : MAX_SALIDA, temperature: temperatura });
-  const texto = d?.response ?? d?.choices?.[0]?.message?.content ?? '';
+  const salida = Array.isArray(d?.output)
+    ? d.output.filter((o: any) => o?.type === 'message').flatMap((o: any) => o.content || []).map((c: any) => c?.text || '').join('')
+    : '';
+  const texto = d?.response ?? d?.choices?.[0]?.message?.content ?? salida ?? '';
   return limpia(typeof texto === 'string' ? texto : JSON.stringify(texto));
 }
 
