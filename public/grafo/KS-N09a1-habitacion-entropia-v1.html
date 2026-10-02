@@ -1112,11 +1112,10 @@ html.mesa body { padding: var(--muda-space-md); box-sizing: border-box; }
         <div class="select">
           <select id="modelo">
             <option value="mistral">Mistral Small · Mistral AI, Francia</option>
-            <option value="llama">Llama 3.3 · Meta, EE. UU. · en Cloudflare</option>
             <option value="qwen">Qwen 3 · Alibaba, China · en Cloudflare</option>
           </select><svg class="mi" viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-357.85 253.85-584l32.61-32.61L480-423.08l193.54-193.53L706.15-584 480-357.85Z"/></svg>
         </div>
-        <p class="small" id="modeloD">Gratuito, con tope; puede entrenar con lo escrito. En la demo, Claude.</p>
+        <p class="small" id="modeloD">Gratuito · unos 1 s por copista. En la demo, Claude.</p>
         <p class="small" id="aviso"></p>
       </div>
       </div>
@@ -1555,7 +1554,7 @@ async function empezar() {
   reiniciar(frase, total);
   const pausaApi = sampleFn ? 0 : 1000;   // Mistral gratuito: 1 petición por segundo
   const cola = [];
-  let producidas = 0, terminado = false, corte = null, despertar = null;
+  let producidas = 0, terminado = false, corte = null, despertar = null; const tiempos = [];
   const avisar = () => { if (despertar) { despertar(); despertar = null; } };
 
   // Productor: un copista por llamada; si no devuelve nada, se le pide otra vez
@@ -1564,7 +1563,8 @@ async function empezar() {
     while (producidas < total && !ctl.signal.aborted) {
       let f = null;
       const tipo = pal ? "palabra:" + (producidas % nP) : tipoDe(producidas, total);
-      try { f = limpiarLinea(await m(ultima, ctl.signal, tipo)); if (f && pal) f = f.replace(/[\[\]]/g, "").replace(/\s+/g, " ").trim() || null; }
+      const t0c = performance.now();
+      try { f = limpiarLinea(await m(ultima, ctl.signal, tipo)); tiempos.push(performance.now() - t0c); if (f && pal) f = f.replace(/[\[\]]/g, "").replace(/\s+/g, " ").trim() || null; }
       catch (e) {
         if (ctl.signal.aborted || (e && e.code === "cancelled")) break;
         corte = e;
@@ -1599,6 +1599,7 @@ async function empezar() {
     let msg = ctl.signal.aborted ? `Parada en el copista ${n}.`
             : corte ? `La cadena se cortó en el copista ${n} de ${total}: ${COPY[corte.code] || COPY.fallo}.`
             : `Fin: ${n} copistas.`;
+    if (tiempos.length) { const med = tiempos.reduce((a, b) => a + b, 0) / tiempos.length / 1000; msg += ` Media real: ${med.toLocaleString("es", { maximumFractionDigits: med < 1 ? 2 : 1 })} s por copista.`; }
     if (sampleFn) {
       estado("Leyendo tu frase y la final…");
       try { lectura = await leerFinal(original.join(" "), actual.map(t => t.w).join(" ")); } catch { lectura = null; }
@@ -1686,9 +1687,9 @@ document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", () 
     $("#cuenta").textContent = n < 4 ? (n ? n + (n === 1 ? " palabra" : " palabras") + " · escribe al menos 4 para seguir" : "Al menos 4 palabras · hasta 280 caracteres")
       : n + " palabras · " + v.length + " de 280 caracteres"; };
   const MODELOS = {
-    mistral: "Gratuito, con tope; puede entrenar con lo escrito. En la demo, Claude.",
-    llama: "Gratuito en Cloudflare, con tope diario. En la demo, Claude.",
-    qwen: "Gratuito en Cloudflare, con tope diario. En la demo, Claude."
+    /* v1.1 · «Gratuito y el tiempo de respuesta» (Patricia, 15:48). Tiempos de referencia de la otra sesión; Llama, descartado */
+    mistral: "Gratuito · unos 1 s por copista. En la demo, Claude.",
+    qwen: "Gratuito · unos 0,6 s por copista. En la demo, Claude."
   };
   $("#modelo").addEventListener("change", e => { $("#modeloD").textContent = MODELOS[e.target.value] || ""; });
   function billete() {
