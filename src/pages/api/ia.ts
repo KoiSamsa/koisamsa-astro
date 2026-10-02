@@ -5,13 +5,13 @@
 
    POST { input, modelo?, temperatura? }  ->  { text, modelo, proveedor }
      input  : texto, o turnos [{ role: "user" | "assistant", content }]
-     modelo : "mistral" (por defecto) · "qwen"
+     modelo : "mistral" (por defecto) · "llama" · "qwen"
 
-   Solo modelos rápidos (Llama y Gemma salieron por lentos, 2-oct). Proveedores, todos en plan gratuito:
+   Solo modelos rápidos, ~1 s por copista o menos (2-oct). Proveedores, todos en plan gratuito:
    · Mistral: la API de Mistral (UE) si existe el secreto MISTRAL_API_KEY;
      si no hay clave, o si responde con límite o error, Mistral Small 3.1
      en Workers AI (Cloudflare).
-   · Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
+   · Llama 3.2 y Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
      (gratuito con tope diario; no necesita clave).
    El modelo corre siempre en el proveedor: nunca en local.
    ═══════════════════════════════════════════════════════════════════ */
@@ -22,15 +22,13 @@ export const prerender = false;
 const WORKERS_AI: Record<string, string> = {
   mistral: '@cf/mistralai/mistral-small-3.1-24b-instruct',
   qwen: '@cf/qwen/qwen3-30b-a3b-fp8',
-  // En pruebas (2-oct): candidatos de EE. UU., fuera del desplegable hasta medirlos
-  llama3b: '@cf/meta/llama-3.2-3b-instruct',
-  gptoss: '@cf/openai/gpt-oss-20b',
+  // EE. UU.: Llama 3.2 3B (~1 s). Medidos y descartados por lentos: Llama 3.3 70B, Llama 3.1 8B, Gemma 4, gpt-oss-20b
+  llama: '@cf/meta/llama-3.2-3b-instruct',
 };
 const NOMBRE: Record<string, string> = {
   mistral: 'Mistral Small',
   qwen: 'Qwen 3',
-  llama3b: 'Llama 3.2 3B',
-  gptoss: 'gpt-oss-20b',
+  llama: 'Llama 3.2',
 };
 
 const MAX_ENTRADA = 16000;      // caracteres por petición
