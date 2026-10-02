@@ -24,13 +24,11 @@ const WORKERS_AI: Record<string, string> = {
   qwen: '@cf/qwen/qwen3-30b-a3b-fp8',
   // EE. UU.: Llama 3.2 3B (~1 s). Medidos y descartados por lentos: Llama 3.3 70B, Llama 3.1 8B, Gemma 4, gpt-oss-20b
   llama: '@cf/meta/llama-3.2-3b-instruct',
-  gptoss: '@cf/openai/gpt-oss-20b',   // en pruebas: con el razonamiento al mínimo
 };
 const NOMBRE: Record<string, string> = {
   mistral: 'Mistral Small',
   qwen: 'Qwen 3',
   llama: 'Llama 3.2',
-  gptoss: 'gpt-oss',
 };
 
 const MAX_ENTRADA = 16000;      // caracteres por petición
@@ -80,14 +78,6 @@ async function conWorkersAi(ai: any, modelo: string, turnos: Turno[], temperatur
   const mensajes = qwen
     ? turnos.map((t, i) => (i === turnos.length - 1 ? { ...t, content: t.content + '\n\n/no_think' } : t))
     : turnos;
-  if (modelo === 'gptoss') {
-    // gpt-oss razona antes de contestar: se le pide el mínimo
-    const g: any = await ai.run(WORKERS_AI[modelo], { input: turnos, reasoning: { effort: 'low' }, max_output_tokens: MAX_SALIDA, temperature: temperatura });
-    const t = Array.isArray(g?.output)
-      ? g.output.filter((o: any) => o?.type === 'message').flatMap((o: any) => o.content || []).map((c: any) => c?.text || '').join('')
-      : g?.response ?? '';
-    return limpia(String(t));
-  }
   const d: any = await ai.run(WORKERS_AI[modelo], { messages: mensajes, max_tokens: qwen ? MAX_SALIDA * 3 : MAX_SALIDA, temperature: temperatura });
   const salida = Array.isArray(d?.output)
     ? d.output.filter((o: any) => o?.type === 'message').flatMap((o: any) => o.content || []).map((c: any) => c?.text || '').join('')
