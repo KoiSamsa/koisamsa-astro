@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- N09.a1 · La habitación de la entropía · v1 (contenido de Entropic v1.1, 2-oct 15:20, por petición de Patricia: «sobrescribir la v1, para que sea esa la última») · copia de «N09.a1 Entropic v1.html» (Vault03/06_LAB) para el Lab del grafo. Solo se añade la línea siguiente: dentro del grafo, los copistas usan el modelo del grafo. -->
+<!-- En koisamsa.com los copistas son la IA gratuita de la web (/grafo/ia.js → /api/ia); en claude.ai, Claude. -->
+<script src="/grafo/ia.js"></script>
 <script>try{if(!window.claude&&window.parent!==window&&window.parent.claude)window.claude=window.parent.claude;}catch(e){}</script>
 <title>Entropic · La habitación de la entropía</title>
 <script>document.documentElement.lang = "es";</script>
@@ -1103,11 +1105,11 @@ html.mesa .pantalla .now-origin .now-origin-l, html.mesa #pConc .ticket .tq-k, h
         <div class="select">
           <select id="modelo">
             <option value="mistral">Mistral Small · Mistral AI, Francia</option>
-            <option value="llama">Llama 3.3 · Meta, EE. UU. · en Cloudflare</option>
+            <option value="llama">Llama 3.2 · Meta, EE. UU. · en Cloudflare</option>
             <option value="qwen">Qwen 3 · Alibaba, China · en Cloudflare</option>
           </select><svg class="mi" viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-357.85 253.85-584l32.61-32.61L480-423.08l193.54-193.53L706.15-584 480-357.85Z"/></svg>
         </div>
-        <p class="small" id="modeloD">Gratuito, con tope; puede entrenar con lo escrito. En la demo, Claude.</p>
+        <p class="small" id="modeloD">Gratuito, con tope; puede entrenar con lo escrito.</p>
         <p class="small" id="aviso"></p>
       </div>
       </div>
@@ -1676,9 +1678,9 @@ document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", () 
     $("#cuenta").textContent = n < 4 ? (n ? n + (n === 1 ? " palabra" : " palabras") + " · escribe al menos 4 para seguir" : "Al menos 4 palabras · hasta 280 caracteres")
       : n + " palabras · " + v.length + " de 280 caracteres"; };
   const MODELOS = {
-    mistral: "Gratuito, con tope; puede entrenar con lo escrito. En la demo, Claude.",
-    llama: "Gratuito en Cloudflare, con tope diario. En la demo, Claude.",
-    qwen: "Gratuito en Cloudflare, con tope diario. En la demo, Claude."
+    mistral: "Gratuito, con tope; puede entrenar con lo escrito.",
+    llama: "Gratuito en Cloudflare, con tope diario.",
+    qwen: "Gratuito en Cloudflare, con tope diario."
   };
   $("#modelo").addEventListener("change", e => { $("#modeloD").textContent = MODELOS[e.target.value] || ""; });
   function billete() {
