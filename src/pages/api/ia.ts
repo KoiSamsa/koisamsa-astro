@@ -5,13 +5,13 @@
 
    POST { input, modelo?, temperatura? }  ->  { text, modelo, proveedor }
      input  : texto, o turnos [{ role: "user" | "assistant", content }]
-     modelo : "mistral" (por defecto) · "gemma" · "qwen"
+     modelo : "mistral" (por defecto) · "qwen"
 
-   Proveedores, todos en plan gratuito:
+   Solo modelos rápidos (Llama y Gemma salieron por lentos, 2-oct). Proveedores, todos en plan gratuito:
    · Mistral: la API de Mistral (UE) si existe el secreto MISTRAL_API_KEY;
      si no hay clave, o si responde con límite o error, Mistral Small 3.1
      en Workers AI (Cloudflare).
-   · Gemma 4 y Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
+   · Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
      (gratuito con tope diario; no necesita clave).
    El modelo corre siempre en el proveedor: nunca en local.
    ═══════════════════════════════════════════════════════════════════ */
@@ -21,12 +21,10 @@ export const prerender = false;
 
 const WORKERS_AI: Record<string, string> = {
   mistral: '@cf/mistralai/mistral-small-3.1-24b-instruct',
-  gemma: '@cf/google/gemma-4-26b-a4b-it',   // sustituye a Llama, que era el lento: solo modelos rápidos
   qwen: '@cf/qwen/qwen3-30b-a3b-fp8',
 };
 const NOMBRE: Record<string, string> = {
   mistral: 'Mistral Small',
-  gemma: 'Gemma 4',
   qwen: 'Qwen 3',
 };
 
