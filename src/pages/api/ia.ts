@@ -11,7 +11,7 @@
    · Mistral: la API de Mistral (UE) si existe el secreto MISTRAL_API_KEY;
      si no hay clave, o si responde con límite o error, Mistral Small 3.1
      en Workers AI (Cloudflare).
-   · Llama 3.3 y Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
+   · Llama 3.1 (8B) y Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
      (gratuito con tope diario; no necesita clave).
    El modelo corre siempre en el proveedor: nunca en local.
    ═══════════════════════════════════════════════════════════════════ */
@@ -21,12 +21,12 @@ export const prerender = false;
 
 const WORKERS_AI: Record<string, string> = {
   mistral: '@cf/mistralai/mistral-small-3.1-24b-instruct',
-  llama: '@cf/meta/llama-3.3-70b-instruct-fp8-fast',
+  llama: '@cf/meta/llama-3.1-8b-instruct-fp8',   // el 3.3 70B tardaba el doble: solo modelos rápidos
   qwen: '@cf/qwen/qwen3-30b-a3b-fp8',
 };
 const NOMBRE: Record<string, string> = {
   mistral: 'Mistral Small',
-  llama: 'Llama 3.3',
+  llama: 'Llama 3.1',
   qwen: 'Qwen 3',
 };
 
