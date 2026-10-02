@@ -1611,7 +1611,8 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(tapiz);
 
 (async () => {
   try { sampleFn = window.claude ? await window.claude.use("sample") : null; } catch { sampleFn = null; }
-  if (sampleFn) $("#aviso").textContent = "En esta demo los copistas son Claude, con tu cuenta.";
+  if (sampleFn && window.claude.web) $("#aviso").textContent = "Los copistas son el modelo que elijas, en plan gratuito. Lo que escribas puede usarse para entrenarlo.";
+  else if (sampleFn) $("#aviso").textContent = "En esta demo los copistas son Claude, con tu cuenta.";
   else if (ENDPOINT_WEB) $("#aviso").textContent = "Los copistas son Mistral. Lo que escribas puede usarse para entrenar sus modelos.";
   else $("#aviso").textContent = "Esta copia no tiene copistas conectados: la cadena no puede empezar.";
   ocupado(false);
