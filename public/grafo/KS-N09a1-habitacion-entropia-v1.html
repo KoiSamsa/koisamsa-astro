@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- N09.a1 · La habitación de la entropía · v1.1 · copia de la demo (claude.ai/artifact/4Z2A8eLgZDAqPQGGGUK2By, versión del 2-oct) para el Lab del grafo. Cambios: el puente /grafo/ia.js y los avisos del modelo. -->
-<!-- En koisamsa.com los copistas son la IA gratuita de la web (/grafo/ia.js → /api/ia); en claude.ai, Claude. -->
-<script src="/grafo/ia.js"></script>
+<!-- N09.a1 · La habitación de la entropía · v1 (contenido de Entropic v1.1, 2-oct 15:20, por petición de Patricia: «sobrescribir la v1, para que sea esa la última») · copia de «N09.a1 Entropic v1.html» (Vault03/06_LAB) para el Lab del grafo. Solo se añade la línea siguiente: dentro del grafo, los copistas usan el modelo del grafo. -->
 <script>try{if(!window.claude&&window.parent!==window&&window.parent.claude)window.claude=window.parent.claude;}catch(e){}</script>
 <title>Entropic · La habitación de la entropía</title>
 <script>document.documentElement.lang = "es";</script>
@@ -285,7 +283,7 @@ textarea:focus-visible { outline: var(--muda-stroke-3) solid var(--muda-color-fo
 
 /* el resultado · la tarjeta héroe */
 .hero { padding: var(--muda-space-xl); gap: var(--muda-space-lg); }
-.now-phrase { margin: 0; font: 400 clamp(28px, 3.6vw, 40px)/1.28 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); overflow-wrap: anywhere; min-height: 2.56em; }
+.now-phrase { margin: 0; font: 400 clamp(28px, 3.6cqw, 40px)/1.28 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); overflow-wrap: anywhere; min-height: 2.56em; }
 .now-origin { margin: 0; font-size: var(--muda-typography-size-body-s); color: var(--muda-color-text-sub); }
 .now-origin b { font: 400 var(--muda-typography-size-body-m) var(--muda-typography-family-serif-italic); color: var(--muda-color-text-ink); }
 .legend { display: flex; flex-wrap: wrap; gap: var(--muda-space-sm) var(--muda-space-xl); margin: 0; padding: var(--muda-space-md) 0 0; list-style: none;
@@ -309,7 +307,7 @@ textarea:focus-visible { outline: var(--muda-stroke-3) solid var(--muda-color-fo
 .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--muda-space-lg); }
 @media (max-width: 640px) { .kpis { grid-template-columns: 1fr; } }
 .kpi { gap: var(--muda-space-xs); }
-.kpi .v { font: 400 clamp(28px, 2.4vw, var(--muda-typography-size-h2))/var(--muda-typography-leading-tight) var(--muda-typography-family-serif); color: var(--muda-color-text-ink);
+.kpi .v { font: 400 clamp(28px, 2.4cqw, var(--muda-typography-size-h2))/var(--muda-typography-leading-tight) var(--muda-typography-family-serif); color: var(--muda-color-text-ink);
   font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; margin-top: var(--muda-space-xs); }
 .kpi .d { font-size: var(--muda-typography-size-meta-l); color: var(--muda-color-text-sub); }
 .bar-m { height: var(--muda-stroke-3); background: var(--muda-color-stroke-soft); margin: var(--muda-space-sm) 0 var(--muda-space-xs); overflow: hidden; }
@@ -373,7 +371,7 @@ details.reg > .small { margin-top: var(--muda-space-md); }
   box-shadow: 0 0 0 var(--muda-stroke-2) color-mix(in srgb, var(--campo-t) 55%, transparent); }
 .campo .over { color: var(--campo-t); opacity: .82; }
 .campo h1 { margin: var(--muda-space-lg) 0 var(--muda-space-sm); color: var(--campo-t);
-  font: 400 clamp(40px, 5.4vw, 84px)/1.02 var(--muda-typography-family-serif); letter-spacing: -.02em; text-wrap: balance; }
+  font: 400 clamp(40px, 5.4cqw, 84px)/1.02 var(--muda-typography-family-serif); letter-spacing: -.02em; text-wrap: balance; }
 .campo .lede { margin: var(--muda-space-md) 0 0; max-width: 46ch; color: var(--campo-t); opacity: .82;
   font: 400 var(--muda-typography-size-body-l)/var(--muda-typography-leading-serif) var(--muda-typography-family-serif-italic); }
 /* el botón F en el campo: contorno en su tinta */
@@ -400,7 +398,7 @@ details.reg > .small { margin-top: var(--muda-space-md); }
 #llegada.on { opacity: 1; pointer-events: auto; cursor: pointer; }
 #llegada .ll-k { margin: 0; font: 400 var(--muda-typography-size-meta-s)/1.2 var(--muda-typography-family-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muda-color-text-sub); }
 #llegada .ll-t { margin: 0; padding: 0 var(--muda-space-lg); max-width: 18ch; text-align: center; text-wrap: balance;
-  font: 400 clamp(36px, 6vw, 88px)/1.02 var(--muda-typography-family-serif); letter-spacing: -.02em; color: var(--muda-color-text-ink); }
+  font: 400 clamp(36px, 6cqw, 88px)/1.02 var(--muda-typography-family-serif); letter-spacing: -.02em; color: var(--muda-color-text-ink); }
 #llegada .ll-bola { width: 21px; height: 21px; border-radius: 50%; background: var(--muda-color-orange-500); }
 
 @media (prefers-reduced-motion: reduce) { .garabato.pinta path { animation: none; } #llegada { display: none; } }
@@ -424,7 +422,7 @@ span.over { display: inline-flex; align-items: baseline; gap: var(--muda-space-s
 .campo-in { padding-top: var(--muda-space-md); padding-bottom: var(--muda-space-lg); }
 .campo-cab { min-height: var(--muda-size-chip); }
 .campo .enlace { min-height: var(--muda-size-chip); }
-.campo h1 { font-size: clamp(28px, 2.8vw, var(--muda-typography-size-display)); line-height: var(--muda-typography-leading-tight); margin: var(--muda-space-xs) 0 0; }
+.campo h1 { font-size: clamp(28px, 2.8cqw, var(--muda-typography-size-display)); line-height: var(--muda-typography-leading-tight); margin: var(--muda-space-xs) 0 0; }
 .garabato { width: min(40%, 233px); height: 10px; }
 .campo .lede { font-size: var(--muda-typography-size-body-s); margin-top: var(--muda-space-sm); max-width: none; }
 /* tu frase: una línea */
@@ -440,10 +438,10 @@ textarea { font-size: var(--muda-typography-size-body-l); padding: var(--muda-sp
 @media (max-width: 1100px) { .prompt { grid-template-columns: minmax(0, 1fr); } }
 /* la frase */
 .hero { padding: var(--muda-space-lg); gap: var(--muda-space-md); }
-.now-phrase { font-size: clamp(22px, 2.2vw, 28px); line-height: 1.35; min-height: 2.7em; }
+.now-phrase { font-size: clamp(22px, 2.2cqw, 28px); line-height: 1.35; min-height: 2.7em; }
 .legend { padding-top: var(--muda-space-sm); }
 /* las cifras */
-.kpi .v { font-size: clamp(22px, 1.9vw, 28px); margin-top: 0; }
+.kpi .v { font-size: clamp(22px, 1.9cqw, 28px); margin-top: 0; }
 .bar-m, .phase-track { margin: var(--muda-space-xs) 0; }
 .ladillo { padding-top: 0; }
 .tapiz { height: 144px; }
@@ -505,7 +503,7 @@ textarea { font-size: var(--muda-typography-size-body-l); padding: var(--muda-sp
 .ruta-p { display: grid; gap: 2px; }
 .ruta-p.fin { text-align: right; }
 .ruta-k { font: 400 var(--muda-typography-size-meta-m)/1.2 var(--muda-typography-family-mono); color: var(--muda-color-text-sub); }
-.ruta-v { font: 400 clamp(28px, 2.6vw, 36px)/1.05 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+.ruta-v { font: 400 clamp(28px, 2.6cqw, 36px)/1.05 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
 .ruta-s { font: 400 var(--muda-typography-size-meta-l)/1.2 var(--muda-typography-family-sans); color: var(--muda-color-text-soft); }
 .ruta-l { position: relative; display: flex; align-items: center; height: 34px; }
 .ruta-l .pt { width: 8px; height: 8px; border-radius: 50%; flex: none; box-shadow: inset 0 0 0 var(--muda-stroke-2) var(--muda-color-brand-base); }
@@ -527,9 +525,9 @@ textarea { font-size: var(--muda-typography-size-body-l); padding: var(--muda-sp
 .tesela .bar-m, .tesela .phase-track span { background: color-mix(in srgb, var(--campo-t) 22%, transparent); }
 .tesela .bar-m i, .tesela .bar-m.brand i, .tesela .phase-track span.on { background: var(--campo-t); }
 .k1 { grid-row: span 2; align-content: space-between; }
-.k1 .v { font-size: clamp(55px, 6.4vw, 89px); line-height: 1; margin-top: var(--muda-space-lg); }
+.k1 .v { font-size: clamp(55px, 6.4cqw, 89px); line-height: 1; margin-top: var(--muda-space-lg); }
 .k1 .d { font-size: var(--muda-typography-size-body-s); }
-.k2 .v, .k3 .v { font-size: clamp(28px, 2.6vw, 36px); }
+.k2 .v, .k3 .v { font-size: clamp(28px, 2.6cqw, 36px); }
 @media (max-width: 640px) { .kpis.bento { grid-template-columns: minmax(0, 1fr); } .k1 { grid-row: auto; } }
 
 /* la brand font de Koi Samsa, sin incrustar (licencia Desktop): solo si está instalada */
@@ -541,7 +539,7 @@ textarea { font-size: var(--muda-typography-size-body-l); padding: var(--muda-sp
 
 /* ═══ v0.27 · LA INTERFAZ VÁLIDA: en franjas ═══ */
 .campo-in { padding-bottom: var(--muda-space-2xl); }
-.campo h1 { font-size: clamp(34px, 3.8vw, 55px); line-height: 1.05; margin: var(--muda-space-md) 0 0; }
+.campo h1 { font-size: clamp(34px, 3.8cqw, 55px); line-height: 1.05; margin: var(--muda-space-md) 0 0; }
 .garabato { width: min(60%, 320px); height: 12px; margin-top: var(--muda-space-xs); }
 .campo .lede { display: block; max-width: 75%; margin: var(--muda-space-lg) 0 0; font-size: 22px; line-height: 1.4; opacity: 1; }
 .nota-a { justify-self: start; display: inline-block; margin-top: var(--muda-space-md); padding: 10px 0; font: 500 var(--muda-typography-size-meta-l)/1 var(--muda-typography-family-fira); color: var(--campo-t); text-underline-offset: 3px; }
@@ -556,7 +554,7 @@ textarea { font-size: var(--muda-typography-size-body-l); padding: var(--muda-sp
 .frase { display: grid; gap: var(--muda-space-xs); }
 .frase-k { font-size: var(--muda-typography-size-body-s); color: var(--muda-color-text-sub); }
 .frase textarea#entrada { width: 100%; box-sizing: border-box; border: 0; border-radius: 0; box-shadow: none; border-bottom: var(--muda-stroke-1) solid var(--muda-color-stroke-strong);
-  padding: var(--muda-space-sm) 0 var(--muda-space-md); background: transparent; font: 400 clamp(30px, 3.2vw, 44px)/1.3 var(--ks-typography-family-script); color: var(--muda-color-text-ink); }
+  padding: var(--muda-space-sm) 0 var(--muda-space-md); background: transparent; font: 400 clamp(30px, 3.2cqw, 44px)/1.3 var(--ks-typography-family-script); color: var(--muda-color-text-ink); }
 .frase textarea#entrada:focus-visible { outline: none; border-bottom-color: var(--muda-color-focus); box-shadow: 0 var(--muda-stroke-2) 0 var(--muda-color-focus); }
 .cuenta { font: 400 var(--muda-typography-size-meta-m) var(--muda-typography-family-mono); color: var(--muda-color-text-sub); }
 /* 02 · el procesado, tres columnas */
@@ -587,7 +585,7 @@ details.exacto .prompt { grid-template-columns: minmax(0, 1fr); margin-top: var(
 .billete { background: transparent; box-shadow: none; padding: 0; display: grid; gap: 0; }
 .billete > * { padding-inline: 0; }
 .billete-top { padding-top: 0; }
-.now-phrase { font-size: clamp(24px, 2.6vw, 36px); line-height: 1.3; }
+.now-phrase { font-size: clamp(24px, 2.6cqw, 36px); line-height: 1.3; }
 details.reg { padding-top: var(--muda-space-md); box-shadow: inset 0 var(--muda-stroke-1) 0 var(--muda-color-stroke-soft); }
 details.reg > summary .over { font: 500 var(--muda-typography-size-body-s)/1.2 var(--muda-typography-family-sans); letter-spacing: 0; text-transform: none; color: var(--muda-color-text-ink); }
 
@@ -601,12 +599,12 @@ details.reg > summary .over { font: 500 var(--muda-typography-size-body-s)/1.2 v
 .proc .acciones { margin-top: 0; }
 .orden { font-size: 20px; }
 .franja-in { padding-block: var(--muda-space-lg) var(--muda-space-xl); }
-.frase textarea#entrada { font-size: clamp(28px, 2.8vw, 40px); }
+.frase textarea#entrada { font-size: clamp(28px, 2.8cqw, 40px); }
 
 /* ═══ v0.28 · el resultado, por encima de cualquier otro dato (Patricia, 11:47) ═══ */
 .billete-cuerpo { padding-top: 0; box-shadow: none; }
 .billete-top { padding-top: var(--muda-space-md); box-shadow: inset 0 var(--muda-stroke-1) 0 var(--muda-color-stroke-soft); }
-.now-phrase { font-size: clamp(28px, 3vw, 44px); }
+.now-phrase { font-size: clamp(28px, 3cqw, 44px); }
 .franja { scroll-margin-top: var(--muda-size-header); }
 .phase-track { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
@@ -619,7 +617,7 @@ details.reg > summary .over { font: 500 var(--muda-typography-size-body-s)/1.2 v
 }
 .maq-cab { display: flex; align-items: center; gap: var(--muda-space-md); position: relative; }
 .maq-tit { display: grid; gap: 0; margin-right: auto; min-width: 0; }
-.maquina h1 { margin: 2px 0 0; font: 400 clamp(24px, 2.2vw, 34px)/1.1 var(--muda-typography-family-serif); letter-spacing: -.01em; color: var(--campo-t); }
+.maquina h1 { margin: 2px 0 0; font: 400 clamp(24px, 2.2cqw, 34px)/1.1 var(--muda-typography-family-serif); letter-spacing: -.01em; color: var(--campo-t); }
 .maquina .garabato { width: min(70%, 240px); height: 9px; margin-top: 3px; }
 .maquina .enlace { min-height: var(--muda-size-chip); }
 .maquina .enlace { margin-left: 0; }
@@ -634,7 +632,7 @@ details.info > summary { list-style: none; width: var(--muda-size-chip); height:
 details.info > summary::-webkit-details-marker { display: none; }
 details.info > summary:focus-visible { outline: var(--muda-stroke-3) solid var(--campo-t); outline-offset: var(--muda-stroke-2); }
 details.info[open] > summary { background: var(--campo-t); color: var(--campo); }
-.info-pan { position: absolute; right: 0; top: calc(100% + 8px); z-index: 5; width: min(440px, calc(100vw - 32px)); display: grid; gap: var(--muda-space-sm);
+.info-pan { position: absolute; right: 0; top: calc(100% + 8px); z-index: 5; width: min(440px, calc(100cqw - 32px)); display: grid; gap: var(--muda-space-sm);
   background: var(--muda-color-bg-surface); color: var(--muda-color-text-ink); border-radius: var(--muda-radius-md); padding: var(--muda-space-lg); box-shadow: 0 8px 34px rgb(45 42 35 / .2); }
 .info-lede { margin: 0; font: 400 var(--muda-typography-size-body-l)/1.4 var(--muda-typography-family-serif-italic); }
 .info-a { font: 500 var(--muda-typography-size-meta-l)/1.3 var(--muda-typography-family-fira); color: var(--muda-color-action); text-underline-offset: 3px; padding: 6px 0; }
@@ -646,7 +644,7 @@ details.info[open] > summary { background: var(--campo-t); color: var(--campo); 
 .panel .over { color: var(--muda-color-text-sub); opacity: 1; }
 /* mandos */
 .frase { display: grid; gap: var(--muda-space-xs); }
-.frase textarea#entrada { font-size: clamp(24px, 2vw, 30px); padding: var(--muda-space-xs) 0 var(--muda-space-sm); }
+.frase textarea#entrada { font-size: clamp(24px, 2cqw, 30px); padding: var(--muda-space-xs) 0 var(--muda-space-sm); }
 .mandos-fila { display: flex; flex-wrap: wrap; gap: var(--muda-space-md) var(--muda-space-xl); }
 .mandos .chips .muda-chip { min-height: var(--muda-size-chip); }
 .modelos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--muda-space-sm); }
@@ -663,13 +661,13 @@ details.exacto { margin-top: auto; padding-top: var(--muda-space-sm); box-shadow
 .pant-cab { display: flex; align-items: center; justify-content: space-between; gap: var(--muda-space-sm); flex-wrap: wrap; }
 .pant-cab .billete-top { padding: 0; box-shadow: none; display: flex; gap: var(--muda-space-sm); }
 .pantalla .billete-cuerpo { padding: 0; box-shadow: none; gap: var(--muda-space-sm); }
-.pantalla .now-phrase { font-size: clamp(24px, 2.4vw, 38px); line-height: 1.28; min-height: 2.56em; }
+.pantalla .now-phrase { font-size: clamp(24px, 2.4cqw, 38px); line-height: 1.28; min-height: 2.56em; }
 .pantalla .ruta { padding: var(--muda-space-sm) 0 0; gap: var(--muda-space-md); }
-.pantalla .ruta-v { font-size: clamp(22px, 1.9vw, 28px); }
+.pantalla .ruta-v { font-size: clamp(22px, 1.9cqw, 28px); }
 .medidores { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--muda-space-md); padding-top: var(--muda-space-md); box-shadow: inset 0 var(--muda-stroke-1) 0 var(--muda-color-stroke-soft); }
 @media (max-width: 560px) { .medidores { grid-template-columns: minmax(0, 1fr); } }
 .medidor { display: grid; gap: 2px; align-content: start; min-width: 0; }
-.medidor .v { font: 400 clamp(22px, 1.9vw, 28px)/1.15 var(--muda-typography-family-serif); font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.medidor .v { font: 400 clamp(22px, 1.9cqw, 28px)/1.15 var(--muda-typography-family-serif); font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .medidor .d { font-size: var(--muda-typography-size-meta-m); color: var(--muda-color-text-sub); }
 .medidor .bar-m, .medidor .phase-track { margin: var(--muda-space-xs) 0 2px; }
 .pestanas { display: flex; gap: var(--muda-space-lg); box-shadow: inset 0 calc(-1 * var(--muda-stroke-1)) 0 var(--muda-color-stroke-soft); }
@@ -694,7 +692,7 @@ details.registro .ticket { margin-top: var(--muda-space-sm); }
 .hoja .frase { display: grid; gap: 2px; }
 .hoja-t { font: 400 var(--muda-typography-size-h3)/1.2 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); }
 .hoja-k { font-size: var(--muda-typography-size-meta-l); color: var(--muda-color-text-sub); }
-.hoja textarea#entrada { font-size: clamp(30px, 2.7vw, 42px); line-height: 1.25; padding: var(--muda-space-xs) 0 var(--muda-space-sm); border-bottom-color: var(--muda-color-text-ink); }
+.hoja textarea#entrada { font-size: clamp(30px, 2.7cqw, 42px); line-height: 1.25; padding: var(--muda-space-xs) 0 var(--muda-space-sm); border-bottom-color: var(--muda-color-text-ink); }
 .hoja .cuenta { justify-self: end; }
 
 /* los tres pasos y, en voz baja, los datos */
@@ -707,9 +705,9 @@ details.registro .ticket { margin-top: var(--muda-space-sm); }
 .datos-t { margin: 0; padding-top: var(--muda-space-md); box-shadow: inset 0 var(--muda-stroke-1) 0 var(--muda-color-stroke-soft);
   font: 400 var(--muda-typography-size-meta-s)/1.2 var(--muda-typography-family-fira); letter-spacing: .06em; text-transform: uppercase; color: var(--muda-color-text-soft); }
 .medidores { padding-top: 0; box-shadow: none; }
-.medidor .v { font-size: clamp(18px, 1.5vw, 22px); color: var(--muda-color-text-sub); }
+.medidor .v { font-size: clamp(18px, 1.5cqw, 22px); color: var(--muda-color-text-sub); }
 .medidor .over { color: var(--muda-color-text-soft); }
-.pantalla .ruta-v { font-size: clamp(20px, 1.6vw, 24px); }
+.pantalla .ruta-v { font-size: clamp(20px, 1.6cqw, 24px); }
 
 /* aire en los mandos; el modelo, en desplegable */
 .mandos { gap: var(--muda-space-lg); }
@@ -723,8 +721,8 @@ details.registro .ticket { margin-top: var(--muda-space-sm); }
 .modelo-f #modeloD { margin-top: var(--muda-space-xs); }
 /* tu frase: el cuerpo baja cuanto más larga */
 .hoja textarea#entrada { field-sizing: fixed; resize: none; height: auto; }
-.hoja textarea#entrada[data-largo="m"] { font-size: clamp(24px, 2.1vw, 32px); }
-.hoja textarea#entrada[data-largo="l"] { font-size: clamp(20px, 1.7vw, 26px); }
+.hoja textarea#entrada[data-largo="m"] { font-size: clamp(24px, 2.1cqw, 32px); }
+.hoja textarea#entrada[data-largo="l"] { font-size: clamp(20px, 1.7cqw, 26px); }
 /* la pantalla: las pestañas ocupan lo que queda y hacen su propio scroll */
 .pantalla > * { flex-shrink: 0; }
 .pantalla > .pest { flex: 1 1 auto; min-height: 120px; overflow: auto; }
@@ -735,8 +733,8 @@ details.registro { margin-top: 0; }
 .mandos { gap: var(--muda-space-md); }
 .modelo-f { padding-block: var(--muda-space-xs); }
 .modelo-f #modeloD, .modelo-f #aviso { margin: 2px 0 0; }
-.pantalla .now-phrase[data-largo="m"] { font-size: clamp(22px, 2vw, 32px); }
-.pantalla .now-phrase[data-largo="l"] { font-size: clamp(20px, 1.7vw, 26px); }
+.pantalla .now-phrase[data-largo="m"] { font-size: clamp(22px, 2cqw, 32px); }
+.pantalla .now-phrase[data-largo="l"] { font-size: clamp(20px, 1.7cqw, 26px); }
 .pantalla > .pest { min-height: 96px; }
 @media (min-width: 1000px) { .pantalla .now-origin { display: none; } }
 
@@ -768,9 +766,9 @@ details.registro { margin-top: 0; }
 .caja-frase { flex: 1 1 auto; background: var(--muda-color-bg-brand); }
 .caja-frase textarea#entrada { flex: 1 1 auto; min-height: 3.6em; width: 100%; box-sizing: border-box; border: 0; border-radius: 0; box-shadow: none; background: transparent;
   border-bottom: var(--muda-stroke-1) solid var(--muda-color-text-ink); padding: var(--muda-space-xs) 0 var(--muda-space-sm); resize: none; field-sizing: fixed;
-  font: 400 clamp(30px, 2.7vw, 42px)/1.25 var(--ks-typography-family-script); color: var(--muda-color-text-ink); }
-.caja-frase textarea#entrada[data-largo="m"] { font-size: clamp(24px, 2.1vw, 32px); }
-.caja-frase textarea#entrada[data-largo="l"] { font-size: clamp(20px, 1.7vw, 26px); }
+  font: 400 clamp(30px, 2.7cqw, 42px)/1.25 var(--ks-typography-family-script); color: var(--muda-color-text-ink); }
+.caja-frase textarea#entrada[data-largo="m"] { font-size: clamp(24px, 2.1cqw, 32px); }
+.caja-frase textarea#entrada[data-largo="l"] { font-size: clamp(20px, 1.7cqw, 26px); }
 .caja-frase textarea#entrada:focus-visible { outline: none; border-bottom-color: var(--muda-color-focus); box-shadow: 0 var(--muda-stroke-2) 0 var(--muda-color-focus); }
 .caja-frase .frase { display: grid; gap: 2px; }
 .caja-frase .cuenta { justify-self: end; align-self: flex-end; }
@@ -816,9 +814,9 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
 
 /* que cada caja quepa entera */
 .modelo-f #aviso { display: none; }
-.caja-frase textarea#entrada { font-size: clamp(26px, 2.2vw, 34px); }
-.caja-frase textarea#entrada[data-largo="m"] { font-size: clamp(22px, 1.8vw, 28px); }
-.caja-frase textarea#entrada[data-largo="l"] { font-size: clamp(18px, 1.5vw, 23px); }
+.caja-frase textarea#entrada { font-size: clamp(26px, 2.2cqw, 34px); }
+.caja-frase textarea#entrada[data-largo="m"] { font-size: clamp(22px, 1.8cqw, 28px); }
+.caja-frase textarea#entrada[data-largo="l"] { font-size: clamp(18px, 1.5cqw, 23px); }
 .caja-proc .acciones #go, .caja-proc .acciones #stop { min-height: 44px; }
 @media (min-width: 1000px) { .pantalla .ruta-s { display: none; } }
 .caja-datos .tapiz { height: 72px; }
@@ -938,7 +936,7 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
 /* v1.1 · densidad ×φ⁻¹ en pantallas bajas (MUDA §06: «la misma pieza se comprime ×φ⁻¹ sin rediseñarse»).
    Por debajo de 940 px de alto, cada medida baja un paso: caja lg→md, bloque md→sm, dentro sm→xs.
    El aire cuadrado de la cabecera se mantiene (34 arriba = 34 al lado). */
-@media (min-width: 1000px) and (max-height: 940px) {
+@media (min-width: 1000px) and (max-height: 940px) and (max-width: 999px) {   /* v1.1 · la mesa ya no comprime */
   .maquina { padding-top: var(--muda-space-lg); gap: var(--muda-space-sm); }
   .maq-cab { padding: var(--muda-space-md) var(--muda-space-md) 0; margin-bottom: var(--muda-space-xs); }
   .cuerpo { gap: var(--muda-space-sm); }
@@ -979,7 +977,7 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
 .medidor .escala b { font-weight: 400; color: var(--muda-color-text-sub); }
 .medidor .escala b.es { font-weight: 600; color: var(--muda-color-text-ink); }
 #pConc .ticket { display: grid; gap: var(--muda-space-sm); font: 400 var(--muda-typography-size-body-s)/1.4 var(--muda-typography-family-sans); }
-#pConc .ticket .tq-ver { margin: 0; font: 400 clamp(22px, 1.8vw, 28px)/1.15 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); }
+#pConc .ticket .tq-ver { margin: 0; font: 400 clamp(22px, 1.8cqw, 28px)/1.15 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); }
 #pConc .ticket .tq-diag { margin: 0; max-width: 62ch; font: 400 var(--muda-typography-size-body-m)/1.45 var(--muda-typography-family-serif); color: var(--muda-color-text-ink); }
 #pConc .ticket .tq-k { margin: var(--muda-space-sm) 0 0; padding-top: var(--muda-space-sm); box-shadow: inset 0 var(--muda-stroke-1) 0 var(--muda-color-stroke-soft);
   font: 500 12px/1.2 var(--muda-typography-family-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muda-color-text-sub); }
@@ -990,15 +988,61 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
 
 #pConc .ticket { padding: var(--muda-space-sm) var(--muda-space-md); gap: var(--muda-space-xs); }
 #pConc .ticket .tq-cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--muda-space-xs) var(--muda-space-md); flex-wrap: wrap; }
-#pConc .ticket .tq-ver { font-size: clamp(20px, 1.6vw, 24px); }
+#pConc .ticket .tq-ver { font-size: clamp(20px, 1.6cqw, 24px); }
 #pConc .ticket .tq-k { margin: 0; padding: 0; box-shadow: none; font-size: 11px; }
 #pConc .ticket .tq-num { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--muda-space-xs) var(--muda-space-md); margin-top: var(--muda-space-xs); padding-top: var(--muda-space-sm); box-shadow: inset 0 var(--muda-stroke-1) 0 var(--muda-color-stroke-soft); }
 #pConc .ticket .tq-num dd { font-size: 16px; }
 @media (max-width: 760px) { #pConc .ticket .tq-num { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 #pConc .ticket .tq-orden { font-family: var(--muda-typography-family-serif-italic); color: var(--muda-color-brand-dark); }
+
+/* ═══ v1.1 · LA MESA (Patricia, 14:41–14:42: «¿partimos de un ancho y alto fijo que escalamos por etapas?» · «ok»).
+   El campo se compone una vez a 1280 × 885 (más la barra de 55: 1280 × 940) y se escala por etapas con zoom:
+   0,8 · 0,9 · 1 · 1,15 · 1,3 — la mayor que quepa entera. Por debajo de 1000 de ancho, la columna de móvil.
+   Dentro de la mesa: densidad comprimida siempre y etiquetas de 14 px como mínimo (a 0,9, 12,6). ═══ */
+#campo { container-type: inline-size; }
+html.mesa body { display: flex; flex-direction: column; min-height: 100vh; background: var(--muda-color-orange-500); }
+html.mesa .bar { flex: 0 0 auto; zoom: var(--mesa-z, 1); }
+html.mesa .medidores { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.3fr); }
+.medidor .escala { column-gap: var(--muda-space-sm); }
+.medidor .escala b { white-space: nowrap; }
+html.mesa #campo { zoom: var(--mesa-z, 1); width: 1280px; height: 885px; flex: 0 0 auto; margin: auto; box-sizing: border-box; }
+html.mesa { --muda-typography-size-meta-s: 14px; --muda-typography-size-meta-m: 14px; --muda-typography-size-meta-l: 14px; }
+html.mesa .pantalla .now-origin .now-origin-l, html.mesa #pConc .ticket .tq-k, html.mesa #pConc .ticket .tq-num dt { font-size: 14px; }
+
+
+/* ═══ v1.1 · aire (Patricia, 14:54: «afinas espacios, que lo has hecho todo apretadísimo»). MUDA §06 no fija rellenos:
+   da la escala (5 · 8 · 13 · 21 · 34) y la densidad. La mesa vuelve a la densidad normal — caja 21, entre bloques 13,
+   dentro 8 — y gana sitio quitando, no apretando: etiquetas en línea en 02, estado sin caja, leyenda dentro del tapiz. ═══ */
+.caja-proc .mandos-fila .field { grid-template-columns: 6.2em minmax(0, 1fr); align-items: center; column-gap: var(--muda-space-sm); }
+.caja-proc .mandos-fila .field > .field-k { grid-column: 1; }
+.caja-proc .mandos-fila .field > :not(.field-k) { grid-column: 2; }
+.caja-proc .mandos-fila .modelo-f #modeloD { grid-column: 2; }
+.caja-proc .visor { min-height: 0; padding: 0; background: none; border: 0; box-shadow: none; font-size: var(--muda-typography-size-meta-l); color: var(--muda-color-text-sub); }
+#pTapiz .legend { padding: 0; box-shadow: none; gap: var(--muda-space-xs) var(--muda-space-lg); font-size: var(--muda-typography-size-meta-l); }
+#pTapiz .tapiz-read:empty { display: none; }
+#pTapiz .tapiz-read:not(:empty) + .legend { display: none; }
 </style>
 
+<script>
+/* v1.1 · la mesa: etapa 0,9 · 1 · 1,15 · 1,3 — la mayor que cabe entera (barra y campo, 1280 × 880, escalan juntos) */
+(function () {
+  const root = document.documentElement, W0 = 1280, H0 = 940, ETAPAS = [0.8, 0.9, 1, 1.15, 1.3];   /* 940 = barra 55 + campo 885 */
+  function etapa() {
+    const w = root.clientWidth, h = window.innerHeight;
+    let z = 0;
+    if (w >= 1000) {
+      const caben = ETAPAS.filter(e => W0 * e <= w && H0 * e <= h);
+      const ancho = ETAPAS.filter(e => W0 * e <= w);
+      z = caben.length ? caben[caben.length - 1] : ancho.length ? ancho[0] : Math.floor(w / W0 * 100) / 100;
+    }
+    root.classList.toggle("mesa", z > 0);
+    root.style.setProperty("--mesa-z", z || 1);
+    root.dataset.etapa = z || "movil";
+  }
+  etapa(); addEventListener("resize", etapa);
+})();
+</script>
 <div id="llegada" aria-hidden="true"><p class="ll-k">koisamsa.com · Lab</p><svg class="ll-logo" viewBox="0 -1499 10387 1940" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><g class="logo-ave"><path class="logo-icon" transform="translate(-70.9,-1443.1) scale(6.4423)" d="M176,68a12,12,0,1,1-12-12A12,12,0,0,1,176,68Zm64,12a8,8,0,0,1-3.56,6.66L216,100.28V120A104.11,104.11,0,0,1,112,224H24a16,16,0,0,1-12.49-26l.1-.12L96,96.63V76.89C96,43.47,122.79,16.16,155.71,16H156a60,60,0,0,1,57.21,41.86l23.23,15.48A8,8,0,0,1,240,80Zm-22.42,0L201.9,69.54a8,8,0,0,1-3.31-4.64A44,44,0,0,0,156,32h-.22C131.64,32.12,112,52.25,112,76.89V99.52a8,8,0,0,1-1.85,5.13L24,208h26.9l70.94-85.12a8,8,0,1,1,12.29,10.24L71.75,208H112a88.1,88.1,0,0,0,88-88V96a8,8,0,0,1,3.56-6.66Z"/></g><g class="logo-nombre"><path class="logo-name" d="M3000.35933670235 -1055.96044921875 2957.879112092975 -746.0 3000.35933670235 -438.03955078125H2974.1192243976625L2851.2469099445375 -700.3997192382812L2439.6646955890687 -723.9757080078125V-769.4483032226562L2851.2469099445375 -796.17626953125L2974.1192243976625 -1055.96044921875ZM3322.6556623859437 -1008.4392700195312 3291.7195051593812 -998.7432250976562 3056.3745954914125 -1391.0319213867188 3216.5827864093812 -1353.03955078125H2362.4308088703187V-1430.0H3085.8228987140687L3226.4551008625062 -1498.8403930664062H3239.9672468586ZM3090.9110334796937 -43.05621337890625 3354.92769607735 -444.82513427734375 3388.407920686725 -436.12908935546875 3272.231651155475 66.29632568359375H3254.9034040851625L3122.2392805500062 0.0H2362.4308088703187V-76.96044921875H3241.094932405475ZM2060.94918045235 0.0V-32.81610107421875L2224.684776155475 -77.36016845703125V-1353.6398315429688L2060.94918045235 -1396.7598876953125V-1430.0H2558.7361677570375V0.0ZM3884.1997297687562 -829.0471801757812V-60.39208984375L3998.3669660968812 -29.5440673828125V0.0H3473.6695173664125V-29.5440673828125L3592.5008772296937 -61.66412353515625V-805.9666748046875Q3576.076865999225 -821.4788208007812 3545.7288435382875 -849.5190734863281Q3515.38082107735 -877.559326171875 3462.645225374225 -919.2872924804688V-943.6474609375L3870.447471467975 -1054.5759887695312H3884.1997297687562ZM4132.117820589068 -29.5440673828125 4246.8610456867245 -60.39208984375V-682.1915283203125Q4246.8610456867245 -741.1353149414062 4228.025169221881 -778.2911071777344Q4209.189292757037 -815.4468994140625 4170.941551057818 -833.0707702636719Q4132.6938093585995 -850.6946411132812 4072.3822248859437 -850.6946411132812Q4012.8867414875062 -850.6946411132812 3956.6511457843812 -834.4947814941406Q3900.4155500812562 -818.294921875 3851.7195051593812 -794.8709106445312L3844.231651155475 -814.1748657226562Q3921.8076399250062 -889.1353149414062 3977.8236006183656 -934.8275451660156Q4033.839561311725 -980.519775390625 4078.415550081256 -1004.1238708496094Q4122.991538850787 -1027.7279663085938 4165.5356062335995 -1035.8639831542969Q4208.079673616412 -1044.0 4259.439842073443 -1044.0Q4400.9276960773495 -1044.0 4469.743797151568 -966.5600280761719Q4538.559898225787 -889.1200561523438 4538.559898225787 -733.96044921875V-61.66412353515625L4656.9672468585995 -29.5440673828125V0.0H4132.117820589068ZM5139.704246370318 -291.25677490234375Q5139.704246370318 -222.34490966796875 5182.3881452960995 -188.02499389648438Q5225.072044221881 -153.705078125 5304.464134065631 -153.705078125Q5349.736167757037 -153.705078125 5399.856223909381 -160.8570556640625Q5449.9762800617245 -168.009033203125 5517.3683699054745 -186.1610107421875V-147.13671875Q5416.312156526568 -79.4163818359375 5348.2118757648495 -42.1322021484375Q5280.111595003131 -4.8480224609375 5227.6632917804745 9.984039306640625Q5175.214988557818 24.81610107421875 5120.462730257037 24.81610107421875Q5041.414146272662 24.81610107421875 4980.313865510943 -5.636016845703125Q4919.2135847492245 -36.088134765625 4884.033500520709 -100.29632568359375Q4848.853416292193 -164.5045166015625 4848.853416292193 -265.56072998046875V-852.7508544921875L4703.620933382037 -960.0076293945312V-980.7918090820312Q4714.4689558429745 -987.7918090820312 4745.493247835162 -1005.1679382324219Q4776.5175398273495 -1022.5440673828125 4820.341972200396 -1047.9642639160156Q4864.166404573443 -1073.3844604492188 4915.7028425617245 -1103.3806457519531Q4967.239280550006 -1133.3768310546875 5021.171623079303 -1164.9649658203125Q5075.1039656085995 -1196.5531005859375 5124.344077913287 -1225.5531005859375H5139.704246370318V-993.5121459960938ZM5030.638999788287 -885.0471801757812V-1024.0H5484.2802351398495L5465.312156526568 -885.0471801757812ZM6303.096336214068 -1044.1200561523438Q6355.1525495929745 -1044.1200561523438 6385.392661897662 -1012.7598876953125Q6415.6327742023495 -981.3997192382812 6415.6327742023495 -928.9194946289062Q6415.6327742023495 -863.6231689453125 6373.592521516803 -819.2508544921875Q6331.552268831256 -774.8785400390625 6270.1039656085995 -774.8785400390625Q6234.5356062335995 -774.8785400390625 6206.523460237506 -781.6505737304688Q6178.511314241412 -788.422607421875 6150.755241243365 -795.1946411132812Q6122.999168245318 -801.9666748046875 6086.911033479693 -801.9666748046875Q6057.4870222492245 -801.9666748046875 6032.971061555865 -794.0107421875Q6008.455100862506 -786.0548095703125 5986.211173860553 -770.8108825683594Q5963.9672468585995 -755.5669555664062 5940.3593367023495 -732.2630004882812L5939.935325471881 -777.9590454101562Q6021.295493928912 -867.9833374023438 6076.823600618365 -921.1915283203125Q6132.351707307818 -974.3997192382812 6171.379813997271 -1000.8518371582031Q6210.4079206867245 -1027.303955078125 6241.072044221881 -1035.7120056152344Q6271.736167757037 -1044.1200561523438 6303.096336214068 -1044.1200561523438ZM5967.199729768756 -850.2477416992188V-61.66412353515625L6106.031089632037 -29.5440673828125V0.0H5556.669517366412V-29.5440673828125L5675.500877229693 -61.66412353515625V-805.9666748046875Q5662.500877229693 -817.7827758789062 5646.680961458209 -831.0548095703125Q5630.8610456867245 -844.3268432617188 5606.7531355304745 -865.0069274902344Q5582.6452253742245 -885.68701171875 5545.6452253742245 -919.2872924804688V-943.6474609375L5953.4474714679745 -1054.5759887695312H5967.199729768756ZM6977.509910432818 -34.60028076171875Q7052.461326448443 -34.60028076171875 7100.440849153521 -83.66412353515625Q7148.4203718585995 -132.72796630859375 7171.108085481646 -234.65579223632812Q7193.795799104693 -336.5836181640625 7193.795799104693 -494.03955078125Q7193.795799104693 -658.0076293945312 7171.820091096881 -767.7796630859375Q7149.844383089068 -877.5516967773438 7102.304832307818 -933.2637023925781Q7054.765281526568 -988.9757080078125 6978.421775667193 -988.9757080078125Q6903.470359651568 -988.9757080078125 6855.7028425617245 -939.911865234375Q6807.935325471881 -890.8480224609375 6785.0356062335995 -789.1322021484375Q6762.135886995318 -687.4163818359375 6762.135886995318 -529.96044921875Q6762.135886995318 -366.568359375 6784.111595003131 -256.29632568359375Q6806.087303010943 -146.0242919921875 6853.626853792193 -90.31228637695312Q6901.166404573443 -34.60028076171875 6977.509910432818 -34.60028076171875ZM6968.725730745318 24.2401123046875Q6820.005393831256 24.2401123046875 6703.8412702960995 -43.7598876953125Q6587.677146760943 -111.7598876953125 6521.04112991524 -232.2598876953125Q6454.405113069537 -352.7598876953125 6454.405113069537 -510.03192138671875Q6454.405113069537 -669.0 6524.661186067584 -790.2720336914062Q6594.917259065631 -911.5440673828125 6715.6254499835995 -979.89208984375Q6836.333640901568 -1048.2401123046875 6987.205955354693 -1048.2401123046875Q7138.926292268756 -1048.2401123046875 7254.802421419146 -980.4521179199219Q7370.678550569537 -912.6641235351562 7436.31456741524 -792.2401123046875Q7501.950584260943 -671.8161010742188 7501.950584260943 -513.9680786132812Q7501.950584260943 -355.0 7430.482505647662 -233.51596069335938Q7359.014427034381 -112.03192138671875 7238.230247346881 -43.895904541015625Q7117.446067659381 24.2401123046875 6968.725730745318 24.2401123046875ZM8437.756248323443 -485.81610107421875Q8437.756248323443 -694.4559326171875 8377.412742464068 -787.1596069335938Q8317.069236604693 -879.86328125 8186.205955354693 -879.86328125Q8142.078269807818 -879.86328125 8102.5265730304745 -869.9073486328125Q8062.974876253131 -859.951416015625 8027.423179475787 -839.5836181640625Q7991.871482698443 -819.2158203125 7959.167808382037 -786.9042358398438L7950.527976839068 -814.1124267578125Q8018.224021760943 -885.1124267578125 8072.391959993365 -930.9163818359375Q8126.559898225787 -976.7203369140625 8172.379813997271 -1002.3882751464844Q8218.199729768756 -1028.0562133789062 8260.50368484688 -1038.1481628417969Q8302.807639925006 -1048.2401123046875 8346.775718538287 -1048.2401123046875Q8473.11159500313 -1048.2401123046875 8561.311454622271 -990.9201965332031Q8649.511314241412 -933.6002807617188 8695.483207551959 -827.5083312988281Q8741.455100862506 -721.4163818359375 8741.455100862506 -572.6002807617188Q8741.455100862506 -381.5440673828125 8669.199027864459 -248.07598876953125Q8596.942954866412 -114.60791015625 8470.762870637896 -45.18389892578125Q8344.58278640938 24.2401123046875 8181.886741487506 24.2401123046875Q8122.6147077960995 24.2401123046875 8062.538719026568 15.952117919921875Q8002.462730257037 7.66412353515625 7945.250724641803 -9.911865234375Q7888.038719026568 -27.48785400390625 7836.070640413287 -55.0638427734375H8013.3197859210995V379.09576416015625L8152.151145784381 411.2158203125V440.7598876953125H7602.789573518756V411.2158203125L7721.620933382037 379.09576416015625V-806.3906860351562Q7708.620933382037 -818.206787109375 7692.801017610553 -831.2668151855469Q7676.981101839068 -844.3268432617188 7652.873191682818 -865.0069274902344Q7628.765281526568 -885.68701171875 7591.765281526568 -919.2872924804688V-943.6474609375L7999.567527620318 -1054.5759887695312H8013.3197859210995V-868.6793823242188V-224.59124755859375Q8013.3197859210995 -167.6474609375 8036.779533235553 -124.70367431640625Q8060.239280550006 -81.7598876953125 8102.3988874835995 -58.060028076171875Q8144.558494417193 -34.36016845703125 8199.294090120318 -34.36016845703125Q8274.821494905475 -34.36016845703125 8328.13307937813 -81.13601684570312Q8381.444663850787 -127.911865234375 8409.600456087115 -227.7158203125Q8437.756248323443 -327.519775390625 8437.756248323443 -485.81610107421875ZM9110.470359651568 -1168.0791015625Q9035.598045198443 -1168.0791015625 8992.101859895709 -1216.8032531738281Q8948.605674592975 -1265.5274047851562 8948.605674592975 -1328.7036743164062Q8948.605674592975 -1390.60791015625 8992.101859895709 -1434.8320617675781Q9035.598045198443 -1479.0562133789062 9110.470359651568 -1479.0562133789062Q9185.766685335162 -1479.0562133789062 9227.47487625313 -1434.8320617675781Q9269.1830671711 -1390.60791015625 9269.1830671711 -1328.7036743164062Q9269.1830671711 -1265.5274047851562 9227.47487625313 -1216.8032531738281Q9185.766685335162 -1168.0791015625 9110.470359651568 -1168.0791015625ZM9269.351707307818 -1054.5759887695312V-849.82373046875V-60.39208984375L9383.518943635943 -29.5440673828125V0.0H8858.821494905475V-29.5440673828125L8977.652854768756 -61.66412353515625V-805.9666748046875Q8966.652854768756 -815.9347534179688 8947.832938997271 -831.8428039550781Q8929.013023225787 -847.7508544921875 8903.905113069537 -869.7789611816406Q8878.797202913287 -891.8070678710938 8847.797202913287 -919.2872924804688V-943.6474609375L9255.599449007037 -1054.5759887695312ZM10040.05397781563 -1048.2401123046875Q10157.254539339068 -1048.2401123046875 10228.50679763985 -1023.3639831542969Q10299.75905594063 -998.4878540039062 10331.727134553912 -959.9757080078125Q10363.695213167193 -921.4635620117188 10363.695213167193 -879.4954833984375Q10363.695213167193 -844.25537109375 10347.379112092975 -817.86328125Q10331.063011018756 -791.47119140625 10304.322898714068 -777.1391296386719Q10277.58278640938 -762.8070678710938 10244.734763948443 -762.8070678710938Q10235.038719026568 -762.8070678710938 10214.646629182818 -785.4871520996094Q10194.254539339068 -808.167236328125 10165.93843826485 -841.3313598632812Q10137.62233719063 -874.4954833984375 10103.23024734688 -907.735595703125Q10068.83815750313 -940.9757080078125 10031.718101350787 -963.6557922363281Q9994.598045198443 -986.3358764648438 9957.022056428912 -986.3358764648438Q9899.710471956256 -986.3358764648438 9855.794792024615 -951.9680786132812Q9811.879112092975 -917.6002807617188 9787.375297395709 -841.1245727539062Q9762.871482698443 -764.6488647460938 9762.871482698443 -637.8251342773438Q9762.871482698443 -470.82513427734375 9800.115409700396 -368.6571960449219Q9837.35933670235 -266.4892578125 9909.635185091021 -220.60931396484375Q9981.911033479693 -174.7293701171875 10086.734763948443 -174.7293701171875Q10169.278831331256 -174.7293701171875 10237.130668489459 -203.56524658203125Q10304.982505647662 -232.401123046875 10365.430808870318 -300.82513427734375L10386.36696609688 -283.4649658203125Q10321.430808870318 -168.3525390625 10255.630668489459 -100.94830322265625Q10189.8305281086 -33.5440673828125 10117.470359651568 -4.6519775390625Q10045.110191194537 24.2401123046875 9958.205955354693 24.2401123046875Q9818.789573518756 24.2401123046875 9711.293388216021 -36.167938232421875Q9603.797202913287 -96.57598876953125 9542.965141145709 -212.13601684570312Q9482.13307937813 -327.696044921875 9482.13307937813 -493.1519775390625Q9482.13307937813 -613.1519775390625 9524.52516922188 -714.5Q9566.91725906563 -815.8480224609375 9643.21739944649 -890.696044921875Q9719.51753982735 -965.5440673828125 9820.953697053912 -1006.89208984375Q9922.389854280475 -1048.2401123046875 10040.05397781563 -1048.2401123046875Z"/></g></svg><p class="ll-lema">La habitación de la entropía</p></div>
 <header class="bar">
   <svg class="logo" viewBox="0 -1499 10387 1940" role="img" aria-label="Entropic" xmlns="http://www.w3.org/2000/svg"><g class="logo-ave"><path class="logo-icon" transform="translate(-70.9,-1443.1) scale(6.4423)" d="M176,68a12,12,0,1,1-12-12A12,12,0,0,1,176,68Zm64,12a8,8,0,0,1-3.56,6.66L216,100.28V120A104.11,104.11,0,0,1,112,224H24a16,16,0,0,1-12.49-26l.1-.12L96,96.63V76.89C96,43.47,122.79,16.16,155.71,16H156a60,60,0,0,1,57.21,41.86l23.23,15.48A8,8,0,0,1,240,80Zm-22.42,0L201.9,69.54a8,8,0,0,1-3.31-4.64A44,44,0,0,0,156,32h-.22C131.64,32.12,112,52.25,112,76.89V99.52a8,8,0,0,1-1.85,5.13L24,208h26.9l70.94-85.12a8,8,0,1,1,12.29,10.24L71.75,208H112a88.1,88.1,0,0,0,88-88V96a8,8,0,0,1,3.56-6.66Z"/></g><g class="logo-nombre"><path class="logo-name" d="M3000.35933670235 -1055.96044921875 2957.879112092975 -746.0 3000.35933670235 -438.03955078125H2974.1192243976625L2851.2469099445375 -700.3997192382812L2439.6646955890687 -723.9757080078125V-769.4483032226562L2851.2469099445375 -796.17626953125L2974.1192243976625 -1055.96044921875ZM3322.6556623859437 -1008.4392700195312 3291.7195051593812 -998.7432250976562 3056.3745954914125 -1391.0319213867188 3216.5827864093812 -1353.03955078125H2362.4308088703187V-1430.0H3085.8228987140687L3226.4551008625062 -1498.8403930664062H3239.9672468586ZM3090.9110334796937 -43.05621337890625 3354.92769607735 -444.82513427734375 3388.407920686725 -436.12908935546875 3272.231651155475 66.29632568359375H3254.9034040851625L3122.2392805500062 0.0H2362.4308088703187V-76.96044921875H3241.094932405475ZM2060.94918045235 0.0V-32.81610107421875L2224.684776155475 -77.36016845703125V-1353.6398315429688L2060.94918045235 -1396.7598876953125V-1430.0H2558.7361677570375V0.0ZM3884.1997297687562 -829.0471801757812V-60.39208984375L3998.3669660968812 -29.5440673828125V0.0H3473.6695173664125V-29.5440673828125L3592.5008772296937 -61.66412353515625V-805.9666748046875Q3576.076865999225 -821.4788208007812 3545.7288435382875 -849.5190734863281Q3515.38082107735 -877.559326171875 3462.645225374225 -919.2872924804688V-943.6474609375L3870.447471467975 -1054.5759887695312H3884.1997297687562ZM4132.117820589068 -29.5440673828125 4246.8610456867245 -60.39208984375V-682.1915283203125Q4246.8610456867245 -741.1353149414062 4228.025169221881 -778.2911071777344Q4209.189292757037 -815.4468994140625 4170.941551057818 -833.0707702636719Q4132.6938093585995 -850.6946411132812 4072.3822248859437 -850.6946411132812Q4012.8867414875062 -850.6946411132812 3956.6511457843812 -834.4947814941406Q3900.4155500812562 -818.294921875 3851.7195051593812 -794.8709106445312L3844.231651155475 -814.1748657226562Q3921.8076399250062 -889.1353149414062 3977.8236006183656 -934.8275451660156Q4033.839561311725 -980.519775390625 4078.415550081256 -1004.1238708496094Q4122.991538850787 -1027.7279663085938 4165.5356062335995 -1035.8639831542969Q4208.079673616412 -1044.0 4259.439842073443 -1044.0Q4400.9276960773495 -1044.0 4469.743797151568 -966.5600280761719Q4538.559898225787 -889.1200561523438 4538.559898225787 -733.96044921875V-61.66412353515625L4656.9672468585995 -29.5440673828125V0.0H4132.117820589068ZM5139.704246370318 -291.25677490234375Q5139.704246370318 -222.34490966796875 5182.3881452960995 -188.02499389648438Q5225.072044221881 -153.705078125 5304.464134065631 -153.705078125Q5349.736167757037 -153.705078125 5399.856223909381 -160.8570556640625Q5449.9762800617245 -168.009033203125 5517.3683699054745 -186.1610107421875V-147.13671875Q5416.312156526568 -79.4163818359375 5348.2118757648495 -42.1322021484375Q5280.111595003131 -4.8480224609375 5227.6632917804745 9.984039306640625Q5175.214988557818 24.81610107421875 5120.462730257037 24.81610107421875Q5041.414146272662 24.81610107421875 4980.313865510943 -5.636016845703125Q4919.2135847492245 -36.088134765625 4884.033500520709 -100.29632568359375Q4848.853416292193 -164.5045166015625 4848.853416292193 -265.56072998046875V-852.7508544921875L4703.620933382037 -960.0076293945312V-980.7918090820312Q4714.4689558429745 -987.7918090820312 4745.493247835162 -1005.1679382324219Q4776.5175398273495 -1022.5440673828125 4820.341972200396 -1047.9642639160156Q4864.166404573443 -1073.3844604492188 4915.7028425617245 -1103.3806457519531Q4967.239280550006 -1133.3768310546875 5021.171623079303 -1164.9649658203125Q5075.1039656085995 -1196.5531005859375 5124.344077913287 -1225.5531005859375H5139.704246370318V-993.5121459960938ZM5030.638999788287 -885.0471801757812V-1024.0H5484.2802351398495L5465.312156526568 -885.0471801757812ZM6303.096336214068 -1044.1200561523438Q6355.1525495929745 -1044.1200561523438 6385.392661897662 -1012.7598876953125Q6415.6327742023495 -981.3997192382812 6415.6327742023495 -928.9194946289062Q6415.6327742023495 -863.6231689453125 6373.592521516803 -819.2508544921875Q6331.552268831256 -774.8785400390625 6270.1039656085995 -774.8785400390625Q6234.5356062335995 -774.8785400390625 6206.523460237506 -781.6505737304688Q6178.511314241412 -788.422607421875 6150.755241243365 -795.1946411132812Q6122.999168245318 -801.9666748046875 6086.911033479693 -801.9666748046875Q6057.4870222492245 -801.9666748046875 6032.971061555865 -794.0107421875Q6008.455100862506 -786.0548095703125 5986.211173860553 -770.8108825683594Q5963.9672468585995 -755.5669555664062 5940.3593367023495 -732.2630004882812L5939.935325471881 -777.9590454101562Q6021.295493928912 -867.9833374023438 6076.823600618365 -921.1915283203125Q6132.351707307818 -974.3997192382812 6171.379813997271 -1000.8518371582031Q6210.4079206867245 -1027.303955078125 6241.072044221881 -1035.7120056152344Q6271.736167757037 -1044.1200561523438 6303.096336214068 -1044.1200561523438ZM5967.199729768756 -850.2477416992188V-61.66412353515625L6106.031089632037 -29.5440673828125V0.0H5556.669517366412V-29.5440673828125L5675.500877229693 -61.66412353515625V-805.9666748046875Q5662.500877229693 -817.7827758789062 5646.680961458209 -831.0548095703125Q5630.8610456867245 -844.3268432617188 5606.7531355304745 -865.0069274902344Q5582.6452253742245 -885.68701171875 5545.6452253742245 -919.2872924804688V-943.6474609375L5953.4474714679745 -1054.5759887695312H5967.199729768756ZM6977.509910432818 -34.60028076171875Q7052.461326448443 -34.60028076171875 7100.440849153521 -83.66412353515625Q7148.4203718585995 -132.72796630859375 7171.108085481646 -234.65579223632812Q7193.795799104693 -336.5836181640625 7193.795799104693 -494.03955078125Q7193.795799104693 -658.0076293945312 7171.820091096881 -767.7796630859375Q7149.844383089068 -877.5516967773438 7102.304832307818 -933.2637023925781Q7054.765281526568 -988.9757080078125 6978.421775667193 -988.9757080078125Q6903.470359651568 -988.9757080078125 6855.7028425617245 -939.911865234375Q6807.935325471881 -890.8480224609375 6785.0356062335995 -789.1322021484375Q6762.135886995318 -687.4163818359375 6762.135886995318 -529.96044921875Q6762.135886995318 -366.568359375 6784.111595003131 -256.29632568359375Q6806.087303010943 -146.0242919921875 6853.626853792193 -90.31228637695312Q6901.166404573443 -34.60028076171875 6977.509910432818 -34.60028076171875ZM6968.725730745318 24.2401123046875Q6820.005393831256 24.2401123046875 6703.8412702960995 -43.7598876953125Q6587.677146760943 -111.7598876953125 6521.04112991524 -232.2598876953125Q6454.405113069537 -352.7598876953125 6454.405113069537 -510.03192138671875Q6454.405113069537 -669.0 6524.661186067584 -790.2720336914062Q6594.917259065631 -911.5440673828125 6715.6254499835995 -979.89208984375Q6836.333640901568 -1048.2401123046875 6987.205955354693 -1048.2401123046875Q7138.926292268756 -1048.2401123046875 7254.802421419146 -980.4521179199219Q7370.678550569537 -912.6641235351562 7436.31456741524 -792.2401123046875Q7501.950584260943 -671.8161010742188 7501.950584260943 -513.9680786132812Q7501.950584260943 -355.0 7430.482505647662 -233.51596069335938Q7359.014427034381 -112.03192138671875 7238.230247346881 -43.895904541015625Q7117.446067659381 24.2401123046875 6968.725730745318 24.2401123046875ZM8437.756248323443 -485.81610107421875Q8437.756248323443 -694.4559326171875 8377.412742464068 -787.1596069335938Q8317.069236604693 -879.86328125 8186.205955354693 -879.86328125Q8142.078269807818 -879.86328125 8102.5265730304745 -869.9073486328125Q8062.974876253131 -859.951416015625 8027.423179475787 -839.5836181640625Q7991.871482698443 -819.2158203125 7959.167808382037 -786.9042358398438L7950.527976839068 -814.1124267578125Q8018.224021760943 -885.1124267578125 8072.391959993365 -930.9163818359375Q8126.559898225787 -976.7203369140625 8172.379813997271 -1002.3882751464844Q8218.199729768756 -1028.0562133789062 8260.50368484688 -1038.1481628417969Q8302.807639925006 -1048.2401123046875 8346.775718538287 -1048.2401123046875Q8473.11159500313 -1048.2401123046875 8561.311454622271 -990.9201965332031Q8649.511314241412 -933.6002807617188 8695.483207551959 -827.5083312988281Q8741.455100862506 -721.4163818359375 8741.455100862506 -572.6002807617188Q8741.455100862506 -381.5440673828125 8669.199027864459 -248.07598876953125Q8596.942954866412 -114.60791015625 8470.762870637896 -45.18389892578125Q8344.58278640938 24.2401123046875 8181.886741487506 24.2401123046875Q8122.6147077960995 24.2401123046875 8062.538719026568 15.952117919921875Q8002.462730257037 7.66412353515625 7945.250724641803 -9.911865234375Q7888.038719026568 -27.48785400390625 7836.070640413287 -55.0638427734375H8013.3197859210995V379.09576416015625L8152.151145784381 411.2158203125V440.7598876953125H7602.789573518756V411.2158203125L7721.620933382037 379.09576416015625V-806.3906860351562Q7708.620933382037 -818.206787109375 7692.801017610553 -831.2668151855469Q7676.981101839068 -844.3268432617188 7652.873191682818 -865.0069274902344Q7628.765281526568 -885.68701171875 7591.765281526568 -919.2872924804688V-943.6474609375L7999.567527620318 -1054.5759887695312H8013.3197859210995V-868.6793823242188V-224.59124755859375Q8013.3197859210995 -167.6474609375 8036.779533235553 -124.70367431640625Q8060.239280550006 -81.7598876953125 8102.3988874835995 -58.060028076171875Q8144.558494417193 -34.36016845703125 8199.294090120318 -34.36016845703125Q8274.821494905475 -34.36016845703125 8328.13307937813 -81.13601684570312Q8381.444663850787 -127.911865234375 8409.600456087115 -227.7158203125Q8437.756248323443 -327.519775390625 8437.756248323443 -485.81610107421875ZM9110.470359651568 -1168.0791015625Q9035.598045198443 -1168.0791015625 8992.101859895709 -1216.8032531738281Q8948.605674592975 -1265.5274047851562 8948.605674592975 -1328.7036743164062Q8948.605674592975 -1390.60791015625 8992.101859895709 -1434.8320617675781Q9035.598045198443 -1479.0562133789062 9110.470359651568 -1479.0562133789062Q9185.766685335162 -1479.0562133789062 9227.47487625313 -1434.8320617675781Q9269.1830671711 -1390.60791015625 9269.1830671711 -1328.7036743164062Q9269.1830671711 -1265.5274047851562 9227.47487625313 -1216.8032531738281Q9185.766685335162 -1168.0791015625 9110.470359651568 -1168.0791015625ZM9269.351707307818 -1054.5759887695312V-849.82373046875V-60.39208984375L9383.518943635943 -29.5440673828125V0.0H8858.821494905475V-29.5440673828125L8977.652854768756 -61.66412353515625V-805.9666748046875Q8966.652854768756 -815.9347534179688 8947.832938997271 -831.8428039550781Q8929.013023225787 -847.7508544921875 8903.905113069537 -869.7789611816406Q8878.797202913287 -891.8070678710938 8847.797202913287 -919.2872924804688V-943.6474609375L9255.599449007037 -1054.5759887695312ZM10040.05397781563 -1048.2401123046875Q10157.254539339068 -1048.2401123046875 10228.50679763985 -1023.3639831542969Q10299.75905594063 -998.4878540039062 10331.727134553912 -959.9757080078125Q10363.695213167193 -921.4635620117188 10363.695213167193 -879.4954833984375Q10363.695213167193 -844.25537109375 10347.379112092975 -817.86328125Q10331.063011018756 -791.47119140625 10304.322898714068 -777.1391296386719Q10277.58278640938 -762.8070678710938 10244.734763948443 -762.8070678710938Q10235.038719026568 -762.8070678710938 10214.646629182818 -785.4871520996094Q10194.254539339068 -808.167236328125 10165.93843826485 -841.3313598632812Q10137.62233719063 -874.4954833984375 10103.23024734688 -907.735595703125Q10068.83815750313 -940.9757080078125 10031.718101350787 -963.6557922363281Q9994.598045198443 -986.3358764648438 9957.022056428912 -986.3358764648438Q9899.710471956256 -986.3358764648438 9855.794792024615 -951.9680786132812Q9811.879112092975 -917.6002807617188 9787.375297395709 -841.1245727539062Q9762.871482698443 -764.6488647460938 9762.871482698443 -637.8251342773438Q9762.871482698443 -470.82513427734375 9800.115409700396 -368.6571960449219Q9837.35933670235 -266.4892578125 9909.635185091021 -220.60931396484375Q9981.911033479693 -174.7293701171875 10086.734763948443 -174.7293701171875Q10169.278831331256 -174.7293701171875 10237.130668489459 -203.56524658203125Q10304.982505647662 -232.401123046875 10365.430808870318 -300.82513427734375L10386.36696609688 -283.4649658203125Q10321.430808870318 -168.3525390625 10255.630668489459 -100.94830322265625Q10189.8305281086 -33.5440673828125 10117.470359651568 -4.6519775390625Q10045.110191194537 24.2401123046875 9958.205955354693 24.2401123046875Q9818.789573518756 24.2401123046875 9711.293388216021 -36.167938232421875Q9603.797202913287 -96.57598876953125 9542.965141145709 -212.13601684570312Q9482.13307937813 -327.696044921875 9482.13307937813 -493.1519775390625Q9482.13307937813 -613.1519775390625 9524.52516922188 -714.5Q9566.91725906563 -815.8480224609375 9643.21739944649 -890.696044921875Q9719.51753982735 -965.5440673828125 9820.953697053912 -1006.89208984375Q9922.389854280475 -1048.2401123046875 10040.05397781563 -1048.2401123046875Z"/></g></svg>
@@ -1059,11 +1103,11 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
         <div class="select">
           <select id="modelo">
             <option value="mistral">Mistral Small · Mistral AI, Francia</option>
-            <option value="llama">Llama 3.2 · Meta, EE. UU. · en Cloudflare</option>
+            <option value="llama">Llama 3.3 · Meta, EE. UU. · en Cloudflare</option>
             <option value="qwen">Qwen 3 · Alibaba, China · en Cloudflare</option>
           </select><svg class="mi" viewBox="0 -960 960 960" aria-hidden="true"><path d="M480-357.85 253.85-584l32.61-32.61L480-423.08l193.54-193.53L706.15-584 480-357.85Z"/></svg>
         </div>
-        <p class="small" id="modeloD">Gratuito, con tope; puede entrenar con lo escrito.</p>
+        <p class="small" id="modeloD">Gratuito, con tope; puede entrenar con lo escrito. En la demo, Claude.</p>
         <p class="small" id="aviso"></p>
       </div>
       </div>
@@ -1112,12 +1156,6 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
       </div>
       <div class="caja-datos datos-dentro" role="group" aria-labelledby="t04">
         <div class="datos-cab"><h3 class="paso-t paso-sub" id="t04"><span class="num">04</span>Los datos</h3>
-        <ul class="legend" aria-label="Qué significa el subrayado">
-          <li><span class="sw s0" aria-hidden="true"></span>tuya, sigue viva</li>
-          <li><span class="sw s1" aria-hidden="true"></span>la puso un copista</li>
-          <li><span class="sw s2" aria-hidden="true"></span>cambiada varias veces</li>
-          <li><span class="sw s3" aria-hidden="true"></span>tuya, ha vuelto</li>
-        </ul>
         </div>
         <div class="medidores">
         <div class="medidor">
@@ -1146,7 +1184,14 @@ details.info > summary { width: var(--muda-size-control); height: var(--muda-siz
       </div>
       <div class="pest" id="pTapiz" role="tabpanel" aria-labelledby="tbTapiz">
         <canvas class="tapiz" id="tapiz" role="img" tabindex="0" aria-label="Tapiz: cada línea es un copista y cada bloque una palabra"></canvas>
-        <p class="tapiz-read" id="tapizRead"><span>—</span>señala una línea para leerla</p>
+        <p class="tapiz-read" id="tapizRead"></p>
+        <ul class="legend" aria-label="Qué significa el subrayado">
+          <li><span class="sw s0" aria-hidden="true"></span>tuya, sigue viva</li>
+          <li><span class="sw s1" aria-hidden="true"></span>la puso un copista</li>
+          <li><span class="sw s2" aria-hidden="true"></span>cambiada varias veces</li>
+          <li><span class="sw s3" aria-hidden="true"></span>tuya, ha vuelto</li>
+        </ul>
+
       </div>
       <div class="pest" id="pReg" role="tabpanel" aria-labelledby="tbReg" tabindex="0" hidden>
         <div class="paso-a-paso" id="pasoBar" hidden>
@@ -1288,7 +1333,7 @@ function reiniciar(frase, total) {
   $("#feedVacio").hidden = false;
   $("#tiquet").hidden = true;
   fila = -1;
-  $("#tapizRead").innerHTML = "<span>—</span>señala una línea del tapiz";
+  $("#tapizRead").textContent = "";
   pintar([]);
 }
 
@@ -1371,7 +1416,7 @@ function copista(prev, quitadas, nacidas, tipo) {
 let fila = -1;
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 function tapiz() {
-  const c = $("#tapiz"), dpr = window.devicePixelRatio || 1;
+  const c = $("#tapiz"), dpr = (window.devicePixelRatio || 1) * (parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--mesa-z")) || 1);
   const w = c.clientWidth, h = c.clientHeight;
   if (!w) return;
   c.width = w * dpr; c.height = h * dpr;
@@ -1396,8 +1441,8 @@ function tapiz() {
   }
 }
 function leer(ev) {
-  const r = $("#tapiz").getBoundingClientRect(), filas = Math.max(esperado + 1, hist.length);
-  const i = Math.floor((ev.clientY - r.top - 14) / ((r.height - 28) / filas));
+  const c = $("#tapiz"), r = c.getBoundingClientRect(), filas = Math.max(esperado + 1, hist.length), k = c.clientHeight ? r.height / c.clientHeight : 1;
+  const i = Math.floor((ev.clientY - r.top - 14 * k) / ((r.height - 28 * k) / filas));
   if (i < 0 || i >= hist.length) return;
   fila = i;
   const out = $("#tapizRead"); out.textContent = "";
@@ -1407,6 +1452,7 @@ function leer(ev) {
 }
 $("#tapiz").addEventListener("pointermove", leer);
 $("#tapiz").addEventListener("pointerdown", leer);
+$("#tapiz").addEventListener("pointerleave", () => { $("#tapizRead").textContent = ""; fila = -1; tapiz(); });
 window.addEventListener("resize", tapiz);
 
 function tiquet() {
@@ -1443,7 +1489,7 @@ Responde solo con JSON: {"fase": "limpia|desalmada|vaporizada", "valoracion": "�
 A: ${a}
 B: ${b}`;
 }
-async function leer(a, b) {
+async function leerFinal(a, b) {
   const p = promptLectura(a, b), o = { modelTier: "default", cache: false };
   let r = null;
   if (typeof sampleFn.json === "function") { try { r = await sampleFn.json(p, o); } catch { r = null; } }
@@ -1545,7 +1591,7 @@ async function empezar() {
             : `Fin: ${n} copistas.`;
     if (sampleFn) {
       estado("Leyendo tu frase y la final…");
-      try { lectura = await leer(original.join(" "), actual.map(t => t.w).join(" ")); } catch { lectura = null; }
+      try { lectura = await leerFinal(original.join(" "), actual.map(t => t.w).join(" ")); } catch { lectura = null; }
       pintar([]);
     }
     estado(msg, !!corte);
@@ -1563,8 +1609,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(tapiz);
 
 (async () => {
   try { sampleFn = window.claude ? await window.claude.use("sample") : null; } catch { sampleFn = null; }
-  if (sampleFn && window.claude.web) $("#aviso").textContent = "Los copistas son el modelo que elijas, en plan gratuito. Lo que escribas puede usarse para entrenarlo.";
-  else if (sampleFn) $("#aviso").textContent = "En esta demo los copistas son Claude, con tu cuenta.";
+  if (sampleFn) $("#aviso").textContent = "En esta demo los copistas son Claude, con tu cuenta.";
   else if (ENDPOINT_WEB) $("#aviso").textContent = "Los copistas son Mistral. Lo que escribas puede usarse para entrenar sus modelos.";
   else $("#aviso").textContent = "Esta copia no tiene copistas conectados: la cadena no puede empezar.";
   ocupado(false);
@@ -1631,9 +1676,9 @@ document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", () 
     $("#cuenta").textContent = n < 4 ? (n ? n + (n === 1 ? " palabra" : " palabras") + " · escribe al menos 4 para seguir" : "Al menos 4 palabras · hasta 280 caracteres")
       : n + " palabras · " + v.length + " de 280 caracteres"; };
   const MODELOS = {
-    mistral: "Gratuito, con tope; puede entrenar con lo escrito.",
-    llama: "Gratuito en Cloudflare, con tope diario.",
-    qwen: "Gratuito en Cloudflare, con tope diario."
+    mistral: "Gratuito, con tope; puede entrenar con lo escrito. En la demo, Claude.",
+    llama: "Gratuito en Cloudflare, con tope diario. En la demo, Claude.",
+    qwen: "Gratuito en Cloudflare, con tope diario. En la demo, Claude."
   };
   $("#modelo").addEventListener("change", e => { $("#modeloD").textContent = MODELOS[e.target.value] || ""; });
   function billete() {
@@ -1713,7 +1758,7 @@ document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", () 
 
 /* ═══ v0.2 · UX: la frase encaja en su sitio, y se empieza por 01 ═══ */
 (function () {
-  const vw = () => Math.max(document.documentElement.clientWidth, 320);
+  const vw = () => Math.max(document.getElementById("campo").offsetWidth, 320);
   function encaja(el, max, min) {
     if (!el || !el.clientHeight) return;
     let t = Math.round(max); el.style.fontSize = t + "px";
@@ -1771,6 +1816,5 @@ document.querySelectorAll(".chips").forEach(g => g.addEventListener("click", () 
 /* v1.1 · el tapiz se redibuja cuando cambia su hueco (ahora crece con 04) */
 if (window.ResizeObserver) new ResizeObserver(() => tapiz()).observe(document.getElementById("tapiz"));
 </script>
-
 
 </html>
