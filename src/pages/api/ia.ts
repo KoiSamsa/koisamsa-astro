@@ -70,8 +70,14 @@ async function conMistralApi(clave: string, turnos: Turno[], temperatura: number
   return limpia(String(d?.choices?.[0]?.message?.content ?? ''));
 }
 
-async function conWorkersAi(ai: any, id: string, turnos: Turno[], temperatura: number) {
-  const d: any = await ai.run(id, { messages: turnos, max_tokens: MAX_SALIDA, temperature: temperatura });
+async function conWorkersAi(ai: any, modelo: string, turnos: Turno[], temperatura: number) {
+  // Qwen 3 razona antes de contestar y el razonamiento se come la respuesta:
+  // se apaga con su propio interruptor (/no_think) y se le da más margen
+  const qwen = modelo === 'qwen';
+  const mensajes = qwen
+    ? turnos.map((t, i) => (i === turnos.length - 1 ? { ...t, content: t.content + '\n\n/no_think' } : t))
+    : turnos;
+  const d: any = await ai.run(WORKERS_AI[modelo], { messages: mensajes, max_tokens: qwen ? MAX_SALIDA * 3 : MAX_SALIDA, temperature: temperatura });
   const texto = d?.response ?? d?.choices?.[0]?.message?.content ?? '';
   return limpia(typeof texto === 'string' ? texto : JSON.stringify(texto));
 }
@@ -102,7 +108,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       } catch { /* límite o error de Mistral: se pasa a Workers AI */ }
     }
     if (!env.AI) return json({ code: 'upstream_error', message: 'La IA no está conectada en este despliegue.' }, 503);
-    const text = await conWorkersAi(env.AI, WORKERS_AI[modelo], turnos, temperatura);
+    const text = await conWorkersAi(env.AI, modelo, turnos, temperatura);
     if (!text) return json({ code: 'empty_completion', message: 'El modelo no devolvió nada.' }, 502);
     return json({ text, modelo: NOMBRE[modelo], proveedor: 'Cloudflare Workers AI' });
   } catch (e: any) {
