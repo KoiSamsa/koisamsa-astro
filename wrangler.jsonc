@@ -3,6 +3,6 @@
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat"],
   "pages_build_output_dir": "./dist",
-  // Workers AI: la IA gratuita de /api/ia (Llama 3.3, Qwen 3 y Mistral Small sin clave)
+  // Workers AI: la IA gratuita de /api/ia (Mistral Small, Gemma 4 y Qwen 3, sin clave)
   "ai": { "binding": "AI" }
 }
