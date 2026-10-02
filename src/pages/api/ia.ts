@@ -5,12 +5,14 @@
 
    POST { input, modelo?, temperatura? }  ->  { text, modelo, proveedor }
      input  : texto, o turnos [{ role: "user" | "assistant", content }]
-     modelo : "mistral" (por defecto) · "llama" · "qwen"
+     modelo : "mistral" (por defecto) · "gemini" · "llama" · "qwen"
 
    Solo modelos rápidos, ~1 s por copista o menos (2-oct). Proveedores, todos en plan gratuito:
    · Mistral: la API de Mistral (UE) si existe el secreto MISTRAL_API_KEY;
      si no hay clave, o si responde con límite o error, Mistral Small 3.1
      en Workers AI (Cloudflare).
+   · Gemini Flash-Lite: la API de Google, con el secreto GEMINI_API_KEY (plan
+     gratuito; por defecto no razona). Sin clave, con límite o con error, responde Qwen 3.
    · Llama 3.2 y Qwen 3: Workers AI, con el binding AI de wrangler.jsonc
      (gratuito con tope diario; no necesita clave).
    El modelo corre siempre en el proveedor: nunca en local.
@@ -71,6 +73,20 @@ async function conMistralApi(clave: string, turnos: Turno[], temperatura: number
   return limpia(String(d?.choices?.[0]?.message?.content ?? ''));
 }
 
+async function conGemini(clave: string, turnos: Turno[], temperatura: number) {
+  const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': clave },
+    body: JSON.stringify({
+      contents: turnos.map((t) => ({ role: t.role === 'assistant' ? 'model' : 'user', parts: [{ text: t.content }] })),
+      generationConfig: { maxOutputTokens: MAX_SALIDA, temperature: temperatura },
+    }),
+  });
+  if (!r.ok) throw new Error(`gemini ${r.status}`);
+  const d: any = await r.json();
+  return limpia((d?.candidates?.[0]?.content?.parts || []).map((p: any) => p?.text || '').join(''));
+}
+
 async function conWorkersAi(ai: any, modelo: string, turnos: Turno[], temperatura: number) {
   // Qwen 3 razona antes de contestar y el razonamiento se come la respuesta:
   // se apaga con su propio interruptor (/no_think) y se le da más margen
@@ -100,7 +116,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   if (!turnos) return json({ code: 'invalid_request', message: 'Falta el texto.' }, 400);
   if (turnos.reduce((n, t) => n + t.content.length, 0) > MAX_ENTRADA) return json({ code: 'prompt_too_large', message: 'Texto demasiado largo.' }, 413);
 
-  const modelo = cuerpo?.modelo in WORKERS_AI ? cuerpo.modelo : 'mistral';
+  let modelo = cuerpo?.modelo === 'gemini' || cuerpo?.modelo in WORKERS_AI ? cuerpo.modelo : 'mistral';
   const t = Number(cuerpo?.temperatura);
   const temperatura = Number.isFinite(t) ? Math.min(Math.max(t, 0), 1.5) : 0.7;
 
@@ -110,6 +126,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
         const text = await conMistralApi(env.MISTRAL_API_KEY, turnos, temperatura);
         if (text) return json({ text, modelo: NOMBRE.mistral, proveedor: 'Mistral AI' });
       } catch { /* límite o error de Mistral: se pasa a Workers AI */ }
+    }
+    if (modelo === 'gemini') {
+      if (env.GEMINI_API_KEY) {
+        try {
+          const text = await conGemini(env.GEMINI_API_KEY, turnos, temperatura);
+          if (text) return json({ text, modelo: 'Gemini Flash-Lite', proveedor: 'Google' });
+        } catch { /* límite o error de Google: responde Qwen */ }
+      }
+      modelo = 'qwen';
     }
     if (!env.AI) return json({ code: 'upstream_error', message: 'La IA no está conectada en este despliegue.' }, 503);
     const text = await conWorkersAi(env.AI, modelo, turnos, temperatura);
