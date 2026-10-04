@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.69 · KOI SAMSA · el grafo, online (demo)</title>
+<title>v1.71 · KOI SAMSA · bolitas pequeñas, alt limpio (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -4143,6 +4143,10 @@ var ppos2=new Float32Array(PN*3);for(var _q=1;_q<PN*3;_q+=3){ppos[_q]=99999;ppos
 var pgeo2=new THREE.BufferGeometry();pgeo2.setAttribute('position',new THREE.BufferAttribute(ppos2,3));
 var pmat2=new THREE.PointsMaterial({color:0x000000,map:TX_HARD,size:2.5,sizeAttenuation:true,transparent:true,opacity:.25,depthWrite:false});
 var _p2=new THREE.Points(pgeo2,pmat2);_p2.frustumCulled=false;group.add(_p2);
+/* v1.71 · BOLITAS PEQUEÑAS (Patricia, 2-oct, 20:24): tope en pantalla, en px CSS; lejos menguan como antes */
+var PMAXPX=3;
+[pmat,pmat2].forEach(function(m){m.onBeforeCompile=function(sh){sh.uniforms.pMax={value:PMAXPX*rnd.getPixelRatio()};
+  sh.vertexShader='uniform float pMax;\n'+sh.vertexShader.replace('#include <fog_vertex>','gl_PointSize=min(gl_PointSize,pMax);\n#include <fog_vertex>');};});
 /* v1.39 · (retirado) el orden de pintado de la v1.38 hacía que toda bola tapara lo de detrás: al 70-90 % se leían
    opacas («ahora me los has puesto todos al 100»). Vuelve el orden de siempre, de atrás adelante: las bolas se
    transparentan según su opacidad y, como las pequeñas quedan bajo el plano de las raíces, se ven detrás, nunca delante. */
@@ -4902,7 +4906,18 @@ function altPinta(i,x,y){   /* v1.66 · el alt de una raíz, bajo su nombre */
 function altFuera(){if(ALTI!==-1){ALTI=-1;if(ALTE){var e=ALTE;ALTE=null;e.classList.remove('on');setTimeout(function(){e.remove();},200);}}}
 var OCLW=[],_oc=new THREE.Vector3(),OCF=null;   /* 2-oct · lo que tapa al nodo activo */
 function _pxR(i,d){return RADN[i]*(SC[i]||1)/(d*Math.tan(cam.fov*Math.PI/360))*(H/2);}
+/* v1.71 · EL ALT, LIMPIO (Patricia, 2-oct, 20:24: «asegúrate de que nada entorpece al texto alt»): la caja del alt en pantalla,
+   con 8 px de margen. Bolas (delante o detrás), nombres, líneas y bolitas se apartan de ahí. */
+var EXR=null,_ex=new THREE.Vector3();
+function exrPrep(){EXR=null;if(ALTI===-1||!ALTE)return;var a=ALTE.getBoundingClientRect();if(!a.width)return;
+  var c=rnd.domElement.getBoundingClientRect(),m=8;EXR={x1:a.left-c.left-m,x2:a.right-c.left+m,y1:a.top-c.top-m,y2:a.bottom-c.top+m};}
+function _scr(v){_ex.copy(v).project(cam);return _ex.z>1?null:{x:(_ex.x*.5+.5)*W,y:(-_ex.y*.5+.5)*H};}
+function enExr(v){var p=_scr(v);return !!p&&p.x>EXR.x1&&p.x<EXR.x2&&p.y>EXR.y1&&p.y<EXR.y2;}
+function segExr(a,b){var p=_scr(a),q=_scr(b);if(!p||!q)return false;
+  if((p.x<EXR.x1&&q.x<EXR.x1)||(p.x>EXR.x2&&q.x>EXR.x2)||(p.y<EXR.y1&&q.y<EXR.y1)||(p.y>EXR.y2&&q.y>EXR.y2))return false;
+  for(var k=0;k<=12;k++){var t=k/12,x=p.x+(q.x-p.x)*t,y=p.y+(q.y-p.y)*t;if(x>EXR.x1&&x<EXR.x2&&y>EXR.y1&&y<EXR.y2)return true;}return false;}
 function occlPrep(f){
+  exrPrep();
   OCF=null;if(f===null||f===undefined||!on_(f))return;
   _oc.copy(P[f]).project(cam);if(_oc.z>1)return;
   var d=cam.position.distanceTo(P[f]),r=_pxR(f,d),cx=(_oc.x*.5+.5)*W,cy=(-_oc.y*.5+.5)*H,hw=Math.max(r,140);
@@ -4915,6 +4930,9 @@ function occlOp(i,op){
       if(_oc.z<=1){var x=(_oc.x*.5+.5)*W,y=(-_oc.y*.5+.5)*H,r=_pxR(i,d),
         nx=Math.max(OCF.x1,Math.min(x,OCF.x2)),ny=Math.max(OCF.y1,Math.min(y,OCF.y2));
         if(Math.hypot(x-nx,y-ny)<r+4)t=1;}}}
+  if(!t&&EXR&&i!==ALTI){var p=_scr(P[i]);   /* v1.71 · sobre el alt, delante o detrás: fuera */
+    if(p){var r2=_pxR(i,cam.position.distanceTo(P[i])),nx2=Math.max(EXR.x1,Math.min(p.x,EXR.x2)),ny2=Math.max(EXR.y1,Math.min(p.y,EXR.y2));
+      if(Math.hypot(p.x-nx2,p.y-ny2)<r2)t=1;}}
   OCLW[i]=(OCLW[i]||0)+(t-(OCLW[i]||0))*(t?0.18:0.10);
   return op*(1-0.88*OCLW[i]);
 }
@@ -6333,6 +6351,7 @@ function frame(){
       var o=(dir?li4:(r3?li3:(p2?li2:li)))*6;
       LP[o]=tP.x;LP[o+1]=tP.y;LP[o+2]=tP.z;
       LP[o+3]=tB.x;LP[o+4]=tB.y;LP[o+5]=tB.z;
+      if(EXR&&segExr(tP,tB)){LP[o+3]=tP.x;LP[o+4]=tP.y;LP[o+5]=tP.z;}   /* v1.71 · la línea no cruza el alt */
       var LC=dir?lcol4:(r3?lcol3:(p2?lcol2:lcol)),_fl=dir?0.75:1,_g1=grisLejos(tP,near,span)*_fl,_g2=grisLejos(tB,near,span)*_fl;   /* v1.38 · v1.41 · v1.46 */
       LC[o]=LC[o+1]=LC[o+2]=_g1;LC[o+3]=LC[o+4]=LC[o+5]=_g2;
       tP.copy(tB);if(dir)li4++;else if(r3)li3++;else if(p2)li2++;else li++;
@@ -6345,6 +6364,7 @@ function frame(){
       if((set&&!on)||!lvis){PP[pix*3+1]=99999;continue;}   /* v1.54 · en reposo laten todos los enlaces, como en la v1.22 (la v1.26 callaba el segundo plano) */
       var tt=lta+(ltb-lta)*(fwd?pt[pix]:1-pt[pix]);   /* v1.44 · solo por el tramo visible */
       bez(A,tC,B,tt,tA);
+      if(EXR&&enExr(tA)){PP[pix*3+1]=99999;continue;}   /* v1.71 · ni las bolitas */
       PP[pix*3]=tA.x;PP[pix*3+1]=tA.y;PP[pix*3+2]=tA.z;
       var PC=p2?pcol2:pcol,_gp=grisLejos(tA,near,span);PC[pix*3]=PC[pix*3+1]=PC[pix*3+2]=_gp;   /* v1.38 */
     }
@@ -6434,6 +6454,7 @@ function frame(){
       var o2=boxes[z];
       if(bx.x1<o2.x2&&bx.x2>o2.x1&&bx.y1<o2.y2&&bx.y2>o2.y1){ok=false;break;}
     }
+    if(ok&&EXR&&it.i!==ALTI&&bx.x1<EXR.x2&&bx.x2>EXR.x1&&bx.y1<EXR.y2&&bx.y2>EXR.y1)ok=false;   /* v1.71 · ningún nombre sobre el alt */
     if(!ok){it.L.e.style.display='none';continue;}
     boxes.push(bx);
     it.L.e.style.display='block';
