@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.81 · KOI SAMSA · el mapa junto a la casita (demo)</title>
+<title>v1.82 · KOI SAMSA · ayuda e info en MUDA (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1256,6 +1256,48 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
 #panel.carpeta.solo-mapa #cp-h0,#panel.carpeta.solo-mapa #cp-h1{display:none}
 #panel.carpeta.solo-mapa .cp-hoja.p0{top:0}
 #panel.carpeta.solo-mapa #panel-x{top:calc((var(--cp-hh) - 32px) / 2)}
+/* ═══ v1.82 · LAS VENTANAS EN MUDA: ayuda, «i» y contacto. Hoja blanca con filete y radio, título en Newsreader,
+   texto en Fira con tinta (AA), botones F, puntos y teclas de MUDA; los dibujos, en el color de cada sección. */
+.veil{background:color-mix(in srgb,var(--papel) 74%,transparent)}
+.card{background:var(--muda-color-bg-surface);border:var(--muda-stroke-1) solid var(--muda-color-stroke-soft);border-radius:var(--muda-radius-lg);
+  box-shadow:0 18px 48px -18px rgba(29,20,12,.22);padding:var(--muda-space-xl) var(--muda-space-xl) var(--muda-space-lg);width:min(560px,100%)}
+.card-x{top:var(--muda-space-md);right:var(--muda-space-md);width:32px;height:32px;border:0;background:transparent;border-radius:50%}
+.card-x:hover{background:var(--muda-color-bg-recessed)}
+.card .kicker{font:500 var(--muda-typography-size-meta-s)/1.2 var(--muda-typography-family-fira);letter-spacing:.06em;text-transform:uppercase;color:var(--muda-color-text-sub);margin:0 0 var(--muda-space-sm)}
+.card h2{font:400 var(--muda-size-display)/var(--muda-typography-leading-tight) var(--muda-typography-family-serif);letter-spacing:normal;color:var(--muda-color-text-ink);margin:0 0 var(--muda-space-md);padding-right:40px}
+.card p{font:400 var(--muda-typography-size-body-m)/1.6 var(--muda-typography-family-fira);color:var(--muda-color-text-ink);margin:0 0 var(--muda-space-md)}
+.card p:last-child{margin-bottom:0}
+.card p b{font-weight:500}
+.fig{height:186px;margin:0 0 var(--muda-space-lg);background:var(--muda-color-bg-recessed);border-radius:var(--muda-radius-md)}
+.fig .fg-l path{stroke:var(--muda-color-text-sub);stroke-width:.8;opacity:.45}
+.fig .fg-t{fill:var(--muda-color-text-ink)}
+.fig .fg-h1{fill:var(--muda-color-bg-surface);stroke:var(--muda-color-stroke-soft)}
+.fig .fg-h2{fill:var(--muda-color-bg-recessed);stroke:var(--muda-color-stroke-soft)}
+.fig .fg-h3{fill:var(--muda-color-bg-soft);stroke:var(--muda-color-stroke-soft)}
+.fig .fg-tx{font:400 8px var(--muda-typography-family-fira);fill:var(--muda-color-text-sub)}
+.fig .fg-tx1{fill:var(--muda-color-text-ink)}
+.fig .fg-ln{fill:var(--muda-color-stroke-soft)}
+.fig .fg-mono{font:400 9.5px var(--muda-typography-family-mono);letter-spacing:1.4px;fill:var(--muda-color-text-ink)}
+.fig .fg-trazo{stroke:var(--muda-color-text-ink);stroke-width:1.3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig .fg-sub{fill:var(--muda-color-text-sub);stroke:var(--muda-color-text-sub)}
+.fig text.fg-sub{stroke:none}
+.nav{margin-top:var(--muda-space-lg);padding-top:var(--muda-space-md);border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
+.tx{font:500 15px/1 var(--muda-typography-family-fira);height:40px;padding:0 21px;border:var(--muda-stroke-1) solid var(--muda-color-stroke-soft);
+  border-radius:var(--muda-radius-sm);background:var(--muda-color-bg-surface);color:var(--muda-color-text-ink)}
+.tx:hover{background:var(--muda-color-bg-recessed)}
+.tx[disabled]{opacity:.35}
+.tx:focus-visible,.dot:focus-visible,.ab-ir>*:focus-visible{outline:var(--muda-stroke-3) solid var(--muda-color-focus);outline-offset:2px}
+.dot{width:8px;height:8px;background:var(--muda-color-stroke-soft)}
+.dot[data-on="1"]{background:var(--muda-color-text-ink)}
+.card kbd{font:400 var(--muda-typography-size-meta-m)/1 var(--muda-typography-family-mono);border:var(--muda-stroke-1) solid var(--muda-color-stroke-soft);
+  border-radius:var(--muda-radius-xs);background:var(--muda-color-bg-recessed);padding:2px 5px}
+.ab-ir{display:flex;flex-wrap:wrap;gap:var(--muda-space-sm);margin-top:var(--muda-space-lg);padding-top:var(--muda-space-md);border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
+.ab-ir>*{display:inline-flex;align-items:center;gap:var(--muda-space-xs);height:40px;padding:0 var(--muda-space-md);font:500 15px/1 var(--muda-typography-family-fira);
+  color:var(--muda-color-text-ink);background:var(--muda-color-bg-surface);border:var(--muda-stroke-1) solid var(--muda-color-stroke-soft);border-radius:var(--muda-radius-sm);
+  text-decoration:none;cursor:pointer}
+.ab-ir>*:hover{background:var(--muda-color-bg-recessed)}
+.ab-ir .ms{font-size:20px}
+@media (max-width:760px){.card{padding:var(--muda-space-lg)}.fig{height:150px}.tx{padding:0 var(--muda-space-md)}}
 </style>
 </head>
 <body>
@@ -1379,44 +1421,51 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
   <button class="ico card-x" id="help-x" aria-label="Cerrar">
     <svg viewBox="0 0 20 20" fill="none"><path d="M5.5 5.5 L14.5 14.5 M14.5 5.5 L5.5 14.5" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/></svg>
   </button>
+  <!-- v1.82 · LA AYUDA, AL DÍA (Patricia, 29-oct: «mejorar lo que sale de info y de la duda»). Cinco pantallas cortas,
+       vestidas de MUDA; los dibujos, con el color de cada sección (--s1 … --s7, se ponen al abrir). Textos: borrador de Claude. -->
   <div class="slide on" data-s="0">
-    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
-      <circle cx="115" cy="75" r="13" fill="#0B0B0B"/>
-      <g stroke="#0B0B0B" stroke-width=".7" opacity=".35">
-        <path d="M115 75 L115 22"/><path d="M115 75 L166 42"/><path d="M115 75 L179 96"/>
-        <path d="M115 75 L142 129"/><path d="M115 75 L88 129"/><path d="M115 75 L51 96"/><path d="M115 75 L64 42"/></g>
-      <g fill="#787B7E"><circle cx="115" cy="22" r="9"/><circle cx="166" cy="42" r="9"/><circle cx="179" cy="96" r="9"/>
-        <circle cx="142" cy="129" r="9"/><circle cx="88" cy="129" r="9"/><circle cx="51" cy="96" r="9"/><circle cx="64" cy="42" r="9"/></g></svg></div>
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none" aria-hidden="true">
+      <g class="fg-l"><path d="M115 75 L115 22"/><path d="M115 75 L166 42"/><path d="M115 75 L179 96"/><path d="M115 75 L142 129"/><path d="M115 75 L88 129"/><path d="M115 75 L51 96"/><path d="M115 75 L64 42"/></g>
+      <circle cx="115" cy="75" r="13" class="fg-t"/>
+      <circle cx="115" cy="22" r="9" style="fill:var(--s1)"/><circle cx="166" cy="42" r="9" style="fill:var(--s2)"/><circle cx="179" cy="96" r="9" style="fill:var(--s3)"/>
+      <circle cx="142" cy="129" r="9" style="fill:var(--s4)"/><circle cx="88" cy="129" r="9" style="fill:var(--s5)"/><circle cx="51" cy="96" r="9" style="fill:var(--s6)"/><circle cx="64" cy="42" r="9" style="fill:var(--s7)"/></svg></div>
     <h2 id="s-t">Esto es un mapa, no un menú</h2>
-    <p>Siete secciones alrededor de un centro. No hay barra de navegación porque la navegación es el mapa: lo que ves es la estructura entera del sitio, de una vez.</p>
+    <p>Siete secciones alrededor de un centro: lo que ves es la estructura entera del sitio, de una vez. Si prefieres una lista, la tienes en el <b>Mapa del sitio</b>, junto a la casa y en el pie, con los hilos que unen unas páginas con otras.</p>
   </div>
   <div class="slide" data-s="1">
-    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
-      <g stroke="#0B0B0B" stroke-width=".8" opacity=".5">
-        <path d="M115 75 L72 48"/><path d="M115 75 L160 52"/><path d="M115 75 L150 116"/><path d="M115 75 L76 108"/></g>
-      <circle cx="115" cy="75" r="16" fill="#0B0B0B"/><circle cx="115" cy="75" r="23" stroke="#0B0B0B" stroke-width="1.1"/>
-      <g fill="#636669"><circle cx="72" cy="48" r="8"/><circle cx="160" cy="52" r="8"/><circle cx="150" cy="116" r="8"/><circle cx="76" cy="108" r="8"/></g>
-      <g fill="#D7D9DA"><circle cx="26" cy="30" r="7"/><circle cx="205" cy="128" r="7"/><circle cx="30" cy="132" r="6"/><circle cx="200" cy="24" r="6"/></g></svg></div>
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none" aria-hidden="true">
+      <rect x="58" y="22" width="114" height="120" rx="6" class="fg-h3"/>
+      <rect x="53" y="40" width="124" height="110" rx="6" class="fg-h2"/>
+      <rect x="48" y="58" width="134" height="100" rx="6" class="fg-h1"/>
+      <text x="66" y="34" class="fg-tx">Mapa del sitio</text><text x="61" y="52" class="fg-tx">Conexiones</text><text x="56" y="70" class="fg-tx fg-tx1">Contenido</text>
+      <rect x="56" y="80" width="80" height="6" rx="1" style="fill:var(--s4)"/><rect x="56" y="94" width="112" height="3" rx="1" class="fg-ln"/><rect x="56" y="103" width="104" height="3" rx="1" class="fg-ln"/><rect x="56" y="112" width="110" height="3" rx="1" class="fg-ln"/></svg></div>
     <h2>Lo que pinchas pasa a ser el centro</h2>
-    <p>El nodo se enciende del todo, sus vecinos se acercan y el resto se apaga. Su contenido sube desde abajo, en carpeta, y el mapa se retira; arriba queda el camino, estirado como una cadena. Cualquier pieza puede ser el sol un rato: aquí no hay una jerarquía fija, hay la que tú abres.</p>
+    <p>El nodo se enciende, sus vecinos se acercan y el resto se apaga. Su contenido sube desde abajo, en una carpeta de tres hojas: <b>Contenido</b>, <b>Conexiones</b> (el mapa alrededor de esa pieza) y <b>Mapa del sitio</b>. Arriba queda el camino, como una cadena: cada bola te devuelve a ese punto.</p>
   </div>
   <div class="slide" data-s="2">
-    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
-      <g stroke="#0B0B0B" stroke-width=".8" opacity=".4"><path d="M72 75 L158 75"/></g>
-      <circle cx="72" cy="75" r="17" fill="#636669"/><circle cx="158" cy="75" r="17" fill="#C6C8CA" opacity=".55"/>
-      <text x="72" y="119" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#3F4245">EXISTE</text>
-      <text x="158" y="119" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9.5" letter-spacing="1.4" fill="#A1A3A6">POR ESCRIBIR</text></svg></div>
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none" aria-hidden="true">
+      <g class="fg-l"><path d="M72 75 L158 75"/></g>
+      <circle cx="72" cy="75" r="17" style="fill:var(--s3)"/><circle cx="158" cy="75" r="17" style="fill:var(--s3)" opacity=".28"/>
+      <text x="72" y="119" text-anchor="middle" class="fg-mono">EXISTE</text>
+      <text x="158" y="119" text-anchor="middle" class="fg-mono fg-sub">POR ESCRIBIR</text></svg></div>
     <h2>Lo pálido todavía no existe</h2>
-    <p>Algunos nodos laten con menos tinta. Son piezas que otras ya enlazan pero que aún no están escritas — huecos declarados, no olvidos. El mapa enseña también lo que falta.</p>
+    <p>Algunos nodos laten con menos tinta. Son piezas que otras ya enlazan pero que aún no están escritas: huecos declarados, no olvidos. En el Mapa del sitio dicen «en preparación». El mapa enseña también lo que falta.</p>
   </div>
   <div class="slide" data-s="3">
-    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none">
-      <g stroke="#0B0B0B" stroke-width="1.1" fill="none" stroke-linecap="round">
-        <path d="M62 60 A32 32 0 1 1 62 90" opacity=".8"/><path d="M58 84 L62 92 L70 88" opacity=".8"/>
-        <circle cx="163" cy="66" r="11"/><path d="M171 74 L179 82"/>
-        <path d="M150 106 H190" opacity=".5"/><path d="M150 118 H176" opacity=".5"/></g></svg></div>
-    <h2>Bucea, gira, busca</h2>
-    <p>La rueda te lleva buceando hacia donde apuntas, entre las bolas, hasta la que quieras; con dos dedos, pellizca. Arrastra para girar alrededor de lo que miras; con la barra espaciadora pulsada, arrastrar desplaza el lienzo, sin girarlo (en el móvil, con dos dedos). La vista se queda donde la dejas, también en Conexiones. Para volver al inicio, doble clic en el vacío, la casa o el botón derecho, que también busca y abre esta ayuda; con una pieza abierta, el doble clic la recentra. La lupa te pregunta qué buscas: al escribir, el mapa deja en pie lo que responde; con Enter, una página con lo mejor de cada sección. Si preguntas, pides algo o no hay nada, contesta Haiku, a veces en verso. Con teclado: <kbd>Tab</kbd> entra al mapa, <kbd>←</kbd><kbd>→</kbd> recorren, <kbd>Enter</kbd> abre y <kbd>Esc</kbd> suelta.</p>
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none" aria-hidden="true">
+      <g class="fg-trazo"><path d="M92 52 A30 30 0 1 1 92 98"/><path d="M87 91 L92 99 L100 95"/></g>
+      <circle cx="115" cy="75" r="10" style="fill:var(--s1)"/><circle cx="152" cy="58" r="6" style="fill:var(--s2)"/><circle cx="150" cy="98" r="5" style="fill:var(--s6)"/>
+      <g class="fg-trazo fg-sub"><path d="M176 40 L190 40 M183 33 L183 47"/></g></svg></div>
+    <h2>Bucear, girar, volver</h2>
+    <p>La rueda te lleva buceando hacia donde apuntas; con dos dedos, pellizca. Arrastra para girar alrededor de lo que miras; con la barra espaciadora pulsada, arrastrar desplaza el lienzo (en el móvil, con dos dedos). Para volver al inicio, la casa o doble clic en el vacío; con una pieza abierta, el doble clic la recentra. El botón derecho abre un menú con todo esto.</p>
+  </div>
+  <div class="slide" data-s="4">
+    <div class="fig"><svg width="230" height="150" viewBox="0 0 230 150" fill="none" aria-hidden="true">
+      <g class="fg-trazo"><circle cx="70" cy="66" r="15"/><path d="M81 77 L93 89"/></g>
+      <rect x="128" y="44" width="62" height="5" rx="1" style="fill:var(--s3)"/><rect x="128" y="58" width="52" height="3" rx="1" class="fg-ln"/><rect x="128" y="67" width="58" height="3" rx="1" class="fg-ln"/>
+      <rect x="128" y="84" width="56" height="5" rx="1" style="fill:var(--s4)"/><rect x="128" y="98" width="46" height="3" rx="1" class="fg-ln"/><rect x="128" y="107" width="54" height="3" rx="1" class="fg-ln"/></svg></div>
+    <h2>Buscar y no perderse</h2>
+    <p>La lupa te pregunta qué buscas: al escribir, el mapa deja en pie lo que responde; con Enter, una página con lo mejor de cada sección. Si preguntas o no hay nada, contesta Haiku, a veces en verso. Con teclado: <kbd>Tab</kbd> entra al mapa, <kbd>←</kbd><kbd>→</kbd> recorren, <kbd>Enter</kbd> abre y <kbd>Esc</kbd> suelta. Y si te pierdes, el Mapa del sitio.</p>
   </div>
   <div class="nav">
     <button class="tx" id="s-prev" disabled>Anterior</button>
@@ -1432,9 +1481,14 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
     <svg viewBox="0 0 20 20" fill="none"><path d="M5.5 5.5 L14.5 14.5 M14.5 5.5 L5.5 14.5" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/></svg>
   </button>
   <p class="kicker">Sobre este sitio</p>
-  <h2 id="a-t" style="margin-bottom:16px">Koi Samsa</h2>
-  <p style="margin-bottom:14px">Arte, diseño y estrategia de marca. Están juntos porque en la práctica nunca estuvieron separados: más de una vez el arte ha sido una rama del encargo de marca.</p>
+  <h2 id="a-t">Koi Samsa</h2>
+  <p>Arte, diseño y estrategia de marca. Están juntos porque en la práctica nunca estuvieron separados: más de una vez el arte ha sido una rama del encargo de marca.</p>
   <p>Un menú obliga a partir en dos lo que en mi cabeza no está partido. Un mapa no: la pieza se queda entera y enseña sus dos vínculos a la vez.</p>
+  <nav class="ab-ir" aria-label="Desde aquí">   <!-- v1.82 · tres salidas, sin tocar los dos párrafos de Patricia -->
+    <button type="button" data-ir="mapa"><span class="ms" aria-hidden="true">account_tree</span>Mapa del sitio</button>
+    <button type="button" data-ir="contacto"><span class="ms" aria-hidden="true">mail</span>Contacto</button>
+    <a href="#about" data-ir="about"><span class="ms" aria-hidden="true">arrow_forward</span>About</a>
+  </nav>
  </div>
 </div>
 
@@ -6215,10 +6269,17 @@ dots.addEventListener('click',function(e){var b=e.target.closest('.dot');if(b)go
 document.getElementById('s-prev').addEventListener('click',function(){goSlide(si-1);});
 document.getElementById('s-next').addEventListener('click',function(){
   if(si===slides.length-1)vHelp.classList.remove('open');else goSlide(si+1);});
-document.getElementById('btn-help').addEventListener('click',function(){goSlide(0);vHelp.classList.add('open');});
+document.getElementById('btn-help').addEventListener('click',function(){
+  for(var _s=1;_s<=7;_s++)vHelp.style.setProperty('--s'+_s,PAL?brandHexSec(_s):'#686761');   /* v1.82 · los dibujos, en el color de cada sección */
+  goSlide(0);vHelp.classList.add('open');});
 document.getElementById('help-x').addEventListener('click',function(){vHelp.classList.remove('open');});
 document.getElementById('btn-i').addEventListener('click',function(){vAbout.classList.add('open');});
 document.getElementById('about-x').addEventListener('click',function(){vAbout.classList.remove('open');});
+vAbout.querySelector('.ab-ir').addEventListener('click',function(e){   /* v1.82 · las tres salidas de la «i» */
+  var b=e.target.closest('[data-ir]');if(!b)return;vAbout.classList.remove('open');
+  if(b.dataset.ir==='mapa')abreMapa({detail:0});
+  else if(b.dataset.ir==='contacto')document.getElementById('pie-mail').click();
+});
 [vHelp,vAbout].forEach(function(v){v.addEventListener('click',function(e){if(e.target===v)v.classList.remove('open');});});
 /* v1.61 · la ficha de contacto: el sobre del pie la abre; se cierra con la ✕, fuera de la tarjeta o con Esc (y solo ella) */
 var vCont=document.getElementById('veil-contacto');
