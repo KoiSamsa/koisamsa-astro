@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.75 · KOI SAMSA · el mapa recoge sus clics (demo)</title>
+<title>v1.76 · KOI SAMSA · el mapa va a la URL de cada página (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -5436,13 +5436,14 @@ function renderMapa(){
   document.getElementById('cp-p2').innerHTML=h+'</div>';
 }
 document.getElementById('cp-p2').addEventListener('click',function(e){
+  /* v1.76 · el mapa va a la URL de cada página, como un enlace de los de siempre: el navegador cambia la dirección
+     y es la dirección la que abre la página (el oyente de hashchange). Solo se intercepta lo que la URL no resuelve:
+     Inicio (#home no abre hoja) y la página en la que ya estás (la misma dirección no cambia nada: vuelve a su Ficha). */
   var a=e.target.closest('a[data-j]');if(!a)return;
-  if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;   /* v1.74 · son enlaces de verdad: otra pestaña, copiar… */
-  e.preventDefault();
+  if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||e.button!==0)return;   /* v1.74 · otra pestaña, copiar… */
   var j=+a.dataset.j;
-  if(j===0){document.getElementById('btn-home').click();return;}
-  if(j===sel){cpTab(0,e.detail===0);return;}
-  clearFilt();setSel(j);
+  if(j===0){e.preventDefault();document.getElementById('btn-home').click();return;}
+  if(j===sel||(location.hash||'').slice(1).toLowerCase()===SLUGN[j]){e.preventDefault();if(j===sel)cpTab(0,e.detail===0);else{clearFilt();setSel(j);}}
 });
 panel.addEventListener('click',function(e){
   var c=e.target.closest('.cp-hoja.detras .cp-cab');if(!c)return;
