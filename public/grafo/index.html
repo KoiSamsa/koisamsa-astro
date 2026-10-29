@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.79 · KOI SAMSA · el mapa del sitio con sus hilos (demo)</title>
+<title>v1.80 · KOI SAMSA · el mapa en el pie y los hilos al 10 % (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1246,12 +1246,16 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
    para que el hilo pase por detrás. v1.79: a la vista siempre. */
 #cp-p2 .mp-hilos-w{position:relative}
 #cp-p2 .mp-hilos{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:0}
-#cp-p2 .mp-hilos path{fill:none;stroke:var(--muda-color-text-sub);stroke-width:1;opacity:.5;transition:opacity var(--muda-duration-8f) var(--muda-motion-easing-default)}
-#cp-p2 .mp-hilos.foco path{opacity:.18}
+#cp-p2 .mp-hilos path{fill:none;stroke:var(--muda-color-text-sub);stroke-width:1;opacity:.1;transition:opacity var(--muda-duration-8f) var(--muda-motion-easing-default)}
+#cp-p2 .mp-hilos.foco path{opacity:.1}   /* v1.80 · los hilos, en un gris muy claro, al 10 % (Patricia, 29-oct) */
 #cp-p2 .mp-hilos.foco path.on{stroke:var(--hc);stroke-width:1.75;opacity:.95}
 #cp-p2 .mp-ini,#cp-p2 .mp-secs{position:relative;z-index:1}
 #cp-p2 a{background:var(--hoja)}
 #cp-p2 a[aria-current="page"]{background:color-mix(in srgb,var(--c) 12%,var(--hoja))}
+/* v1.80 · el mapa desde el pie, sin página abierta: solo la hoja del Mapa, arriba del todo */
+#panel.carpeta.solo-mapa #cp-h0,#panel.carpeta.solo-mapa #cp-h1{display:none}
+#panel.carpeta.solo-mapa .cp-hoja.p0{top:0}
+#panel.carpeta.solo-mapa #panel-x{top:calc((var(--cp-hh) - 32px) / 2)}
 </style>
 </head>
 <body>
@@ -1304,6 +1308,7 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
   <div class="pie-fila">
     <nav class="pie-nav" aria-label="Secciones"></nav>
     <span class="pie-hueco" aria-hidden="true"></span>
+    <button type="button" class="pie-ic" id="pie-mapa" aria-label="Mapa del sitio" title="Mapa del sitio"><span class="ms" aria-hidden="true">account_tree</span></button>   <!-- v1.80 · el mapa del sitio, junto al sobre -->
     <button type="button" class="pie-ic" id="pie-mail" aria-haspopup="dialog" aria-label="Contacto" title="Contacto"><span class="ms" aria-hidden="true">mail</span></button>   <!-- v1.61 · abre la ficha de contacto; la cámara sale (Instagram va en la ficha) -->
   </div>
 </footer>
@@ -4814,7 +4819,7 @@ var panel=document.getElementById('panel');
 /* el body lleva la cuenta: logo y sonido se apartan por CSS, no por JS */
 var TAPADO_T=Infinity;   /* v1.27 · cuándo queda el grafo del todo tapado (el velo tarda .38 s) */
 function openPanel(){if(!panel.classList.contains('open'))TAPADO_T=performance.now()+600;panel.classList.add('open');document.body.classList.add('panel-on');pieSonido(true);}
-function closePanel(){panel.classList.remove('open');document.body.classList.remove('panel-on');pieSonido(false);}
+function closePanel(){panel.classList.remove('solo-mapa');panel.classList.remove('open');document.body.classList.remove('panel-on');pieSonido(false);}
 /* v1.29 · el sonido se muda: al pie mientras se lee, a su esquina mientras se explora */
 function pieSonido(enPie){var b=document.getElementById('btn-snd'),p=document.getElementById('pie');if(!b||!p)return;
   (enPie?p.querySelector('.pie-fila'):document.getElementById('hud-br')).appendChild(b);}
@@ -5422,6 +5427,7 @@ setTimeout(function(){
    Detrás, por su orden: la más cercana, la de número menor; la otra, «lejos», asoma por encima de las dos */
 var CPT=0;
 function cpTab(k,foco){   /* v1.77 · las hojas, por su profundidad (p0 delante, p1, p2 la más lejana) y su orden; tres desde la v1.79 */
+  if(k!==2)panel.classList.remove('solo-mapa');   /* v1.80 · en cuanto hay página, vuelven sus hojas */
   var cambia=(CPT!==k),orden=[k].concat([0,1,2].filter(function(i){return i!==k;})),del=null;
   CPT=k;
   if(k!==1)TAPADO_T=performance.now()+600;   /* v1.28 · todo menos Conexiones vuelve a tapar el grafo tras el cambio de hoja */
@@ -6213,6 +6219,12 @@ document.getElementById('about-x').addEventListener('click',function(){vAbout.cl
 [vHelp,vAbout].forEach(function(v){v.addEventListener('click',function(e){if(e.target===v)v.classList.remove('open');});});
 /* v1.61 · la ficha de contacto: el sobre del pie la abre; se cierra con la ✕, fuera de la tarjeta o con Esc (y solo ella) */
 var vCont=document.getElementById('veil-contacto');
+/* v1.80 · el mapa del sitio también desde el pie (Patricia, 29-oct: «abajo a la derecha, junto al mail»). Con una página
+   abierta, su hoja del Mapa pasa delante; desde el inicio, sin página, la carpeta se abre solo con el Mapa. */
+document.getElementById('pie-mapa').addEventListener('click',function(e){
+  if(sel===null){panel.classList.add('solo-mapa');openPanel();}
+  cpTab(2,e.detail===0);
+});
 document.getElementById('pie-mail').addEventListener('click',function(){vCont.classList.add('open');setTimeout(function(){document.getElementById('contacto-x').focus();},30);});
 document.getElementById('contacto-x').addEventListener('click',function(){vCont.classList.remove('open');document.getElementById('pie-mail').focus();});
 vCont.addEventListener('click',function(e){
