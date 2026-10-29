@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.84 · KOI SAMSA · el mapa, de auxilio (demo)</title>
+<title>v1.85 · KOI SAMSA · raíces equidistantes, Home sin página (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -4174,6 +4174,7 @@ var RING=155,PAL=true;   /* v1.24 · SIEMPRE EN COLOR: la paleta sale del menú 
      ESF_P veces el anillo.
    PESO[k] · ANG[k], el centro de su arco · ALT[k], su altura · ALTP[i], la de cada pieza respecto a su raíz ·
    SECD[i], la sección con la que viaja cada pieza (su naturaleza; v1.56) */
+var EQUI=true;   /* v1.85 · raíces en heptágono regular y a la altura de Home */
 var ESF_R=0.45,ESF_P=0.45,RADIAL=0.30,ARCO_MIN=45*Math.PI/180,AUREO=137.50776*Math.PI/180;   /* v1.59 · ARCO_MIN: ningún arco por debajo de 45° */
 var SECD=[],PESO=[0,0,0,0,0,0,0,0],ANG=[0],ALT=[0],ALTP=[],ENL=[0];
 for(var _i=0;_i<N.length;_i++){var _s=_i<8?0:(HYB[_i]?HYB[_i][0]:N[_i][4]);SECD.push(_s>=1&&_s<=7?_s:0);}
@@ -4189,11 +4190,15 @@ for(var _i=0;_i<N.length;_i++){var _s=_i<8?0:(HYB[_i]?HYB[_i][0]:N[_i][4]);SECD.
   for(k=1;k<=7;k++){c[k]=acc+arc[k]/2;acc+=arc[k];m+=c[k]-(k-1)/7*2*Math.PI;}
   m/=7;   /* sin girar el conjunto: de media, cada raíz sigue donde estaba en el heptágono */
   for(k=1;k<=7;k++)ANG[k]=c[k]-m-Math.PI/2;
+  /* v1.85 · LAS RAÍCES, EQUIDISTANTES (Patricia, 29-oct: «sé que en el pasado lo cambié, pero ahora creo que es mejor que todas
+     las esferas estén relativamente equidistantes»). Vuelve el heptágono regular del 21-jul: siete arcos iguales. Los arcos
+     por peso (v1.58) y su mínimo (v1.59) quedan calculados arriba, sin uso, por si se quieren recuperar (EQUI=false). */
+  if(EQUI)for(k=1;k<=7;k++)ANG[k]=(k-1)/7*2*Math.PI-Math.PI/2;
   /* v1.59 · LAS ALTURAS, POR ENLACES: la raíz con más enlaces, a la altura de Home; la que menos, arriba del todo
      (ESF_R veces el anillo); las demás, en proporción. ENL[k]: sus enlaces (a Home, a otras raíces y a sus piezas). */
   var emin=1e9,emax=0;
   for(k=1;k<=7;k++){ENL[k]=0;for(i=0;i<L.length;i++)if(L[i][0]===k||L[i][1]===k)ENL[k]++;emin=Math.min(emin,ENL[k]);emax=Math.max(emax,ENL[k]);}
-  for(k=1;k<=7;k++)ALT[k]=emax>emin?RING*ESF_R*(emax-ENL[k])/(emax-emin):0;
+  for(k=1;k<=7;k++)ALT[k]=(!EQUI&&emax>emin)?RING*ESF_R*(emax-ENL[k])/(emax-emin):0;   /* v1.85 · con EQUI, todas a la altura de Home; las piezas siguen en sus planos */
   for(i=0;i<N.length;i++)ALTP.push(i<8?0:RING*ESF_P*Math.cos(i*AUREO));
 })();
 /* v1.24 · OPACIDAD POR ESTADO (Patricia, 27-sep): el 100 % es del nodo activado y del que tiene el ratón encima. Reposo, proximidad y
@@ -4735,7 +4740,8 @@ function nadoPone(){
    con la que viaja cada pieza (su naturaleza) */
 var TORB=0,ORBR=0,ORBA=0,ORBW=2*Math.PI/(220*0.96),OPLA=[null],OTG=[null];   /* una vuelta cada 220 s (T avanza 0,96 por segundo) */
 for(var _k=1;_k<=7;_k++){var _a0=ANG[_k];   /* v1.58 · el centro de su arco */
-  OPLA.push({a:_a0,r:(Math.random()-0.5)*0.12,e:0.025+Math.random()*0.03,w:Math.random()*6.283,inc:0.035+Math.random()*0.035,nod:Math.random()*6.283});
+  OPLA.push(EQUI?{a:_a0,r:(Math.random()-0.5)*0.04,e:0.008+Math.random()*0.01,w:Math.random()*6.283,inc:0.012+Math.random()*0.012,nod:Math.random()*6.283}   /* v1.85 · órbitas contenidas: ±2 % de radio, elipse y plano apenas */
+    :{a:_a0,r:(Math.random()-0.5)*0.12,e:0.025+Math.random()*0.03,w:Math.random()*6.283,inc:0.035+Math.random()*0.035,nod:Math.random()*6.283});
   OTG.push({x:0,y:0,z:0,a:0,r:0,da:0,dr:0,dy:0,ok:false});}
 function orbitas(){
   /* el reloj: se para al leer (Conexiones) y al buscar (el mapa filtrado); al 30 % mientras señalas una bola */
@@ -5756,6 +5762,7 @@ function applyFilt(v){
 }
 function clearFilt(){FILT=null;ACT=null;FILT_Q='';FILT_TAG=false;qn.className='';qn.innerHTML='';}
 function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al saltar de nodo */
+  if(v===0){document.getElementById('btn-home').click();return;}   /* v1.85 · Home no tiene página: pincharla es volver al inicio (Patricia, 29-oct) */
   if(v!==null&&v!==undefined)anotFuera(document.getElementById('anot-home'));   /* v1.63 · ya ha empezado */
   var _serie=null;if(v!==null&&v!==undefined&&PLEG[v]){_serie=v;v=N[v][4];}   /* v1.59 · una serie plegada se abre en la página de su sección, en su sitio */
   IDXDEMO=null;                 /* cambiar de nodo cierra el artefacto abierto */
