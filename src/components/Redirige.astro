@@ -1,0 +1,22 @@
+---
+/* Lleva una dirección a su sitio en el grafo (29-oct-2026: koisamsa.com pasa a ser la web nueva).
+   Las direcciones del WordPress, la portada y las páginas de prueba de julio no se pierden: llevan a su
+   pieza del grafo. El destino puede llevar #: el navegador lo conserva. Sin JS, la meta y el enlace. */
+interface Props { a: string; titulo?: string }
+const { a, titulo = 'Koi Samsa' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{titulo}</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href={new URL(a.split('#')[0], 'https://koisamsa.com').href}>
+  <meta http-equiv="refresh" content={`0;url=${a}`}>
+  <script is:inline define:vars={{ a }}>location.replace(a);</script>
+</head>
+<body style="font-family:system-ui,sans-serif;background:#FAF9F7;color:#2D2A23;padding:34px">
+  <p><a href={a}>{titulo}</a></p>
+</body>
+</html>
