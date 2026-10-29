@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.80 · KOI SAMSA · el mapa en el pie y los hilos al 10 % (demo)</title>
+<title>v1.81 · KOI SAMSA · el mapa junto a la casita (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1282,12 +1282,15 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
   <button class="ico" id="btn-home" aria-label="Volver al inicio · pasa por encima para ver la posición de partida" title="Inicio">
     <svg viewBox="0 0 20 20" fill="none"><path d="M3 9.2 L10 3.2 L17 9.2 M5 8.4 V16.4 H15 V8.4" stroke="#1A1C1E" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
   </button>
-  <button class="ico" id="btn-help" aria-label="Cómo se usa este mapa" title="Cómo se usa este mapa">
-    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" stroke="#1A1C1E" stroke-width="1.3"/><path d="M7.9 7.7 A2.1 2.1 0 1 1 10 10.6 V11.9" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/><circle class="fillme" cx="10" cy="14.3" r=".85" fill="#1A1C1E"/></svg>
+  <button class="ico" id="btn-mapa" aria-label="Mapa del sitio" title="Mapa del sitio">   <!-- v1.81 · el mapa del sitio, junto a la casita; la interrogación pasa a la derecha, junto a la i -->
+    <svg viewBox="0 0 20 20" fill="none"><rect x="2.6" y="7.7" width="4.8" height="4.6" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><rect x="12.6" y="3" width="4.8" height="4.4" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><rect x="12.6" y="12.6" width="4.8" height="4.4" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><path d="M7.4 10 H10 M10 5.2 V14.8 M10 5.2 H12.6 M10 14.8 H12.6" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
 </div>
 
 <div class="hud" id="hud-tr">
+  <button class="ico" id="btn-help" aria-label="Cómo se usa este mapa" title="Cómo se usa este mapa">
+    <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" stroke="#1A1C1E" stroke-width="1.3"/><path d="M7.9 7.7 A2.1 2.1 0 1 1 10 10.6 V11.9" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/><circle class="fillme" cx="10" cy="14.3" r=".85" fill="#1A1C1E"/></svg>
+  </button>
   <button class="ico" id="btn-i" aria-label="Sobre este sitio" title="Sobre este sitio">
     <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.2" stroke="#1A1C1E" stroke-width="1.3"/><path d="M10 8.8 V14" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round"/><circle class="fillme" cx="10" cy="6.3" r=".85" fill="#1A1C1E"/></svg>
   </button>
@@ -6221,10 +6224,12 @@ document.getElementById('about-x').addEventListener('click',function(){vAbout.cl
 var vCont=document.getElementById('veil-contacto');
 /* v1.80 · el mapa del sitio también desde el pie (Patricia, 29-oct: «abajo a la derecha, junto al mail»). Con una página
    abierta, su hoja del Mapa pasa delante; desde el inicio, sin página, la carpeta se abre solo con el Mapa. */
-document.getElementById('pie-mapa').addEventListener('click',function(e){
+function abreMapa(e){
   if(sel===null){panel.classList.add('solo-mapa');openPanel();}
   cpTab(2,e.detail===0);
-});
+}
+document.getElementById('pie-mapa').addEventListener('click',abreMapa);
+document.getElementById('btn-mapa').addEventListener('click',abreMapa);   /* v1.81 · y arriba, junto a la casita */
 document.getElementById('pie-mail').addEventListener('click',function(){vCont.classList.add('open');setTimeout(function(){document.getElementById('contacto-x').focus();},30);});
 document.getElementById('contacto-x').addEventListener('click',function(){vCont.classList.remove('open');document.getElementById('pie-mail').focus();});
 vCont.addEventListener('click',function(e){
