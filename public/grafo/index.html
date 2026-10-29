@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.71 · KOI SAMSA · bolitas pequeñas, alt limpio (demo)</title>
+<title>v1.72 · KOI SAMSA · la carpeta se ve como carpeta (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1186,6 +1186,18 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 #cadena.apretada .tramo{flex-basis:13px;margin:0 5px}
 #cadena.apretada .cz.here{flex:0 1 auto;min-width:0}
 #cadena.apretada .cz.here .et{min-width:0;overflow:hidden;text-overflow:ellipsis}
+/* ═══ v1.72 · LA CARPETA SE VE COMO CARPETA (Patricia, 29-oct: «quiero que se evidencie que son tarjetas»)
+   Las hojas iban de borde a borde y se leían como franjas. Ahora el papel asoma a los lados, la hoja de detrás es
+   5 px más estrecha por lado (la carpeta v4b de MUDA, como en Galería) y la de delante lleva su filete.
+   El grafo no se asoma por los lados: con la Ficha delante, el velo baja entero; con Conexiones, la ventana sigue abierta. */
+:root{--cp-mx:var(--muda-space-lg)}
+@media (max-width:760px){:root{--cp-mx:var(--muda-space-sm)}}
+#panel.carpeta{left:var(--cp-mx);right:var(--cp-mx);width:auto}
+.cp-hoja{border-radius:var(--muda-radius-lg) var(--muda-radius-lg) 0 0}
+.cp-hoja.detras{left:var(--muda-space-xs);right:var(--muda-space-xs)}
+.cp-hoja.delante{box-shadow:0 0 0 var(--muda-stroke-1) var(--muda-color-stroke-soft)}
+@media (max-width:760px){.cp-hoja{border-radius:var(--muda-radius-md) var(--muda-radius-md) 0 0}}
+body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
 </style>
 </head>
 <body>
