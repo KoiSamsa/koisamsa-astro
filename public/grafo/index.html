@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.77 · KOI SAMSA · el mapa plano (demo)</title>
+<title>v1.78 · KOI SAMSA · el mapa con hilos (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1246,19 +1246,29 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
 body.panel-on:has(#cp-h3.delante) #velo-top{height:100%}
 #panel.carpeta #cp-c3{pointer-events:auto}
 @media (max-width:760px){body.cp-lee{--carpeta-top:calc(env(safe-area-inset-top,0px) - 4 * var(--cp-hh))}}
-/* el mapa plano: la dirección en mono, el nombre en gris; una por línea */
+/* v1.78 · el mapa con hilos: el índice del Mapa del sitio, y detrás un SVG con un hilo por conexión */
 #panel.carpeta #cp-p3 h1{font-size:var(--muda-size-display);white-space:normal;padding-bottom:0}
-#cp-p3 .mp-plano{list-style:none;margin:0;padding:0;border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
-#cp-p3 .mp-plano li{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 var(--muda-space-md);padding:var(--muda-space-xs) 0;
-  border-bottom:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
-#cp-p3 a{font:400 var(--muda-typography-size-meta-l)/1.5 var(--muda-typography-family-mono);color:var(--muda-color-text-ink);overflow-wrap:anywhere;
-  text-decoration:underline;text-decoration-color:var(--muda-color-stroke-soft);text-decoration-thickness:1px;text-underline-offset:3px}
+#cp-p3 .mp-hilos-w{position:relative}
+#cp-p3 .mp-hilos{position:absolute;left:0;top:0;pointer-events:none;overflow:visible;z-index:0}
+#cp-p3 .mp-hilos path{fill:none;stroke:var(--muda-color-text-sub);stroke-width:1;opacity:.28;transition:opacity var(--muda-duration-8f) var(--muda-motion-easing-default)}
+#cp-p3 .mp-hilos.foco path{opacity:.08}
+#cp-p3 .mp-hilos.foco path.on{stroke:var(--hc);stroke-width:1.5;opacity:.9}
+#cp-p3 .mp-ini,#cp-p3 .mp-secs{position:relative;z-index:1}
+#cp-p3 .mp-ini{margin:0 0 var(--muda-space-xl);font:500 var(--muda-typography-size-body-m)/1.4 var(--muda-typography-family-fira)}
+#cp-p3 .mp-secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--muda-space-xl) var(--muda-space-2xl)}
+#cp-p3 .mp-sec h2{margin:0 0 var(--muda-space-sm);padding-top:var(--muda-space-sm);border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft);
+  font:500 var(--muda-typography-size-meta-m)/1.3 var(--muda-typography-family-fira);letter-spacing:.06em;text-transform:uppercase}
+#cp-p3 ul{list-style:none;margin:0;padding:0}
+#cp-p3 li{margin:0 0 var(--muda-space-xs);font:400 var(--muda-typography-size-body-s)/1.45 var(--muda-typography-family-fira);color:var(--muda-color-text-ink)}
+#cp-p3 a{color:var(--muda-color-text-ink);background:var(--hoja);text-decoration:underline;text-decoration-color:var(--muda-color-stroke-soft);text-decoration-thickness:1px;text-underline-offset:3px}
+#cp-p3 h2 a{text-decoration:none}
 #cp-p3 a:hover{text-decoration-color:var(--muda-color-text-ink)}
 #cp-p3 a[aria-current="page"]{font-weight:600;text-decoration-color:var(--c);text-decoration-thickness:2px;
-  background:color-mix(in srgb,var(--c) 12%,transparent);border-radius:var(--muda-radius-xs);padding:1px 6px 2px;margin-left:-6px}
-#cp-p3 a[aria-current="page"]::after{content:" · estás aquí";font-family:var(--muda-typography-family-fira);font-weight:400;color:var(--muda-color-text-sub)}
+  background:color-mix(in srgb,var(--c) 12%,var(--hoja));border-radius:var(--muda-radius-xs);padding:1px 6px 2px;margin-left:-6px}
+#cp-p3 a[aria-current="page"]::after{content:" · estás aquí";font-weight:400;color:var(--muda-color-text-sub);text-transform:none;letter-spacing:normal}
 #cp-p3 .mp-bola{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:.08em}
-#cp-p3 .mp-nom{font:400 var(--muda-typography-size-body-s)/1.45 var(--muda-typography-family-fira);color:var(--muda-color-text-sub)}
+#cp-p3 .mp-cod{font:400 var(--muda-typography-size-meta-s)/1 var(--muda-typography-family-mono);color:var(--muda-color-text-sub)}
+#cp-p3 .mp-prep{font-size:var(--muda-typography-size-meta-s);color:var(--muda-color-text-sub)}
 </style>
 </head>
 <body>
@@ -1327,8 +1337,8 @@ body.panel-on:has(#cp-h3.delante) #velo-top{height:100%}
      Buscar es ir del usuario hacia adentro, como en un archivador: la hoja de delante enseña su contenido; la de
      detrás, solo su cabecera. Las pestañas de toda la vida, en un mismo plano, se llaman SEPARADORES. -->
 <aside id="panel" class="carpeta" role="dialog" aria-labelledby="p-t">
-  <section class="cp-hoja detras p3" id="cp-h3">   <!-- v1.77 · el mapa plano: todas las direcciones, una por línea -->
-    <div class="cp-cab"><button class="cp-t" id="cp-t3" aria-expanded="false" aria-controls="cp-c3"><span class="ms cp-ic" aria-hidden="true">link</span><span class="cp-tx"><span class="cp-nm">Mapa plano</span></span></button></div>
+  <section class="cp-hoja detras p3" id="cp-h3">   <!-- v1.78 · el mapa del sitio con los hilos de conexión -->
+    <div class="cp-cab"><button class="cp-t" id="cp-t3" aria-expanded="false" aria-controls="cp-c3"><span class="ms cp-ic" aria-hidden="true">hub</span><span class="cp-tx"><span class="cp-nm">Mapa con hilos</span></span></button></div>
     <div class="cp-cuerpo" id="cp-c3"><div class="cp-pan" id="cp-p3"></div></div>
   </section>
   <section class="cp-hoja detras p2" id="cp-h2">   <!-- v1.73 · el mapa del sitio, para quien se ha perdido -->
@@ -5437,7 +5447,7 @@ function cpTab(k,foco){   /* v1.77 · cuatro hojas: la profundidad (p0 delante �
   CPT=k;
   if(k!==1)TAPADO_T=performance.now()+600;   /* v1.28 · todo menos Conexiones vuelve a tapar el grafo tras el cambio de hoja */
   if(k===2)renderMapa();
-  if(k===3)renderPlano();
+  if(k===3)renderHilos();
   orden.forEach(function(i,p){var h=document.getElementById('cp-h'+i);if(p===0)del=h;
     h.classList.toggle('delante',p===0);h.classList.toggle('detras',p>0);h.classList.remove('lejos','p0','p1','p2','p3');h.classList.add('p'+p);
     document.getElementById('cp-t'+i).setAttribute('aria-expanded',p===0?'true':'false');});
@@ -5448,7 +5458,7 @@ function cpTab(k,foco){   /* v1.77 · cuatro hojas: la profundidad (p0 delante �
 /* ═══ v1.73 · EL MAPA DEL SITIO (Patricia, 29-oct: «para quien se ha perdido… un mapa del site lo más normativo posible»).
    Un índice de los de siempre: Inicio, las siete secciones y, debajo de cada una, sus páginas por su código; la página
    en la que estás, marcada. Las de demo no salen; las que aún no tienen texto, sí, con «en preparación». */
-function renderMapa(){
+function mapaHTML(tit,dek){
   /* v1.74 · la página activa, con el color de su nodo (el de su bola en la cadena) */
   var col=function(j){return (j===0)?'#000000':(PAL?brandHex(j):'#0B0B0B');};
   var enlace=function(j,t){var aqui=(j===sel);
@@ -5457,7 +5467,7 @@ function renderMapa(){
   var li=function(k){var c=codigoDe(k);
     return '<li>'+enlace(k,nombreDe(k).replace(/^N\d{2}\.[a-z]\d+\s*/i,''))+
       (c?' <span class="mp-cod">'+c+'</span>':'')+(conCuerpo(k)?'':' <span class="mp-prep">en preparación</span>')+'</li>';};
-  var h='<p class="kicker">koisamsa.com</p><h1>Mapa del sitio</h1><p class="desc">Todas las páginas, por secciones.</p>'+
+  var h='<p class="kicker">koisamsa.com</p><h1>'+tit+'</h1><p class="desc">'+dek+'</p>'+
     '<p class="mp-ini"><a href="#home" data-j="0">Inicio</a></p><div class="mp-secs">';
   for(var sc=1;sc<=7;sc++){
     var ps=[];for(var k=8;k<N.length;k++)if(seccionDe(k)===sc&&!/· demo$/.test(N[k][0]))ps.push(k);
@@ -5467,24 +5477,49 @@ function renderMapa(){
     h+='<section class="mp-sec'+(dentro?' mp-dentro':'')+'"'+(dentro?' style="--c:'+col(sc)+'"':'')+'><h2>'+(dentro?'<span class="mp-bola" aria-hidden="true"></span>':'')+enlace(sc,nombreDe(sc))+'</h2>'+
       (ps.length?'<ul>'+ps.map(li).join('')+'</ul>':'')+'</section>';
   }
-  document.getElementById('cp-p2').innerHTML=h+'</div>';
+  return h+'</div>';
 }
-/* ═══ v1.77 · EL MAPA PLANO (Patricia, 29-oct: «una cuarta pestaña en la que esté el mapa del sitio plano, pero con las url
-   enlazadas»). Todas las direcciones completas, una por línea y en el orden del mapa, con el nombre de la página al lado. */
-function baseDir(){return /koisamsa\.com$|\.pages\.dev$/.test(location.hostname)?(location.origin+location.pathname):URL_DEMO;}
-function renderPlano(){
-  var col=function(j){return (j===0)?'#000000':(PAL?brandHex(j):'#0B0B0B');},b=baseDir(),js=[0];
-  for(var sc=1;sc<=7;sc++){js.push(sc);
-    var ps=[];for(var k=8;k<N.length;k++)if(seccionDe(k)===sc&&!/· demo$/.test(N[k][0]))ps.push(k);
-    ps.sort(function(a,c){var ca=codigoDe(a),cb=codigoDe(c);
-      if(ca&&cb)return ca<cb?-1:(ca>cb?1:0);if(ca)return -1;if(cb)return 1;return a-c;});
-    js=js.concat(ps);}
-  var h='<p class="kicker">koisamsa.com</p><h1>Mapa plano</h1><p class="desc">Todas las direcciones, una por línea.</p><ul class="mp-plano">'+
-    js.map(function(j){var aqui=(j===sel),u=b+'#'+SLUGN[j];
-      return '<li><a href="#'+SLUGN[j]+'" data-j="'+j+'"'+(aqui?' aria-current="page" style="--c:'+col(j)+'"':'')+'>'+
-        (aqui?'<span class="mp-bola" aria-hidden="true"></span>':'')+esc(u)+'</a> <span class="mp-nom">'+esc(j===0?'Inicio':nombreDe(j))+'</span></li>';}).join('')+'</ul>';
-  document.getElementById('cp-p3').innerHTML=h;
+function renderMapa(){document.getElementById('cp-p2').innerHTML=mapaHTML('Mapa del sitio','Todas las páginas, por secciones.');}
+/* ═══ v1.78 · EL MAPA CON HILOS (Patricia, 29-oct: «simplemente quiero la misma pantalla de Mapa del sitio, pero que salgan
+   hilos de conexión»). El mismo índice, y por detrás, un hilo por cada conexión del grafo (L) entre dos páginas del mapa.
+   No se dibujan los de Inicio ni los de una sección con sus propias páginas: eso ya lo dice el índice. Al pasar por un
+   nombre, sus hilos se encienden en su color y los demás se apagan; en reposo, encendidos los de la página activa. */
+function colNodo(j){return (j===0)?'#000000':(PAL?brandHex(j):'#0B0B0B');}
+function renderHilos(){
+  var P=document.getElementById('cp-p3');
+  P.innerHTML='<div class="mp-hilos-w">'+mapaHTML('Mapa con hilos','Las mismas páginas, con sus conexiones.')+'<svg class="mp-hilos" aria-hidden="true"></svg></div>';
+  requestAnimationFrame(function(){dibujaHilos();hilosFoco(sel);});   /* después de que la hoja pase delante: cambia de ancho */
 }
+function dibujaHilos(){
+  var P=document.getElementById('cp-p3'),W=P.querySelector('.mp-hilos-w'),sv=P.querySelector('.mp-hilos');if(!W||!sv)return;
+  var wr=W.getBoundingClientRect(),A={},d='';
+  P.querySelectorAll('a[data-j]').forEach(function(a){var j=+a.dataset.j;if(j>0)A[j]=a.getBoundingClientRect();});
+  sv.setAttribute('width',wr.width);sv.setAttribute('height',wr.height);sv.setAttribute('viewBox','0 0 '+wr.width+' '+wr.height);
+  var h='',visto={};
+  for(var k=0;k<L.length;k++){var a=L[k][0],b=L[k][1];
+    if(!A[a]||!A[b]||a===b)continue;
+    if((a<=7&&seccionDe(b)===a)||(b<=7&&seccionDe(a)===b))continue;   /* la sección y sus páginas: ya lo dice el índice */
+    var key=Math.min(a,b)+'-'+Math.max(a,b);if(visto[key])continue;visto[key]=1;
+    var ra=A[a],rb=A[b],ya=ra.top+ra.height/2-wr.top,yb=rb.top+rb.height/2-wr.top,x1,x2,c1,c2;
+    if(Math.abs(ra.left-rb.left)<40){   /* misma columna: el hilo sale por la derecha y vuelve, en arco */
+      x1=ra.right-wr.left+4;x2=rb.right-wr.left+4;var m=Math.max(x1,x2)+Math.min(90,18+Math.abs(yb-ya)/4);c1=m;c2=m;}
+    else if(ra.left<rb.left){x1=ra.right-wr.left+4;x2=rb.left-wr.left-4;c1=x1+(x2-x1)/2;c2=c1;}
+    else{x1=ra.left-wr.left-4;x2=rb.right-wr.left+4;c1=x1-(x1-x2)/2;c2=c1;}
+    h+='<path data-a="'+a+'" data-b="'+b+'" d="M'+x1.toFixed(1)+' '+ya.toFixed(1)+' C'+c1.toFixed(1)+' '+ya.toFixed(1)+' '+c2.toFixed(1)+' '+yb.toFixed(1)+' '+x2.toFixed(1)+' '+yb.toFixed(1)+'"/>';
+  }
+  sv.innerHTML=h;
+}
+function hilosFoco(j){
+  var sv=document.querySelector('#cp-p3 .mp-hilos');if(!sv)return;
+  var on=(j!==null&&j!==undefined&&j>0)?j:null;
+  sv.classList.toggle('foco',on!==null);if(on!==null)sv.style.setProperty('--hc',colNodo(on));
+  sv.querySelectorAll('path').forEach(function(p){p.classList.toggle('on',on!==null&&(+p.dataset.a===on||+p.dataset.b===on));});
+}
+(function(){var P=document.getElementById('cp-p3');
+  P.addEventListener('mouseover',function(e){var a=e.target.closest('a[data-j]');if(a)hilosFoco(+a.dataset.j);});
+  P.addEventListener('mouseleave',function(){hilosFoco(sel);});
+  P.addEventListener('focusin',function(e){var a=e.target.closest('a[data-j]');if(a)hilosFoco(+a.dataset.j);});
+  addEventListener('resize',function(){if(CPT===3)dibujaHilos();});})();
 function mapaClic(e){
   /* v1.76 · el mapa va a la URL de cada página, como un enlace de los de siempre: el navegador cambia la dirección
      y es la dirección la que abre la página (el oyente de hashchange). Solo se intercepta lo que la URL no resuelve:
