@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.74 · KOI SAMSA · el mapa, enlaces y color (demo)</title>
+<title>v1.75 · KOI SAMSA · el mapa recoge sus clics (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -421,7 +421,7 @@ body.panel-on #logo,body.panel-on #hud-br{opacity:0;pointer-events:none}
 #cp-c1{background:transparent;pointer-events:none}
 /* la carpeta solo recoge los clics donde hay papel: cabeceras, ✕ y la Ficha; por la ventana pasan al grafo */
 #panel.carpeta{pointer-events:none}
-#panel.carpeta .cp-cab,#panel.carpeta #panel-x,#panel.carpeta #cp-c0{pointer-events:auto}
+#panel.carpeta .cp-cab,#panel.carpeta #panel-x,#panel.carpeta #cp-c0,#panel.carpeta #cp-c2{pointer-events:auto}   /* v1.75 · el Mapa también es papel */
 #cp-p1{display:none}
 body.v-pleno #hud-tl,body.v-pleno #hud-tr,body.v-pleno #search{display:flex}   /* la carpeta deja el menú arriba también con un artefacto a pleno */
 @media (prefers-reduced-motion:reduce){.cp-hoja,#panel.carpeta{transition:none}.cp-hoja.sube{animation:none}}
