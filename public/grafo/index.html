@@ -5,7 +5,7 @@
 <script src="/grafo/ia.js"></script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v1.76 · KOI SAMSA · el mapa va a la URL de cada página (demo)</title>
+<title>v1.77 · KOI SAMSA · el mapa plano (demo)</title>
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1230,6 +1230,35 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
 #cp-p2 a[aria-current="page"]::after{content:" · estás aquí";font-weight:400;color:var(--muda-color-text-sub);text-transform:none;letter-spacing:normal}
 #cp-p2 .mp-cod{font:400 var(--muda-typography-size-meta-s)/1 var(--muda-typography-family-mono);color:var(--muda-color-text-sub)}
 #cp-p2 .mp-prep{font-size:var(--muda-typography-size-meta-s);color:var(--muda-color-text-sub)}
+/* ═══ v1.77 · CUATRO HOJAS: CONTENIDO, CONEXIONES, MAPA DEL SITIO Y MAPA PLANO ═══════════════════════════════════
+   Cada hoja, por su profundidad (p0 delante … p3 la más lejana): una cabecera más arriba, 5 px más estrecha por lado
+   y un tono más por cada hoja que la separa de la de delante. */
+#panel.carpeta .cp-hoja.p0{top:calc(3 * var(--cp-hh));left:0;right:0;z-index:4}
+#panel.carpeta .cp-hoja.p1{top:calc(2 * var(--cp-hh));left:var(--muda-space-xs);right:var(--muda-space-xs);z-index:3}
+#panel.carpeta .cp-hoja.p2{top:var(--cp-hh);left:calc(2 * var(--muda-space-xs));right:calc(2 * var(--muda-space-xs));z-index:2}
+#panel.carpeta .cp-hoja.p3{top:0;left:calc(3 * var(--muda-space-xs));right:calc(3 * var(--muda-space-xs));z-index:1}
+#panel.carpeta .cp-hoja.p1 .cp-cab{background:var(--muda-color-bg-recessed)}
+#panel.carpeta .cp-hoja.p2 .cp-cab{background:var(--muda-color-bg-soft)}
+#panel.carpeta .cp-hoja.p3 .cp-cab{background:color-mix(in srgb,var(--muda-color-bg-soft),var(--muda-color-text-ink) 6%)}
+#panel.carpeta .cp-hoja.detras .cp-cab:hover{background:var(--muda-color-bg-recessed-hover)}
+#panel.carpeta #panel-x{top:calc(3 * var(--cp-hh) + (var(--cp-hh) - 32px) / 2)}
+#velo-top{height:calc(var(--carpeta-top) + 3 * var(--cp-hh))}
+body.panel-on:has(#cp-h3.delante) #velo-top{height:100%}
+#panel.carpeta #cp-c3{pointer-events:auto}
+@media (max-width:760px){body.cp-lee{--carpeta-top:calc(env(safe-area-inset-top,0px) - 4 * var(--cp-hh))}}
+/* el mapa plano: la dirección en mono, el nombre en gris; una por línea */
+#panel.carpeta #cp-p3 h1{font-size:var(--muda-size-display);white-space:normal;padding-bottom:0}
+#cp-p3 .mp-plano{list-style:none;margin:0;padding:0;border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
+#cp-p3 .mp-plano li{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 var(--muda-space-md);padding:var(--muda-space-xs) 0;
+  border-bottom:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
+#cp-p3 a{font:400 var(--muda-typography-size-meta-l)/1.5 var(--muda-typography-family-mono);color:var(--muda-color-text-ink);overflow-wrap:anywhere;
+  text-decoration:underline;text-decoration-color:var(--muda-color-stroke-soft);text-decoration-thickness:1px;text-underline-offset:3px}
+#cp-p3 a:hover{text-decoration-color:var(--muda-color-text-ink)}
+#cp-p3 a[aria-current="page"]{font-weight:600;text-decoration-color:var(--c);text-decoration-thickness:2px;
+  background:color-mix(in srgb,var(--c) 12%,transparent);border-radius:var(--muda-radius-xs);padding:1px 6px 2px;margin-left:-6px}
+#cp-p3 a[aria-current="page"]::after{content:" · estás aquí";font-family:var(--muda-typography-family-fira);font-weight:400;color:var(--muda-color-text-sub)}
+#cp-p3 .mp-bola{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--c);margin-right:6px;vertical-align:.08em}
+#cp-p3 .mp-nom{font:400 var(--muda-typography-size-body-s)/1.45 var(--muda-typography-family-fira);color:var(--muda-color-text-sub)}
 </style>
 </head>
 <body>
@@ -1298,15 +1327,19 @@ body.panel-on:has(#cp-h2.delante) #velo-top{height:100%}
      Buscar es ir del usuario hacia adentro, como en un archivador: la hoja de delante enseña su contenido; la de
      detrás, solo su cabecera. Las pestañas de toda la vida, en un mismo plano, se llaman SEPARADORES. -->
 <aside id="panel" class="carpeta" role="dialog" aria-labelledby="p-t">
-  <section class="cp-hoja detras lejos" id="cp-h2">   <!-- v1.73 · el mapa del sitio, para quien se ha perdido -->
+  <section class="cp-hoja detras p3" id="cp-h3">   <!-- v1.77 · el mapa plano: todas las direcciones, una por línea -->
+    <div class="cp-cab"><button class="cp-t" id="cp-t3" aria-expanded="false" aria-controls="cp-c3"><span class="ms cp-ic" aria-hidden="true">link</span><span class="cp-tx"><span class="cp-nm">Mapa plano</span></span></button></div>
+    <div class="cp-cuerpo" id="cp-c3"><div class="cp-pan" id="cp-p3"></div></div>
+  </section>
+  <section class="cp-hoja detras p2" id="cp-h2">   <!-- v1.73 · el mapa del sitio, para quien se ha perdido -->
     <div class="cp-cab"><button class="cp-t" id="cp-t2" aria-expanded="false" aria-controls="cp-c2"><span class="ms cp-ic" aria-hidden="true">account_tree</span><span class="cp-tx"><span class="cp-nm">Mapa del sitio</span></span></button></div>
     <div class="cp-cuerpo" id="cp-c2"><div class="cp-pan" id="cp-p2"></div></div>
   </section>
-  <section class="cp-hoja detras" id="cp-h1">
+  <section class="cp-hoja detras p1" id="cp-h1">
     <div class="cp-cab"><button class="cp-t" id="cp-t1" aria-expanded="false" aria-controls="cp-c1"><span class="ms cp-ic" aria-hidden="true">hub</span><span class="cp-tx"><span class="cp-l">Conexiones de:</span></span></button></div>
     <div class="cp-cuerpo" id="cp-c1"><div class="cp-pan" id="cp-p1"></div></div>
   </section>
-  <section class="cp-hoja delante" id="cp-h0">
+  <section class="cp-hoja delante p0" id="cp-h0">
     <div class="cp-cab"><button class="cp-t" id="cp-t0" aria-expanded="true" aria-controls="cp-c0"><span class="ms cp-ic" aria-hidden="true">article</span><span class="cp-tx"><span class="cp-l">Contenido de:</span></span></button></div>
     <div class="cp-cuerpo" id="cp-c0"><div class="cp-pan" id="cp-p0">
       <div class="p-heroe" id="p-heroe">   <!-- v1.61 · la cabecera de la hoja: en las piezas, un campo del color de su sección -->
@@ -5399,14 +5432,15 @@ setTimeout(function(){
 /* v1.26 · la carpeta: qué hoja va delante (0 = la ficha, 1 = las conexiones, 2 = el mapa del sitio, v1.73).
    Detrás, por su orden: la más cercana, la de número menor; la otra, «lejos», asoma por encima de las dos */
 var CPT=0;
-function cpTab(k,foco){
-  var cambia=(CPT!==k),atras=[0,1,2].filter(function(i){return i!==k;}),del=null;
+function cpTab(k,foco){   /* v1.77 · cuatro hojas: la profundidad (p0 delante … p3 la más lejana) por su orden */
+  var cambia=(CPT!==k),orden=[k].concat([0,1,2,3].filter(function(i){return i!==k;})),del=null;
   CPT=k;
-  if(k!==1)TAPADO_T=performance.now()+600;   /* v1.28 · la Ficha (y el Mapa) vuelve a tapar el grafo tras el cambio de hoja */
+  if(k!==1)TAPADO_T=performance.now()+600;   /* v1.28 · todo menos Conexiones vuelve a tapar el grafo tras el cambio de hoja */
   if(k===2)renderMapa();
-  [0,1,2].forEach(function(i){var h=document.getElementById('cp-h'+i);if(i===k)del=h;
-    h.classList.toggle('delante',i===k);h.classList.toggle('detras',i!==k);h.classList.toggle('lejos',i===atras[1]);
-    document.getElementById('cp-t'+i).setAttribute('aria-expanded',i===k?'true':'false');});
+  if(k===3)renderPlano();
+  orden.forEach(function(i,p){var h=document.getElementById('cp-h'+i);if(p===0)del=h;
+    h.classList.toggle('delante',p===0);h.classList.toggle('detras',p>0);h.classList.remove('lejos','p0','p1','p2','p3');h.classList.add('p'+p);
+    document.getElementById('cp-t'+i).setAttribute('aria-expanded',p===0?'true':'false');});
   if(cambia&&!RM){del.classList.remove('sube');void del.offsetWidth;del.classList.add('sube');}
   del.querySelector('.cp-cuerpo').scrollTop=0;
   if(foco)del.querySelector('.cp-t').focus();
@@ -5435,7 +5469,23 @@ function renderMapa(){
   }
   document.getElementById('cp-p2').innerHTML=h+'</div>';
 }
-document.getElementById('cp-p2').addEventListener('click',function(e){
+/* ═══ v1.77 · EL MAPA PLANO (Patricia, 29-oct: «una cuarta pestaña en la que esté el mapa del sitio plano, pero con las url
+   enlazadas»). Todas las direcciones completas, una por línea y en el orden del mapa, con el nombre de la página al lado. */
+function baseDir(){return /koisamsa\.com$|\.pages\.dev$/.test(location.hostname)?(location.origin+location.pathname):URL_DEMO;}
+function renderPlano(){
+  var col=function(j){return (j===0)?'#000000':(PAL?brandHex(j):'#0B0B0B');},b=baseDir(),js=[0];
+  for(var sc=1;sc<=7;sc++){js.push(sc);
+    var ps=[];for(var k=8;k<N.length;k++)if(seccionDe(k)===sc&&!/· demo$/.test(N[k][0]))ps.push(k);
+    ps.sort(function(a,c){var ca=codigoDe(a),cb=codigoDe(c);
+      if(ca&&cb)return ca<cb?-1:(ca>cb?1:0);if(ca)return -1;if(cb)return 1;return a-c;});
+    js=js.concat(ps);}
+  var h='<p class="kicker">koisamsa.com</p><h1>Mapa plano</h1><p class="desc">Todas las direcciones, una por línea.</p><ul class="mp-plano">'+
+    js.map(function(j){var aqui=(j===sel),u=b+'#'+SLUGN[j];
+      return '<li><a href="#'+SLUGN[j]+'" data-j="'+j+'"'+(aqui?' aria-current="page" style="--c:'+col(j)+'"':'')+'>'+
+        (aqui?'<span class="mp-bola" aria-hidden="true"></span>':'')+esc(u)+'</a> <span class="mp-nom">'+esc(j===0?'Inicio':nombreDe(j))+'</span></li>';}).join('')+'</ul>';
+  document.getElementById('cp-p3').innerHTML=h;
+}
+function mapaClic(e){
   /* v1.76 · el mapa va a la URL de cada página, como un enlace de los de siempre: el navegador cambia la dirección
      y es la dirección la que abre la página (el oyente de hashchange). Solo se intercepta lo que la URL no resuelve:
      Inicio (#home no abre hoja) y la página en la que ya estás (la misma dirección no cambia nada: vuelve a su Ficha). */
@@ -5444,7 +5494,9 @@ document.getElementById('cp-p2').addEventListener('click',function(e){
   var j=+a.dataset.j;
   if(j===0){e.preventDefault();document.getElementById('btn-home').click();return;}
   if(j===sel||(location.hash||'').slice(1).toLowerCase()===SLUGN[j]){e.preventDefault();if(j===sel)cpTab(0,e.detail===0);else{clearFilt();setSel(j);}}
-});
+}
+document.getElementById('cp-p2').addEventListener('click',mapaClic);
+document.getElementById('cp-p3').addEventListener('click',mapaClic);
 panel.addEventListener('click',function(e){
   var c=e.target.closest('.cp-hoja.detras .cp-cab');if(!c)return;
   cpTab(+c.parentNode.id.slice(4),e.detail===0);   /* v1.37 · con ratón no se lleva el foco: sin aro */
