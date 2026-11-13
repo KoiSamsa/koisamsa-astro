@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.90 · la web en la raíz">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.91 · las piezas en la ruta">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -5564,7 +5564,7 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(
 /* v1.63 · la nota de la home: a los 2,6 s, si nadie ha tocado nada ni se ha llegado por enlace */
 setTimeout(function notaHome(){
   var _ob=document.getElementById('obras');if(_ob&&!_ob.hidden){setTimeout(notaHome,1200);return;}   /* v1.83 · una sola letra a mano a la vez: espera a la cortinilla */
-  if(sel!==null||(location.hash||'').length>1)return;
+  if(sel!==null||slugURL())return;
   var slot=document.getElementById('anot-home-slot');if(slot){slot.outerHTML=anotHTML('home',innerWidth<=640?'arriba':'abajo','anot-home');ANOT_HOME_T=performance.now();}
 },2600);
 /* v1.26 · la carpeta: qué hoja va delante (0 = la ficha, 1 = las conexiones, 2 = el mapa del sitio, v1.73).
@@ -5588,13 +5588,13 @@ function mapaHTML(tit,dek){
   /* v1.74 · la página activa, con el color de su nodo (el de su bola en la cadena) */
   var col=function(j){return (j===0)?'#000000':(PAL?brandHex(j):'#0B0B0B');};
   var enlace=function(j,t){var aqui=(j===sel);
-    return '<a href="#'+SLUGN[j]+'" data-j="'+j+'"'+(aqui?' aria-current="page" style="--c:'+col(j)+'"':'')+'>'+
+    return '<a href="'+rutaDe(SLUGN[j])+'" data-j="'+j+'"'+(aqui?' aria-current="page" style="--c:'+col(j)+'"':'')+'>'+
       (aqui?'<span class="mp-bola" aria-hidden="true"></span>':'')+esc(t)+'</a>';};
   var li=function(k){var c=codigoDe(k);
     return '<li>'+enlace(k,nombreDe(k).replace(/^N\d{2}\.[a-z]\d+\s*/i,''))+
       (c?' <span class="mp-cod">'+c+'</span>':'')+(conCuerpo(k)?'':' <span class="mp-prep">en preparación</span>')+'</li>';};
   var h='<p class="kicker">koisamsa.com</p><h1>'+tit+'</h1><p class="desc">'+dek+'</p>'+
-    '<p class="mp-ini"><a href="#home" data-j="0">Inicio</a></p><div class="mp-secs">';
+    '<p class="mp-ini"><a href="'+(RUTAS?'/':'#home')+'" data-j="0">Inicio</a></p><div class="mp-secs">';
   for(var sc=1;sc<=7;sc++){
     var ps=[];for(var k=8;k<N.length;k++)if(seccionDe(k)===sc&&!/· demo$/.test(N[k][0]))ps.push(k);
     ps.sort(function(a,b){var ca=codigoDe(a),cb=codigoDe(b);
@@ -5655,7 +5655,7 @@ function mapaClic(e){
   var j=+a.dataset.j;
   cierraMapa();   /* v1.84 · elegida la página, la ventana se va */
   if(j===0){e.preventDefault();document.getElementById('btn-home').click();return;}
-  if(j===sel||(location.hash||'').slice(1).toLowerCase()===SLUGN[j]){e.preventDefault();if(j===sel)cpTab(0,e.detail===0);else{clearFilt();setSel(j);}}
+  if(j===sel||slugURL()===SLUGN[j]){e.preventDefault();if(j===sel)cpTab(0,e.detail===0);else{clearFilt();setSel(j);}}
 }
 document.getElementById('cp-p2').addEventListener('click',mapaClic);
 panel.addEventListener('click',function(e){
@@ -5822,7 +5822,9 @@ function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al sal
   var _sec=(sel===null)?-1:(sel<=7?sel:(HYB[sel]?HYB[sel][0]:N[sel][4]));
   [].forEach.call(document.querySelectorAll('.pie-n'),function(b){b.setAttribute('aria-current',(+b.dataset.j===_sec)?'true':'false');});
   /* v1.31 · la dirección sigue a la portada abierta (#studio…), para poder pasar el enlace */
-  try{var _hs=(sel!==null&&sel>=1)?'#'+((SLUGN&&SLUGN[_serie!==null?_serie:sel])||slugDe(sel)):'';if(location.hash!==_hs)history.replaceState(null,'',_hs||(location.pathname+location.search));}catch(_e){}   /* v1.61 · cada nodo y micronodo, su dirección (antes, solo las secciones) */
+  try{var _sl=(sel!==null&&sel>=1)?((SLUGN&&SLUGN[_serie!==null?_serie:sel])||slugDe(sel)):'';
+    if(RUTAS){var _ru=(_sl?'/'+_sl:'/')+location.search;if(location.pathname+location.search+location.hash!==_ru)history.replaceState(null,'',_ru);}   /* v1.91 · en la web, la pieza va en la ruta */
+    else{var _hs=_sl?'#'+_sl:'';if(location.hash!==_hs)history.replaceState(null,'',_hs||(location.pathname+location.search));}}catch(_e){}   /* v1.61 · cada nodo y micronodo, su dirección (antes, solo las secciones) */
   if(sel!==null){if(!mantener)cpTab(0);renderPanel();openPanel();renderStrip();blip();if(_serie!==null)irASerie(_serie);}
   else{closePanel();closeStrip();cadena.hidden=true;CAD_SEL=null;renderHermanas();}
 }
@@ -6818,6 +6820,15 @@ function slugTxt(t){return String(t||'').toLowerCase().normalize('NFD').replace(
     if(NSLUG[sl]!==undefined)sl=sl+'-'+(slugTxt(codigoDe(i))||i);}
   SLUGN.push(sl);NSLUG[sl]=i;}
   NSLUG['entropic']=NSLUG['habitacion-entropia']=29;})();   /* v1.68 · los nombres de antes de la habitación */
+/* ═══ v1.91 · LAS PIEZAS EN LA RUTA (Koi, 13-nov: «URLs limpias», paso 2). En koisamsa.com cada pieza vive en su ruta,
+   koisamsa.com/la-ia-si-se-cansa, sin #. El # sigue valiendo al llegar (enlaces antiguos) y se convierte en ruta.
+   En la demo de claude.ai (otro origen) todo sigue por #: RUTAS dice dónde estamos. El glosario toma su dirección
+   larga (decidida el 29-oct); la corta queda como alias. ═══ */
+var RUTAS=/koisamsa\.com$|\.pages\.dev$|^127\.0\.0\.1$|^localhost$/.test(location.hostname);
+(function(){var g=NSLUG['glosario-de-producto-ux-ui-e-ia'];if(g!==undefined){SLUGN[g]='glosario-terminos-producto-digital';NSLUG['glosario-terminos-producto-digital']=g;}})();
+function slugURL(){var h=(location.hash||'').slice(1).toLowerCase();if(h&&NSLUG[h]!==undefined)return h;
+  if(!RUTAS)return '';var p=location.pathname.replace(/^\/+|\/+$/g,'').split('/')[0]||'';try{p=decodeURIComponent(p);}catch(_e){}return p.toLowerCase();}
+function rutaDe(sl){return (RUTAS?'/':'#')+sl;}
 function llegada(i){
   var ov=document.getElementById('llegada'),sc=seccionDe(i);
   if(!RM&&ov){ov.querySelector('.ll-k').textContent=(i<=7?'koisamsa.com':('koisamsa.com · '+nombreDe(sc>=1&&sc<=7?sc:i)));
@@ -6828,13 +6839,14 @@ function llegada(i){
 (function(){
   var h=(location.hash||'').slice(1).toLowerCase();
   if(/^buscar-/.test(h)){var _t=h.slice(7).replace(/-/g,' ').trim();if(_t)setTimeout(function(){openSearch();q.value=_t;enviaBusqueda(_t,true);},500);return;}   /* v1.51 */
-  var i=NSLUG[h];if(i!==undefined&&i>0)llegada(i);
+  var i=NSLUG[slugURL()];if(i!==undefined&&i>0)llegada(i);   /* v1.91 · por la ruta o por el # */
 })();
 addEventListener('hashchange',function(){var h=(location.hash||'').slice(1).toLowerCase(),i=NSLUG[h];if(i!==undefined&&i>0&&i!==sel){clearFilt();setSel(i);}});
 /* el botón «Compartir» (era «Copiar enlace» hasta la v1.67): en la web, la propia dirección; en la demo, la de la demo con la pieza detrás */
 var URL_DEMO='https://claude.ai/artifact/9NLvds7e2CSUuuNLdYpCd1';
-function enlaceActual(){var base=/koisamsa\.com$|\.pages\.dev$/.test(location.hostname)?(location.origin+location.pathname):URL_DEMO;
-  var s=(location.hash||'').slice(1)||(sel!==null?SLUGN[sel]:'');return base+(s?'#'+s:'');}
+function enlaceActual(){var s=(sel!==null&&sel>=1)?SLUGN[sel]:'';
+  if(RUTAS)return location.origin+(s?'/'+s:'/');   /* v1.91 · koisamsa.com/pieza */
+  return URL_DEMO+(s?'#'+s:'');}
 document.getElementById('p-enlace').addEventListener('click',function(){
   var t=this.querySelector('.p-enlace-t'),u=enlaceActual(),box=document.getElementById('p-enlace-u');
   var ok=function(){t.textContent='Enlace copiado';box.hidden=true;setTimeout(function(){t.textContent='Compartir';},1600);};
