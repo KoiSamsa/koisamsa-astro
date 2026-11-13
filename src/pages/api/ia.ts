@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    /api/ia · la IA gratuita de koisamsa.com
    La usan el buscador del grafo y La habitación de la entropía (N09.a1),
-   a través de /grafo/ia.js, que imita la capacidad `sample` de claude.ai.
+   a través de /ia.js, que imita la capacidad `sample` de claude.ai.
 
    POST { input, modelo?, temperatura? }  ->  { text, modelo, proveedor }
      input  : texto, o turnos [{ role: "user" | "assistant", content }]

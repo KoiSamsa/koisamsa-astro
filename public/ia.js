@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════
-   /grafo/ia.js · el puente a la IA gratuita de koisamsa.com
+   /ia.js · el puente a la IA gratuita de koisamsa.com
    Las piezas del grafo se escribieron como artifacts de claude.ai y piden
    `window.claude.use("sample")`. En claude.ai ese objeto existe y responde
    Claude. En la web no existe: este archivo lo crea con la misma forma y
@@ -8,7 +8,7 @@
    Solo actúa si no hay un `window.claude` de verdad: en claude.ai no toca nada.
    El modelo sale de opciones.modelo, de un <select id="modelo"> de la página
    o, por defecto, Mistral.
-   Uso: <script src="/grafo/ia.js"></script>, antes del resto de scripts.
+   Uso: <script src="/ia.js"></script>, antes del resto de scripts.
    ═══════════════════════════════════════════════════════════════════ */
 (function () {
   if (window.claude) return;
