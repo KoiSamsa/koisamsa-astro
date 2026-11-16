@@ -6,11 +6,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.91 · las piezas en la ruta">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.98 · el clic arranca sin pausa">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0&icon_names=account_tree,article,arrow_back,arrow_forward,hub,link,mail,search,share&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0&icon_names=account_tree,article,arrow_back,arrow_forward,grid_on,hub,link,mail,search,share&display=block" rel="stylesheet">
 <style>
 :root{--papel:#FAF9F7;--tinta:#0B0B0B;--ink:#3F4245;--ink-2:#787B7E;--ink-3:#A1A3A6;
   --line:rgba(11,11,11,.11);--panel-w:440px}
@@ -406,7 +406,8 @@ body.strip-on #panel{bottom:var(--strip-h)}   /* v1.24 · el panel termina encim
 .cp-pan{max-width:1120px;container-type:inline-size}
 .cp-pan>.kicker,.cp-pan>h1,.cp-pan>.desc,.cp-pan>#p-art{max-width:none}
 .cp-pan>h1{margin-top:0}
-#panel.carpeta.is-idx h1{font-size:clamp(40px,4.4vw,64px)}
+@media(max-width:640px){#panel.carpeta.is-idx h1{font-size:40px}}   /* v1.92 · en el móvil, 40 */
+#panel.carpeta.is-idx .p-bola,#panel.carpeta.is-idx .kicker{display:none}   /* v1.92 · fuera «Índice · /studio» (Koi, 16-nov) */
 #panel.carpeta #panel-x{position:absolute;top:calc(var(--cp-hh) + 6px);right:var(--sp-lg);z-index:5;background:var(--hoja)}
 #panel.carpeta.is-demo #cp-c0{padding:0;display:flex;flex-direction:column;overflow:hidden}
 #panel.carpeta.is-demo #cp-p0{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;max-width:none}
@@ -541,6 +542,12 @@ body.panel-on #pie{transform:translateY(0)}
 #panel.carpeta{transition:transform var(--muda-duration-34f) var(--muda-motion-easing-default)}
 .cp-hoja{transition:top var(--muda-duration-21f) var(--muda-motion-easing-default)}
 .cp-hoja.sube{animation-duration:var(--muda-duration-21f)}
+/* v1.97 · desde Conexiones (Koi: «una pausa excesiva y un salto brusco»): la hoja de Contenido no aparece de golpe.
+   El cuerpo entra en fundido y subiendo un poco, y la hoja tarda 34f en colocarse, no 21f. Solo en ese paso. */
+#panel.desde-cx .cp-hoja{transition-duration:.9s}   /* v1.98 · «el movimiento de después, algo más pausado»: 34f → 0,9 s */
+#panel.desde-cx .sube{animation-duration:.9s}
+#panel.desde-cx .cp-hoja.delante .cp-cuerpo{animation:cp-aparece .9s var(--muda-motion-easing-default) both}
+@keyframes cp-aparece{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
 .cp-cab{padding:0 var(--muda-space-2xl);border-radius:var(--muda-radius-lg) var(--muda-radius-lg) 0 0;
   box-shadow:0 calc(-1 * var(--muda-stroke-1)) 0 var(--muda-color-stroke-soft);transition:background-color var(--muda-duration-8f) var(--muda-motion-easing-default)}
 .cp-hoja.detras .cp-cab{background:var(--muda-color-bg-recessed)}
@@ -611,7 +618,7 @@ body.panel-on #pie{transform:translateY(0)}
 /* ═══ v1.31 · LAS PORTADAS DE SECCIÓN (Patricia, 28-sep, 09:52) ═══════════════════════════════════════════
    Todas como /notes y /lab: el título en minúsculas, en Newsreader 700, grande; y la cuadrícula de piezas.
    Una portada puede enseñarse suelta con un enlace: la web funciona como portfolio.                         */
-#panel.carpeta.is-idx h1{font-family:var(--muda-typography-family-serif);font-weight:700;font-size:clamp(52px,7vw,104px);
+#panel.carpeta.is-idx h1{font-family:var(--muda-typography-family-serif);font-weight:700;font-size:56px;   /* v1.92 · era clamp(52px,7vw,104px): 56 fijos e iguales en todas las secciones (Koi, 16-nov: «/studio se apodera de media página») */
   line-height:.86;letter-spacing:-.04em;color:var(--muda-color-text-ink);margin:0 0 var(--muda-space-md)}
 
 /* ── pie: iconos (Material Symbols Outlined, la familia de iconos de MUDA) ── */
@@ -650,6 +657,11 @@ button.pie-ic{border:0;background:transparent;padding:0;cursor:pointer;font:inhe
   height:var(--muda-size-control);padding:0 21px;border:var(--muda-stroke-1) solid var(--muda-color-stroke-strong);border-radius:var(--muda-radius-sm);
   background:transparent;cursor:pointer;margin-right:34px}   /* el botón F de MUDA (30-sep): Fira 15 · 500 · +0,02, alto 40, relleno 21, radio 5 */
 .p-enlace .ms{font-size:20px}
+/* v1.92 · Koi, 16-nov: solo el icono, sin caja ni texto. v1.95b: el avioncito (send) no le gustó («mejor el icono de compartir de antes»): vuelve share */
+.p-enlace{border:0;padding:0;height:auto;background:transparent;gap:0;width:32px;height:32px;justify-content:center;border-radius:50%}
+.p-enlace .ms{font-size:22px}
+.p-enlace .p-enlace-t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.p-enlace:hover{background:var(--muda-color-bg-recessed)}
 .p-enlace:hover{color:var(--muda-color-text-ink);background:var(--muda-color-bg-recessed)}
 .p-enlace:focus-visible{outline:var(--muda-stroke-3) solid var(--muda-color-focus);outline-offset:2px}
 .p-enlace-u{font:400 var(--muda-typography-size-meta-m) var(--muda-typography-family-mono);color:var(--muda-color-text-ink);
@@ -942,6 +954,8 @@ body.hermanas-on #panel.carpeta{bottom:calc(var(--pie-h) + var(--her-h));
 #hermanas .her-a{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:var(--muda-space-sm);border:0;background:transparent;
   padding:0;height:100%;cursor:pointer;font:inherit;color:inherit;text-align:left}
 #hermanas .her-nx{justify-content:flex-end;text-align:right}
+#hermanas .her-sec{flex:0 0 auto;justify-content:center;gap:var(--muda-space-xs)}
+#hermanas .her-sec:hover .ms{color:var(--muda-color-text-ink)}
 #hermanas .her-vacio{cursor:default}
 #hermanas .her-t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #hermanas .her-l{color:var(--muda-color-text-sub)}
@@ -1444,7 +1458,7 @@ body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
     <div class="cp-cuerpo" id="cp-c0"><div class="cp-pan" id="cp-p0">
       <div class="p-heroe" id="p-heroe">   <!-- v1.61 · la cabecera de la hoja: en las piezas, un campo del color de su sección -->
         <div class="p-cab"><span class="p-bola" id="p-bola" aria-hidden="true"></span><p class="kicker" id="p-k"></p>
-          <button type="button" class="p-enlace" id="p-enlace" title="Copia la dirección de esta página"><span class="ms" aria-hidden="true">share</span><span class="p-enlace-t">Compartir</span></button>
+          <button type="button" class="p-enlace" id="p-enlace" title="Compartir: copia la dirección de esta página" aria-label="Compartir: copia la dirección de esta página"><span class="ms" aria-hidden="true">share</span><span class="p-enlace-t">Compartir</span></button>
           <span class="p-enlace-u" id="p-enlace-u" hidden></span></div>
         <h1 id="p-t"></h1>
         <svg class="garabato" id="p-garabato" viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 15.5 C 52 9.5, 118 6.2, 196 6.8 S 330 9.8, 397 7.2"/></svg>
@@ -1542,9 +1556,11 @@ body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
   </button>
   <p class="kicker">Sobre este sitio</p>
   <h2 id="a-t">Koi Samsa</h2>
-  <p>Arte, diseño y estrategia de marca. Están juntos porque en la práctica nunca estuvieron separados: más de una vez el arte ha sido una rama del encargo de marca.</p>
-  <p>Un menú obliga a partir en dos lo que en mi cabeza no está partido. Un mapa no: la pieza se queda entera y enseña sus dos vínculos a la vez.</p>
-  <nav class="ab-ir" aria-label="Desde aquí">   <!-- v1.82 · tres salidas, sin tocar los dos párrafos de Patricia -->
+  <!-- v1.94 · las palabras de Koi, 16-nov, tal cual (solo la ortografía). Los dos párrafos anteriores, del 29-oct, en _ARCHIVO de la v1.93 -->
+  <p>Alguna vez me hicieron dudar de si era demasiado disperso lo que hacía. Pero yo sabía que no, que estaba todo conectado.</p>
+  <p>Arte, contenidos, lettering, diseño, tecnología, docencia… aquí encontrarás de todo y de alguna manera sabrás quién soy más allá de un CV.</p>
+  <p>Gracias por tomarte el tiempo de bucear.</p>
+  <nav class="ab-ir" aria-label="Desde aquí">   <!-- v1.82 · tres salidas -->
     <button type="button" data-ir="mapa"><span class="ms" aria-hidden="true">account_tree</span>Mapa del sitio</button>
     <button type="button" data-ir="contacto"><span class="ms" aria-hidden="true">mail</span>Contacto</button>
     <a href="#about" data-ir="about"><span class="ms" aria-hidden="true">arrow_forward</span>About</a>
@@ -4893,6 +4909,32 @@ function paneo(dx,dy){
   look.add(_pd);place();
 }
 function enConexiones(){return sel!==null&&panel.classList.contains('open')&&CPT===1;}
+/* v1.95 · desde Conexiones, pinchar otra bola hace dos cosas seguidas: primero el viaje hasta ella (sigue en Conexiones,
+   se ve acercarse) y, cuando ha llegado, la hoja de Contenido pasa delante. Koi, 16-nov: «al clic hace una doble cosa:
+   primero se anima que el nodo se acerca y acto seguido, fluido, se abre la card de contenidos». */
+var LUEGO_T=null;
+/* v1.98 · Koi: «la pausa entre el clic y el comienzo de movimiento sea casi 0». La cámara viaja con un muelle (CAM_K 0,0045,
+   CAM_D 0,87) que parte de velocidad cero: los primeros fotogramas casi no se mueven y se lee como pausa. Al pinchar desde
+   Conexiones se le da un impulso inicial hacia el destino (mirada y distancia); el muelle sigue desde ahí y frena como siempre. */
+var ARRANQUE_K=0.045;
+function arranque(){try{
+  LOOKV.x+=(lookT.x-look.x)*ARRANQUE_K;LOOKV.y+=(lookT.y-look.y)*ARRANQUE_K;LOOKV.z+=(lookT.z-look.z)*ARRANQUE_K;
+  var radT=(sel!==null&&CXL)?CXR:RAD_NAT*(1-ZOOM*0.72);RADV+=(radT-rad)*ARRANQUE_K;
+}catch(_e){}}
+function luegoContenido(n){   /* v1.97 · la hoja no espera a que la bola se pare del todo (frena asintótica y tardaba): basta con que vaya despacio. Y entra en fundido (.desde-cx) */
+  clearTimeout(LUEGO_T);if(RM){LUEGO_T=setTimeout(function(){if(sel===n&&enConexiones())cpTab(0,false);},250);return;}
+  var t0=performance.now(),px=null,py=null,lentos=0;
+  (function mira(){
+    if(sel!==n||!enConexiones())return;
+    tA.copy(P[n]).project(cam);var sx=(tA.x*.5+.5)*W,sy=(-tA.y*.5+.5)*H;
+    var dt=performance.now()-t0;
+    if(px!==null&&Math.hypot(sx-px,sy-py)<2.5)lentos++;else lentos=0;   /* menos de 2,5 px por décima: ya casi llegó */
+    px=sx;py=sy;
+    if((dt>500&&lentos>=3)||dt>2200){
+      panel.classList.add('desde-cx');cpTab(0,false);setTimeout(function(){panel.classList.remove('desde-cx');},1000);return;}
+    LUEGO_T=setTimeout(mira,100);
+  })();
+}
 /* v1.50 · el doble clic en el vacío: en la home, al modo inicial (como la casa); en Conexiones, a la vista de partida */
 function dobleClic(){if(enConexiones())recentrar();else document.getElementById('btn-home').click();}
 /* v1.52 · LA VISTA GENERAL SE LEE POR SUS RAÍCES (Patricia, 28-sep, 22:58): hondura = pasos desde la raíz por los
@@ -5443,7 +5485,15 @@ function hermanas(j){
 var HER=document.getElementById('hermanas');
 function renderHermanas(){
   var on=false,h='';
-  if(sel!==null&&sel>=8&&!IDXDEMO&&conCuerpo(sel)){
+  if(sel!==null&&sel>=1&&sel<=7&&!IDXDEMO){   /* v1.93 · en una sección: Anterior, el nodo del que vienes; el hub, sus Conexiones; Siguiente, su primera conexión (Koi, 16-nov) */
+    on=true;
+    var pv7=(VENGO!==null&&VENGO!==sel)?VENGO:0;
+    var nx7=null,cx7=nbrList(sel).filter(on_);for(var q7=0;q7<cx7.length;q7++){if(cx7[q7]!==0&&cx7[q7]!==pv7&&cx7[q7]!==sel){nx7=cx7[q7];break;}}
+    h='<button class="her-a her-pv" data-j="'+pv7+'"><span class="ms" aria-hidden="true">arrow_back</span><span class="her-t"><span class="her-l">Anterior</span> '+esc(pv7===0?'Inicio':nombreDe(pv7))+'</span></button>'+
+      '<button class="her-a her-sec" data-cx="1" title="Conexiones de '+esc(nombreDe(sel))+'" aria-label="Conexiones de '+esc(nombreDe(sel))+'"><span class="ms" aria-hidden="true">hub</span></button>'+
+      (nx7!==null?'<button class="her-a her-nx" data-j="'+nx7+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx7))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
+  }
+  else if(sel!==null&&sel>=8&&!IDXDEMO&&conCuerpo(sel)){
     var hs=hermanas(sel),at=hs.indexOf(sel),sc=seccionDe(sel);
     if(sc===6){   /* la tienda: relacionados */
       var rel=hs.filter(function(k){return k!==sel;});
@@ -5455,7 +5505,7 @@ function renderHermanas(){
     }else if(at>=0&&hs.length>1){on=true;
       var pv=at>0?hs[at-1]:null,nx=at<hs.length-1?hs[at+1]:null;
       h=(pv!==null?'<button class="her-a her-pv" data-j="'+pv+'"><span class="ms" aria-hidden="true">arrow_back</span><span class="her-t"><span class="her-l">Anterior</span> '+esc(nombreDe(pv))+'</span></button>':'<span class="her-a her-pv her-vacio"></span>')+
-        '<span class="her-n">'+(at+1)+' / '+hs.length+'</span>'+
+        '<button class="her-a her-sec" data-j="'+sc+'" title="Todas las piezas de '+esc(nombreDe(sc))+'" aria-label="Todas las piezas de '+esc(nombreDe(sc))+'"><span class="ms" aria-hidden="true">grid_on</span><span class="her-n">'+(at+1)+' / '+hs.length+'</span></button>'+   /* v1.92 · la rejilla, al índice de la sección (Koi, 16-nov) */
         (nx!==null?'<button class="her-a her-nx" data-j="'+nx+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
     }
   }
@@ -5463,6 +5513,7 @@ function renderHermanas(){
   document.body.classList.toggle('hermanas-on',on);
 }
 HER.addEventListener('click',function(e){
+  var cx=e.target.closest('.her-a[data-cx]');if(cx){cpTab(1,e.detail===0);return;}   /* v1.93 · el hub pone delante Conexiones */
   var b=e.target.closest('.her-a[data-j]');if(!b)return;
   clearFilt();setSel(+b.dataset.j,CPT===1);   /* en Conexiones sigue en Conexiones */
 });
@@ -5518,7 +5569,8 @@ function vaciaHTML(j){   /* una pieza por escribir no se queda en blanco: dónde
   '</div>';
 }
 function ajustaHero(){   /* el hero de las secciones (/notes, /lab…), a todo el ancho de la hoja, sin comerse la primera pantalla */
-  var h=document.getElementById('p-t');if(!panel.classList.contains('is-idx')){h.style.fontSize='';return;}
+  var h=document.getElementById('p-t');h.style.fontSize='';return;   /* v1.92 · ya no se estira: 56 px fijos para todas las secciones (Koi, 16-nov). El ajuste al ancho queda debajo por si se recupera */
+  if(!panel.classList.contains('is-idx')){h.style.fontSize='';return;}
   var box=document.getElementById('cp-p0'),W=box.clientWidth;if(!W)return;
   h.style.fontSize='100px';var r=document.createRange();r.selectNodeContents(h);var w=r.getBoundingClientRect().width;if(!w)return;
   var f=100*W/w*0.97,tope=Math.max(64,Math.min(377,CP0.clientHeight*0.40));   /* v1.63 · 280 → 377 */
@@ -5807,6 +5859,7 @@ function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al sal
   IDXDEMO=null;                 /* cambiar de nodo cierra el artefacto abierto */
   CXO.set(0,0,0);               /* v1.57 · otra pieza, centrada en ella */
   if(v===null||sel===null)CXL=false;   /* v1.50 · abrir desde la home o cerrar: vista de partida; saltar: la tuya */
+  if(v!==sel&&sel!==null)VENGO=sel;   /* v1.93 · de dónde vienes, para el Anterior de las secciones (Koi, 16-nov) */
   sel=v;SET=(sel!==null)?nbrs(sel):null;
   solNuevo(sel);   /* v1.37 */
   /* v1.13 · EL GIRO GRANDE (obs. aicodingdictionary.com, 26-jul-2026):
@@ -5823,7 +5876,7 @@ function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al sal
   [].forEach.call(document.querySelectorAll('.pie-n'),function(b){b.setAttribute('aria-current',(+b.dataset.j===_sec)?'true':'false');});
   /* v1.31 · la dirección sigue a la portada abierta (#studio…), para poder pasar el enlace */
   try{var _sl=(sel!==null&&sel>=1)?((SLUGN&&SLUGN[_serie!==null?_serie:sel])||slugDe(sel)):'';
-    if(RUTAS){var _ru=(_sl?'/'+_sl:'/')+location.search;if(location.pathname+location.search+location.hash!==_ru)history.replaceState(null,'',_ru);}   /* v1.91 · en la web, la pieza va en la ruta */
+    if(RUTAS){var _ru=(_sl?'/'+_sl:'/')+location.search;if(location.pathname+location.search+location.hash!==_ru)history[NAVPOP?'replaceState':'pushState'](null,'',_ru);}   /* v1.91 · en la web, la pieza va en la ruta · v1.92 · y es un paso del historial: Atrás vuelve a la anterior (Koi, 16-nov: «volver a la página anterior sin más») */
     else{var _hs=_sl?'#'+_sl:'';if(location.hash!==_hs)history.replaceState(null,'',_hs||(location.pathname+location.search));}}catch(_e){}   /* v1.61 · cada nodo y micronodo, su dirección (antes, solo las secciones) */
   if(sel!==null){if(!mantener)cpTab(0);renderPanel();openPanel();renderStrip();blip();if(_serie!==null)irASerie(_serie);}
   else{closePanel();closeStrip();cadena.hidden=true;CAD_SEL=null;renderHermanas();}
@@ -5876,7 +5929,7 @@ stage.addEventListener('pointerup',function(e){
     if(_db)dobleClic();
     else if(n!==null&&n===sel&&n===DBLN.n&&_ah-DBLN.t<420){}   /* v1.50 · doble clic sobre una bola: la abre y la deja abierta (antes, el segundo clic la cerraba) */
     else if(panel.classList.contains('open')&&CPT===1){   /* v1.28 · en Conexiones: otro nodo, se salta a él; el mismo, su Ficha; el vacío, nada */
-      if(n!==null){if(n===sel)cpTab(0,true);else{clearFilt();setSel(n,true);}}
+      if(n!==null){if(n===sel)cpTab(0,true);else{clearFilt();setSel(n,true);arranque();luegoContenido(n);}}   /* v1.95 · la bola se acerca y, acto seguido, su Contenido delante (Koi, 16-nov) · v1.98 · sin pausa al arrancar */
     }else setSel((n!==null&&n===sel)?null:n);
     DBLN=(n!==null)?{t:_ah,n:n}:{t:0,n:null};
     stage.focus();
@@ -6829,6 +6882,13 @@ var RUTAS=/koisamsa\.com$|\.pages\.dev$|^127\.0\.0\.1$|^localhost$/.test(locatio
 function slugURL(){var h=(location.hash||'').slice(1).toLowerCase();if(h&&NSLUG[h]!==undefined)return h;
   if(!RUTAS)return '';var p=location.pathname.replace(/^\/+|\/+$/g,'').split('/')[0]||'';try{p=decodeURIComponent(p);}catch(_e){}return p.toLowerCase();}
 function rutaDe(sl){return (RUTAS?'/':'#')+sl;}
+/* v1.92 · el camino de vuelta: cada pieza abierta es un paso del historial (pushState). Al pulsar Atrás o Adelante,
+   popstate pone la pieza que dice la dirección, sin añadir otro paso. */
+var NAVPOP=false;
+var VENGO=null;   /* v1.93 · el último nodo visitado en esta visita */
+addEventListener('popstate',function(){if(!RUTAS)return;NAVPOP=true;try{var h=slugURL(),i=h?NSLUG[h]:undefined;
+  if(i!==undefined&&i>0){if(i!==sel){clearFilt();setSel(i);}}
+  else if(!h||i===0){if(sel!==null)document.getElementById('btn-home').click();}}finally{NAVPOP=false;}});
 function llegada(i){
   var ov=document.getElementById('llegada'),sc=seccionDe(i);
   if(!RM&&ov){ov.querySelector('.ll-k').textContent=(i<=7?'koisamsa.com':('koisamsa.com · '+nombreDe(sc>=1&&sc<=7?sc:i)));
@@ -6849,7 +6909,7 @@ function enlaceActual(){var s=(sel!==null&&sel>=1)?SLUGN[sel]:'';
   return URL_DEMO+(s?'#'+s:'');}
 document.getElementById('p-enlace').addEventListener('click',function(){
   var t=this.querySelector('.p-enlace-t'),u=enlaceActual(),box=document.getElementById('p-enlace-u');
-  var ok=function(){t.textContent='Enlace copiado';box.hidden=true;setTimeout(function(){t.textContent='Compartir';},1600);};
+  var ok=function(){t.textContent='Enlace copiado';box.hidden=true;var ic=document.querySelector('#p-enlace .ms');if(ic)ic.textContent='check';setTimeout(function(){t.textContent='Compartir';if(ic)ic.textContent='share';},1600);};   /* v1.92 · sin texto a la vista, el aviso es el icono */
   var mal=function(){box.textContent=u;box.hidden=false;try{var r=document.createRange();r.selectNodeContents(box);var ss=getSelection();ss.removeAllRanges();ss.addRange(r);}catch(_e){}};
   try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(u).then(ok,mal);else mal();}catch(_e){mal();}
 });
