@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.92 · la hoja de sección y el camino de vuelta">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.93 · el paseo desde las secciones">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -5451,7 +5451,15 @@ function hermanas(j){
 var HER=document.getElementById('hermanas');
 function renderHermanas(){
   var on=false,h='';
-  if(sel!==null&&sel>=8&&!IDXDEMO&&conCuerpo(sel)){
+  if(sel!==null&&sel>=1&&sel<=7&&!IDXDEMO){   /* v1.93 · en una sección: Anterior, el nodo del que vienes; el hub, sus Conexiones; Siguiente, su primera conexión (Koi, 16-nov) */
+    on=true;
+    var pv7=(VENGO!==null&&VENGO!==sel)?VENGO:0;
+    var nx7=null,cx7=nbrList(sel).filter(on_);for(var q7=0;q7<cx7.length;q7++){if(cx7[q7]!==0&&cx7[q7]!==pv7&&cx7[q7]!==sel){nx7=cx7[q7];break;}}
+    h='<button class="her-a her-pv" data-j="'+pv7+'"><span class="ms" aria-hidden="true">arrow_back</span><span class="her-t"><span class="her-l">Anterior</span> '+esc(pv7===0?'Inicio':nombreDe(pv7))+'</span></button>'+
+      '<button class="her-a her-sec" data-cx="1" title="Conexiones de '+esc(nombreDe(sel))+'" aria-label="Conexiones de '+esc(nombreDe(sel))+'"><span class="ms" aria-hidden="true">hub</span></button>'+
+      (nx7!==null?'<button class="her-a her-nx" data-j="'+nx7+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx7))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
+  }
+  else if(sel!==null&&sel>=8&&!IDXDEMO&&conCuerpo(sel)){
     var hs=hermanas(sel),at=hs.indexOf(sel),sc=seccionDe(sel);
     if(sc===6){   /* la tienda: relacionados */
       var rel=hs.filter(function(k){return k!==sel;});
@@ -5471,6 +5479,7 @@ function renderHermanas(){
   document.body.classList.toggle('hermanas-on',on);
 }
 HER.addEventListener('click',function(e){
+  var cx=e.target.closest('.her-a[data-cx]');if(cx){cpTab(1,e.detail===0);return;}   /* v1.93 · el hub pone delante Conexiones */
   var b=e.target.closest('.her-a[data-j]');if(!b)return;
   clearFilt();setSel(+b.dataset.j,CPT===1);   /* en Conexiones sigue en Conexiones */
 });
@@ -5816,6 +5825,7 @@ function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al sal
   IDXDEMO=null;                 /* cambiar de nodo cierra el artefacto abierto */
   CXO.set(0,0,0);               /* v1.57 · otra pieza, centrada en ella */
   if(v===null||sel===null)CXL=false;   /* v1.50 · abrir desde la home o cerrar: vista de partida; saltar: la tuya */
+  if(v!==sel&&sel!==null)VENGO=sel;   /* v1.93 · de dónde vienes, para el Anterior de las secciones (Koi, 16-nov) */
   sel=v;SET=(sel!==null)?nbrs(sel):null;
   solNuevo(sel);   /* v1.37 */
   /* v1.13 · EL GIRO GRANDE (obs. aicodingdictionary.com, 26-jul-2026):
@@ -6841,6 +6851,7 @@ function rutaDe(sl){return (RUTAS?'/':'#')+sl;}
 /* v1.92 · el camino de vuelta: cada pieza abierta es un paso del historial (pushState). Al pulsar Atrás o Adelante,
    popstate pone la pieza que dice la dirección, sin añadir otro paso. */
 var NAVPOP=false;
+var VENGO=null;   /* v1.93 · el último nodo visitado en esta visita */
 addEventListener('popstate',function(){if(!RUTAS)return;NAVPOP=true;try{var h=slugURL(),i=h?NSLUG[h]:undefined;
   if(i!==undefined&&i>0){if(i!==sel){clearFilt();setSel(i);}}
   else if(!h||i===0){if(sel!==null)document.getElementById('btn-home').click();}}finally{NAVPOP=false;}});
