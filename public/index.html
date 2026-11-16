@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.99 · el mapa solo en el pie">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.100 · toda pieza con pie">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -5475,7 +5475,7 @@ function codigoDe(j){var d=DOC[j],m=((d&&d.kick)||'').match(/N\d{2}\.[a-z]\d+/)|
 function conCuerpo(k){return k>=8&&DOC[k]&&DOC[k].body&&!/· demo$/.test(N[k][0]);}
 function hermanas(j){
   var sc=seccionDe(j),r=[];
-  for(var k=8;k<N.length;k++)if(conCuerpo(k)&&seccionDe(k)===sc)r.push(k);
+  for(var k=8;k<N.length;k++)if(on_(k)&&!/· demo$/.test(N[k][0])&&seccionDe(k)===sc)r.push(k);   /* v1.100 · todas las piezas visibles de la sección, tengan texto o no (antes, solo las que tenían cuerpo) */
   r.sort(function(a,b){var ca=codigoDe(a),cb=codigoDe(b);
     if(ca&&cb)return ca<cb?-1:(ca>cb?1:0);if(ca)return -1;if(cb)return 1;return a-b;});
   return r;
@@ -5491,7 +5491,7 @@ function renderHermanas(){
       '<button class="her-a her-sec" data-cx="1" title="Conexiones de '+esc(nombreDe(sel))+'" aria-label="Conexiones de '+esc(nombreDe(sel))+'"><span class="ms" aria-hidden="true">hub</span></button>'+
       (nx7!==null?'<button class="her-a her-nx" data-j="'+nx7+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx7))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
   }
-  else if(sel!==null&&sel>=8&&!IDXDEMO&&conCuerpo(sel)){
+  else if(sel!==null&&sel>=8&&!IDXDEMO){   /* v1.100 · toda pieza tiene pie (Koi, 16-nov: «revisa los prefooters de toda la web») */
     var hs=hermanas(sel),at=hs.indexOf(sel),sc=seccionDe(sel);
     if(sc===6){   /* la tienda: relacionados */
       var rel=hs.filter(function(k){return k!==sel;});
@@ -5500,14 +5500,14 @@ function renderHermanas(){
       if(rel.length){on=true;
         h='<span class="her-l">Relacionados</span><span class="her-rel">'+rel.map(function(k){
           return '<button class="her-a" data-j="'+k+'">'+esc(nombreDe(k))+'</button>';}).join('<span class="her-sep" aria-hidden="true">·</span>')+'</span>';}
-    }else if(at>=0&&hs.length>1){on=true;
-      var pv=at>0?hs[at-1]:null,nx=at<hs.length-1?hs[at+1]:null;
+    }else{on=true;   /* v1.100 · también sola, o sin texto: al menos la rejilla a su sección */
+      var pv=at>0?hs[at-1]:null,nx=(at>=0&&at<hs.length-1)?hs[at+1]:null;
       h=(pv!==null?'<button class="her-a her-pv" data-j="'+pv+'"><span class="ms" aria-hidden="true">arrow_back</span><span class="her-t"><span class="her-l">Anterior</span> '+esc(nombreDe(pv))+'</span></button>':'<span class="her-a her-pv her-vacio"></span>')+
-        '<button class="her-a her-sec" data-j="'+sc+'" title="Todas las piezas de '+esc(nombreDe(sc))+'" aria-label="Todas las piezas de '+esc(nombreDe(sc))+'"><span class="ms" aria-hidden="true">grid_on</span><span class="her-n">'+(at+1)+' / '+hs.length+'</span></button>'+   /* v1.92 · la rejilla, al índice de la sección (Koi, 16-nov) */
+        '<button class="her-a her-sec" data-j="'+sc+'" title="Todas las piezas de '+esc(nombreDe(sc))+'" aria-label="Todas las piezas de '+esc(nombreDe(sc))+'"><span class="ms" aria-hidden="true">grid_on</span><span class="her-n">'+(at>=0?((at+1)+' / '+hs.length):(hs.length+(hs.length===1?' pieza':' piezas')))+'</span></button>'+   /* v1.92 · la rejilla, al índice de la sección (Koi, 16-nov) */
         (nx!==null?'<button class="her-a her-nx" data-j="'+nx+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
     }
   }
-  HER.innerHTML=h;HER.classList.toggle('tienda',on&&sel!==null&&seccionDe(sel)===6);
+  HER.innerHTML=h;HER.classList.toggle('tienda',on&&sel!==null&&sel>=8&&seccionDe(sel)===6);   /* v1.100 · solo las piezas de la tienda, no la sección Store */
   document.body.classList.toggle('hermanas-on',on);
 }
 HER.addEventListener('click',function(e){
