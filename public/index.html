@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.96 · la hoja espera a la bola y vuelve el icono de compartir">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.97 · desde Conexiones, la hoja entra en fundido">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -542,6 +542,12 @@ body.panel-on #pie{transform:translateY(0)}
 #panel.carpeta{transition:transform var(--muda-duration-34f) var(--muda-motion-easing-default)}
 .cp-hoja{transition:top var(--muda-duration-21f) var(--muda-motion-easing-default)}
 .cp-hoja.sube{animation-duration:var(--muda-duration-21f)}
+/* v1.97 · desde Conexiones (Koi: «una pausa excesiva y un salto brusco»): la hoja de Contenido no aparece de golpe.
+   El cuerpo entra en fundido y subiendo un poco, y la hoja tarda 34f en colocarse, no 21f. Solo en ese paso. */
+#panel.desde-cx .cp-hoja{transition-duration:var(--muda-duration-34f)}
+#panel.desde-cx .sube{animation-duration:var(--muda-duration-34f)}
+#panel.desde-cx .cp-hoja.delante .cp-cuerpo{animation:cp-aparece var(--muda-duration-34f) var(--muda-motion-easing-default) both}
+@keyframes cp-aparece{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
 .cp-cab{padding:0 var(--muda-space-2xl);border-radius:var(--muda-radius-lg) var(--muda-radius-lg) 0 0;
   box-shadow:0 calc(-1 * var(--muda-stroke-1)) 0 var(--muda-color-stroke-soft);transition:background-color var(--muda-duration-8f) var(--muda-motion-easing-default)}
 .cp-hoja.detras .cp-cab{background:var(--muda-color-bg-recessed)}
@@ -4907,16 +4913,17 @@ function enConexiones(){return sel!==null&&panel.classList.contains('open')&&CPT
    se ve acercarse) y, cuando ha llegado, la hoja de Contenido pasa delante. Koi, 16-nov: «al clic hace una doble cosa:
    primero se anima que el nodo se acerca y acto seguido, fluido, se abre la card de contenidos». */
 var LUEGO_T=null;
-function luegoContenido(n){   /* v1.95b · no un temporizador: la hoja espera a que la bola se haya parado en pantalla (Koi: «la animación de la card se sobrepone») */
+function luegoContenido(n){   /* v1.97 · la hoja no espera a que la bola se pare del todo (frena asintótica y tardaba): basta con que vaya despacio. Y entra en fundido (.desde-cx) */
   clearTimeout(LUEGO_T);if(RM){LUEGO_T=setTimeout(function(){if(sel===n&&enConexiones())cpTab(0,false);},250);return;}
-  var t0=performance.now(),px=null,py=null,quietos=0;
+  var t0=performance.now(),px=null,py=null,lentos=0;
   (function mira(){
     if(sel!==n||!enConexiones())return;
     tA.copy(P[n]).project(cam);var sx=(tA.x*.5+.5)*W,sy=(-tA.y*.5+.5)*H;
     var dt=performance.now()-t0;
-    if(px!==null&&Math.hypot(sx-px,sy-py)<0.6)quietos++;else quietos=0;
+    if(px!==null&&Math.hypot(sx-px,sy-py)<2.5)lentos++;else lentos=0;   /* menos de 2,5 px por décima: ya casi llegó */
     px=sx;py=sy;
-    if((dt>700&&quietos>=5)||dt>4200){cpTab(0,false);return;}   /* medio segundo quieta, nunca antes de 0,7 s; tope 4,2 s */
+    if((dt>500&&lentos>=3)||dt>2200){
+      panel.classList.add('desde-cx');cpTab(0,false);setTimeout(function(){panel.classList.remove('desde-cx');},700);return;}
     LUEGO_T=setTimeout(mira,100);
   })();
 }
