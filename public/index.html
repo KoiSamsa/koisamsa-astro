@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.98 · el clic arranca sin pausa">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.99 · el mapa solo en el pie">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1403,9 +1403,7 @@ body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
   <button class="ico" id="btn-home" aria-label="Volver al inicio · pasa por encima para ver la posición de partida" title="Inicio">
     <svg viewBox="0 0 20 20" fill="none"><path d="M3 9.2 L10 3.2 L17 9.2 M5 8.4 V16.4 H15 V8.4" stroke="#1A1C1E" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
   </button>
-  <button class="ico" id="btn-mapa" aria-label="Mapa del sitio" title="Mapa del sitio">   <!-- v1.81 · el mapa del sitio, junto a la casita; la interrogación pasa a la derecha, junto a la i -->
-    <svg viewBox="0 0 20 20" fill="none"><rect x="2.6" y="7.7" width="4.8" height="4.6" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><rect x="12.6" y="3" width="4.8" height="4.4" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><rect x="12.6" y="12.6" width="4.8" height="4.4" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><path d="M7.4 10 H10 M10 5.2 V14.8 M10 5.2 H12.6 M10 14.8 H12.6" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  </button>
+  <!-- v1.99 · el mapa del sitio ya no va en la cabecera: solo en el pie (Koi, 16-nov: «así dejaré el header más simple»). Estuvo aquí de la v1.81 a la v1.98 -->
 </div>
 
 <div class="hud" id="hud-tr">
@@ -6437,7 +6435,7 @@ document.getElementById('mapa-x').addEventListener('click',cierraMapa);
 vMapa.addEventListener('click',function(e){if(e.target===vMapa)cierraMapa();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vMapa.classList.contains('open')){e.preventDefault();e.stopPropagation();cierraMapa();}},true);
 document.getElementById('pie-mapa').addEventListener('click',abreMapa);
-document.getElementById('btn-mapa').addEventListener('click',abreMapa);   /* v1.81 · y arriba, junto a la casita */
+/* v1.99 · el botón del mapa de la cabecera (v1.81) se retiró: el mapa se abre desde el pie y desde la «i» */
 document.getElementById('pie-mail').addEventListener('click',function(){vCont.classList.add('open');setTimeout(function(){document.getElementById('contacto-x').focus();},30);});
 document.getElementById('contacto-x').addEventListener('click',function(){vCont.classList.remove('open');document.getElementById('pie-mail').focus();});
 vCont.addEventListener('click',function(e){
