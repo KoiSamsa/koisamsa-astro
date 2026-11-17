@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.105 · el mapa vuelve junto a la casita">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.106 · la hoja tiene medida y respira">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -159,21 +159,21 @@ kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--li
 /* ── marginalia · las CUATRO familias canon, a la spec de los ────
    componentes firmados: .ks-aside-concept · -card · -derivada · pullquote.
    Clase .mgl para el rótulo: .lb ya era la etiqueta de los nodos.   */
-.mg{font-size:14px;line-height:1.5;margin:var(--sp-md) 0}
+.mg{font-size:14px;line-height:1.5;margin:0 0 var(--muda-space-lg)}   /* v1.106 · 21 entre notas */
 .mg .mgl{display:block;position:static;transform:none;
   font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
   margin:0 0 var(--sp-xs);font-family:ui-monospace,monospace}
 .mg p{margin:0}
-.mg p+p{margin-top:.6em}
-.mg-concepto{background:#E3F4F5;border-radius:var(--r-md);
-  padding:var(--sp-md) var(--sp-lg)}
-.mg-concepto .mgl{color:#006F73}
-.mg-nota{border:1px solid var(--line);border-radius:var(--r-sm);
-  padding:var(--sp-sm) var(--sp-md)}
-.mg-nota .mgl{color:var(--ink-3)}
-.mg-derivada{background:#FEEEE2;border-radius:var(--r-sm);
-  border-left:3px solid #DC7D53;padding:var(--sp-sm) var(--sp-md)}
-.mg-derivada .mgl{color:#B24512}
+.mg p+p{margin-top:var(--muda-space-md)}   /* v1.106 · 13 dentro de la nota */
+/* v1.106 · la marginalia, neutra (Koi, 17-nov: «MUDA es neutro by design y mi adaptación usa los colores por criterios taxonómicos;
+   el color de la nota de marginalia no debe ser naranja»): la anotación en gris frío (slate), el concepto en topo, lo relacionado en
+   post-it (gold-300, el único otro color). Sale el cobre y el turquesa del margen. Relleno 21, como todo lo que es un bloque. */
+.mg-concepto{background:#F7F6F2;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
+.mg-concepto .mgl{color:#7E7C76}
+.mg-nota{background:#F5F7F7;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
+.mg-nota .mgl{color:#787B7E}
+.mg-derivada{background:#FDF297;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
+.mg-derivada .mgl{color:#43392E}
 .pq{margin:var(--sp-lg) 0;padding-left:var(--sp-md);
   border-left:3px solid var(--acc,var(--tinta));
   font-size:18px;font-style:italic;line-height:1.45;color:#141618}
@@ -399,7 +399,7 @@ body.strip-on #panel{bottom:var(--strip-h)}   /* v1.24 · el panel termina encim
 .cp-pan{max-width:1120px;container-type:inline-size}
 .cp-pan>.kicker,.cp-pan>h1,.cp-pan>.desc,.cp-pan>#p-art{max-width:none}
 .cp-pan>h1{margin-top:0}
-@media(max-width:640px){#panel.carpeta.is-idx h1{font-size:40px}}   /* v1.92 · en el móvil, 40 */
+@media(max-width:640px){#panel.carpeta.is-idx h1{font-size:48px}}   /* v1.92 · en el móvil, 40 · v1.106 · 48 */
 #panel.carpeta.is-idx .p-bola,#panel.carpeta.is-idx .kicker{display:none}   /* v1.92 · fuera «Índice · /studio» (Koi, 16-nov) */
 #panel.carpeta #panel-x{position:absolute;top:calc(var(--cp-hh) + 6px);right:var(--sp-lg);z-index:5;background:var(--hoja)}
 #panel.carpeta.is-demo #cp-c0{padding:0;display:flex;flex-direction:column;overflow:hidden}
@@ -554,10 +554,10 @@ body.panel-on #pie{transform:translateY(0)}
   color:var(--muda-color-text-sub);max-width:var(--muda-typography-prose-max);margin:0 0 var(--muda-space-xl)}
 /* el cuerpo de lectura es muda-page: Newsreader body-m, párrafos a space-md */
 #panel.carpeta .art{font-family:var(--muda-typography-family-serif);font-size:var(--muda-typography-size-body-m);line-height:1.65;color:var(--muda-color-text-ink)}
-#panel.carpeta .art p{margin:0 0 var(--muda-space-md)}
+#panel.carpeta .art p{margin:0 0 var(--muda-space-lg)}   /* v1.106 · 21 entre párrafos (eran 13 con letra de 20) */
 #panel.carpeta .art strong{color:var(--muda-color-text-ink)}
 #panel.carpeta .art h3{font:500 var(--muda-typography-size-meta-m)/1.3 var(--muda-typography-family-fira);letter-spacing:.06em;text-transform:uppercase;
-  color:var(--muda-color-text-sub);margin:var(--muda-space-xl) 0 var(--muda-space-md);padding-top:var(--muda-space-md);border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}
+  color:var(--muda-color-text-sub);margin:var(--muda-space-2xl) 0 var(--muda-space-lg);padding-top:var(--muda-space-md);border-top:var(--muda-stroke-1) solid var(--muda-color-stroke-soft)}   /* v1.106 · 55 antes de un apartado, 21 después del rótulo */
 /* la marginalia es muda-aside: Fira Sans body-s; sus tres familias conservan su fondo */
 #panel.carpeta .mg{font-family:var(--muda-typography-family-fira);font-size:var(--muda-typography-size-body-s);line-height:1.5;color:var(--muda-color-text-ink)}
 #panel.carpeta .mg .mgl{font:500 var(--muda-typography-size-meta-s)/1.2 var(--muda-typography-family-fira);letter-spacing:.06em;text-transform:uppercase}
@@ -605,7 +605,7 @@ body.panel-on #pie{transform:translateY(0)}
 /* ═══ v1.31 · LAS PORTADAS DE SECCIÓN (Patricia, 28-sep, 09:52) ═══════════════════════════════════════════
    Todas como /notes y /lab: el título en minúsculas, en Newsreader 700, grande; y la cuadrícula de piezas.
    Una portada puede enseñarse suelta con un enlace: la web funciona como portfolio.                         */
-#panel.carpeta.is-idx h1{font-family:var(--muda-typography-family-serif);font-weight:700;font-size:56px;   /* v1.92 · era clamp(52px,7vw,104px): 56 fijos e iguales en todas las secciones (Koi, 16-nov: «/studio se apodera de media página») */
+#panel.carpeta.is-idx h1{font-family:var(--muda-typography-family-serif);font-weight:700;font-size:72px;   /* v1.106 · 72: la portada pesa más que cualquier pieza (Koi, 17-nov) ·    /* v1.92 · era clamp(52px,7vw,104px): 56 fijos e iguales en todas las secciones (Koi, 16-nov: «/studio se apodera de media página») */
   line-height:.86;letter-spacing:-.04em;color:var(--muda-color-text-ink);margin:0 0 var(--muda-space-md)}
 
 /* ── pie: iconos (Material Symbols Outlined, la familia de iconos de MUDA) ── */
@@ -657,17 +657,18 @@ button.pie-ic{border:0;background:transparent;padding:0;cursor:pointer;font:inhe
 .garabato{display:none}
 /* LA PIEZA: su cabecera es un campo del color de su sección (Signal, 01:32), a sangre en la hoja */
 #panel.carpeta .cp-cuerpo{overflow-x:hidden}
-#panel.carpeta.is-pieza .p-heroe{margin:calc(-1 * var(--cpy)) 0 var(--muda-space-xl) calc(-1 * var(--cpx));padding:var(--cpy) 0 var(--muda-space-2xl) var(--cpx);
+#panel.carpeta.is-pieza .p-heroe{margin:calc(-1 * var(--cpy)) 0 var(--muda-space-2xl) calc(-1 * var(--cpx));padding:var(--cpy) 0 var(--muda-space-xl) var(--cpx);   /* v1.106 · el campo, corto: 34 dentro, 55 debajo (Koi: «ese header me mata») */
   color:var(--campo-t,#FAF9F7);position:relative;isolation:isolate}
 #panel.carpeta.is-pieza .p-heroe::before{content:"";position:absolute;top:0;bottom:0;left:0;right:-100vw;background:var(--campo,#2D2A23);z-index:-1}
 #panel.carpeta.is-pieza .p-heroe .kicker,#panel.carpeta.is-pieza .p-heroe .desc{color:var(--campo-t);opacity:.82}
-#panel.carpeta.is-pieza .p-heroe h1{color:var(--campo-t);font-size:clamp(40px,5.4vw,84px);line-height:1.02;letter-spacing:-.02em;text-wrap:balance;max-width:20ch;margin:var(--muda-space-lg) 0 var(--muda-space-sm)}
+#panel.carpeta.is-pieza .p-heroe h1{color:var(--campo-t);font-size:clamp(36px,3.9vw,56px);   /* v1.106 · 56 como mucho, por debajo de la portada (era hasta 84) */line-height:1.02;letter-spacing:-.02em;text-wrap:balance;max-width:20ch;margin:var(--muda-space-lg) 0 var(--muda-space-sm)}
 #panel.carpeta.is-pieza .p-heroe .desc{font-style:italic;max-width:46ch;margin:var(--muda-space-md) 0 0}
 #panel.carpeta.is-pieza .p-bola{box-shadow:0 0 0 2px color-mix(in srgb,var(--campo-t) 55%,transparent)}
 #panel.carpeta.is-pieza .p-enlace{color:var(--campo-t);border-color:color-mix(in srgb,var(--campo-t) 62%,transparent)}
 #panel.carpeta.is-pieza .p-enlace:hover{background:color-mix(in srgb,var(--campo-t) 10%,transparent)}
 #panel.carpeta.is-pieza #panel-x{background:var(--muda-color-bg-surface);border-radius:50%}
 #panel.carpeta.is-pieza.is-nota .p-heroe .kicker,#panel.carpeta.is-pieza.is-nota .p-heroe .desc{opacity:1;color:var(--muda-color-text-sub,#686761)}   /* v1.68 · Notes, negro sobre blanco */
+#panel.carpeta.is-pieza.is-nota .p-heroe .kicker{color:var(--kick,#335E82)}   /* v1.106 · salvo el antetítulo, en su azul */
 /* el rotulador que se pinta solo (scribble, 01:37): bajo el título de la pieza */
 #panel.carpeta.is-pieza .garabato{display:block;width:min(46%,380px);height:14px;margin:2px 0 0;overflow:visible}
 .garabato path{fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;vector-effect:non-scaling-stroke;opacity:.78;stroke-dasharray:1;stroke-dashoffset:0}
@@ -675,11 +676,6 @@ button.pie-ic{border:0;background:transparent;padding:0;cursor:pointer;font:inhe
 @keyframes garabato{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
 @media (prefers-reduced-motion:reduce){.garabato.pinta path{animation:none}}
 /* la pieza por escribir: dónde vive y con qué conecta */
-.pz-vacia{display:grid;gap:var(--muda-space-md);margin:0 0 var(--muda-space-xl)}
-.pz-nota{font:400 var(--muda-typography-size-body-m)/1.5 var(--muda-typography-family-serif);color:var(--muda-color-text-sub);margin:0 0 var(--muda-space-sm)}
-.pz-secs{display:flex;gap:var(--muda-space-sm);flex-wrap:wrap}
-.pz-sec{cursor:pointer;border:0;font:inherit}
-.pz-vacia .ix-count{margin:var(--muda-space-md) 0 0}
 
 /* ═══ v1.61 · EL HERO GRANDOTE, AJUSTADO AL ANCHO DE LA HOJA (Mag, 01:30–01:31) ═══════════════════════════════ */
 #panel.carpeta.is-idx h1{white-space:nowrap;padding-bottom:.12em}   /* sitio para la bajada de la g de /galería */
@@ -1227,6 +1223,17 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 #velo-top{height:100%}
 body.cx-on #velo-top{height:var(--carpeta-top)}
 #hermanas .her-sec[aria-pressed="true"] .ms{color:var(--muda-color-text-ink);background:var(--muda-color-bg-recessed);border-radius:50%;padding:7px;margin:-7px}
+/* ═══ v1.106 · LA HOJA TIENE MEDIDA (Koi, 17-nov: «debemos ser un ejemplo de responsiveness») ═══════════════════════════
+   A partir de 1440 la hoja no crece: va centrada y el papel asoma a los lados. El pie de la hoja va con la hoja; el de la web, a
+   todo lo ancho. Dentro, los índices se paran en 1280; el campo de color de las piezas cubre la hoja entera; la cadena deja sitio
+   a los dos botones de la derecha. Estudio con capturas: 04_PROYECTOS/Koisamsa.com/outputs/KS-grafo-3d-estudio-responsive-2026-11-17 */
+:root{--hoja-max:1440px}
+#panel.carpeta{max-width:var(--hoja-max);margin-inline:auto}
+#hermanas{max-width:var(--hoja-max);margin-inline:auto;left:var(--cp-mx);right:var(--cp-mx)}
+.cp-pan{max-width:1280px}
+#panel.carpeta.is-pieza .p-heroe::before{left:-100vw}
+@media (min-width:761px){#cadena{right:140px}}
+#panel.carpeta .cp-cuerpo{padding-bottom:calc(89px + env(safe-area-inset-bottom,0px))}   /* el final de la hoja respira (Fibonacci: 89) */
 /* v1.78 · los hilos del mapa: detrás del índice, un SVG con un hilo por conexión; los nombres llevan el papel de la hoja
    para que el hilo pase por detrás. v1.79: a la vista siempre. */
 #cp-p2 .mp-hilos-w{position:relative}
@@ -5497,7 +5504,8 @@ function renderPanel(){
   /* PIEZA con artefacto: la lanzadera va lo primero, antes del cuerpo */
   var lanza=(mm&&mm.it.demo&&!isDemo)?lanzaderaHTML(mm.it):'';
   document.getElementById('p-art').innerHTML=isDemo?demoHTML()
-    :(isIdx?idxHTML(key):(lanza+(d?('<div class="art">'+d.body+'</div>'):'')+((!d&&!lanza)?vaciaHTML(sel):'')));   /* v1.61 · la pieza por escribir: dónde vive y con qué conecta */
+    :(isIdx?idxHTML(key):(lanza+(d?('<div class="art">'+d.body+'</div>'):'')));   /* v1.61 · la pieza por escribir enseñaba «dónde vive y con qué conecta» · v1.106 fuera: la cadena y el hub ya lo dicen (Koi, 17-nov) */
+  ordenaMargen();   /* v1.106 */
   panel.classList.toggle('is-idx',!!isIdx&&!isDemo);
   panel.classList.toggle('is-demo',isDemo);
   /* la vista del artefacto se marca en el body: mueve panel, franja y HUD */
@@ -5511,7 +5519,7 @@ function renderPanel(){
   var _hx=PAL?brandHex(sel):'#2D2A23',_he=document.getElementById('p-heroe');
   panel.classList.toggle('is-pieza',!isIdx&&!isDemo);
   var _nota=!isIdx&&!isDemo&&sel>7&&seccionDe(sel)===3;panel.classList.toggle('is-nota',_nota);   /* v1.68 · Notes: negro sobre blanco */
-  if(_nota){panel.style.setProperty('--acc','#2D2A23');_he.style.setProperty('--campo','#FFFFFF');_he.style.setProperty('--campo-t','#2D2A23');document.getElementById('p-bola').style.setProperty('--c','#2D2A23');}
+  if(_nota){var _az=PAL?brandHex(sel):'#335E82';panel.style.setProperty('--acc','#2D2A23');_he.style.setProperty('--campo','#FFFFFF');_he.style.setProperty('--campo-t','#2D2A23');_he.style.setProperty('--kick',_az);document.getElementById('p-bola').style.setProperty('--c',_az);}   /* v1.106 · la línea de la bolita, en el azul de Notes (Koi, 17-nov: «su toque azul») */
   else{_he.style.setProperty('--campo',_hx);_he.style.setProperty('--campo-t',tintaSobre(_hx));
   document.getElementById('p-bola').style.setProperty('--c',_hx);}
   var _ga=document.getElementById('p-garabato');_ga.classList.remove('pinta');void _ga.getBoundingClientRect();if(!isIdx&&!isDemo)_ga.classList.add('pinta');
@@ -5522,20 +5530,20 @@ function renderPanel(){
   requestAnimationFrame(paginaLista);   /* v1.61 · el hero a su ancho, las hojas y el mazo en su sitio */
 }
 addEventListener('resize',function(){if(IDXDEMO)ajustaEscala();if(sel!==null)paginaLista();});   /* v1.61 · y el hero, las hojas y el mazo */
+/* v1.106 · en pantalla estrecha la marginalia deja de flotar y se leía ANTES del párrafo que anota (Koi, 17-nov: «no puede ser que vaya
+   primero una anotación que el propio artículo»). Cada nota que va seguida de un párrafo pasa detrás de él; al ensanchar, vuelve. */
+function ordenaMargen(){var est=matchMedia('(max-width:760px)').matches,art=document.querySelector('#p-art .art');if(!art)return;
+  [].forEach.call(art.querySelectorAll('.mg'),function(mg){
+    if(est&&!mg._ancla){var sig=mg.nextElementSibling;while(sig&&sig.tagName!=='P'&&!sig.classList.contains('mg'))sig=sig.nextElementSibling;   /* el primer párrafo que sigue, saltando rótulos */
+      if(sig&&sig.tagName==='P'){mg._ancla=mg.nextElementSibling;sig.after(mg);mg.dataset.movido='1';}}
+    else if(!est&&mg._ancla){if(mg._ancla.parentNode)mg._ancla.before(mg);mg._ancla=null;delete mg.dataset.movido;}});}
+matchMedia('(max-width:760px)').addEventListener('change',ordenaMargen);
 /* ═══ v1.61 · LAS PÁGINAS ═══════════════════════════════════════════════════════════════════════════════════════════ */
 var CP0=document.getElementById('cp-c0'),_ptk=false;
 function lumRel(h){h=String(h).replace('#','');if(h.length<6)return 0;var c=[0,2,4].map(function(k){var v=parseInt(h.substr(k,2),16)/255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4);});
   return 0.2126*c[0]+0.7152*c[1]+0.0722*c[2];}
 function contraste(a,b){var x=lumRel(a),y=lumRel(b);return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05);}
 function tintaSobre(h){return contraste(h,'#2D2A23')>=contraste(h,'#FAF9F7')?'#2D2A23':'#FAF9F7';}   /* la tinta de MUDA o el papel: la que más se lea */
-function vaciaHTML(j){   /* una pieza por escribir no se queda en blanco: dónde vive y con qué conecta */
-  var secs=((typeof HYB!=='undefined'&&HYB[j])?HYB[j].slice():[N[j][4]]).filter(function(x){return x>=1&&x<=7;});
-  var vec=nbrList(j).filter(function(k){return k>=8&&!PLEG[k]&&on_(k)&&!/· demo$/.test(N[k][0]);}).slice(0,6);
-  return '<div class="pz-vacia">'+(N[j][2]?'<p class="pz-nota">En preparación. De momento, dónde vive y con qué conecta.</p>':'')+
-    '<p class="ix-count">Vive en</p><div class="pz-secs">'+secs.map(function(x){return '<button type="button" class="muda-tag muda-tag--tinta pz-sec" data-j="'+x+'" style="--muda-tag-tinta:'+(PAL?brandHexSec(x):'#2D2A23')+'">'+esc(nombreDe(x))+'</button>';}).join('')+'</div>'+
-    (vec.length?'<p class="ix-count">Conecta con</p>'+idxGridHTML(vec.map(function(k){return {j:k,nid:codigoDe(k),cluster:kickOf(k),title:nombreDe(k),lead:leadPublico(k),date:'',authors:'',read:'',state:'',img:'',demo:'',w:0,vista:'panel'};})):'')+
-  '</div>';
-}
 function ajustaHero(){   /* el hero de las secciones (/notes, /lab…), a todo el ancho de la hoja, sin comerse la primera pantalla */
   var h=document.getElementById('p-t');h.style.fontSize='';return;   /* v1.92 · ya no se estira: 56 px fijos para todas las secciones (Koi, 16-nov). El ajuste al ancho queda debajo por si se recupera */
   if(!panel.classList.contains('is-idx')){h.style.fontSize='';return;}
@@ -5578,7 +5586,6 @@ CP0.addEventListener('click',function(e){
   var l=e.target.closest('.cas-l');   /* la cascada: la lámina pulsada, delante */
   if(l){anotFuera(l.parentNode.querySelector('.anot'));var cs=l.parentNode.querySelectorAll('.cas-l'),z=0;[].forEach.call(cs,function(x){z=Math.max(z,+getComputedStyle(x).zIndex||0);x.classList.remove('delante');});
     l.style.setProperty('--z',z+1);l.classList.add('delante');return;}
-  var s=e.target.closest('.pz-sec');if(s){clearFilt();setSel(+s.dataset.j);}
 });
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(sel!==null)ajustaHero();});
 /* v1.63 · la nota de la home: a los 2,6 s, si nadie ha tocado nada ni se ha llegado por enlace */
