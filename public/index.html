@@ -6,11 +6,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.106 · la hoja tiene medida y respira">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.107 · la portada, dos vistas y un conmutador">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0&icon_names=account_tree,article,arrow_back,arrow_forward,hub,link,mail,search,share&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0&icon_names=account_tree,article,arrow_back,arrow_forward,grid_view,hub,link,mail,search,share,view_list&display=block" rel="stylesheet">
 <style>
 :root{--papel:#FAF9F7;--tinta:#0B0B0B;--ink:#3F4245;--ink-2:#787B7E;--ink-3:#A1A3A6;
   --line:rgba(11,11,11,.11);--panel-w:440px}
@@ -166,14 +166,15 @@ kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--li
 .mg p{margin:0}
 .mg p+p{margin-top:var(--muda-space-md)}   /* v1.106 · 13 dentro de la nota */
 /* v1.106 · la marginalia, neutra (Koi, 17-nov: «MUDA es neutro by design y mi adaptación usa los colores por criterios taxonómicos;
-   el color de la nota de marginalia no debe ser naranja»): la anotación en gris frío (slate), el concepto en topo, lo relacionado en
-   post-it (gold-300, el único otro color). Sale el cobre y el turquesa del margen. Relleno 21, como todo lo que es un bloque. */
-.mg-concepto{background:#F7F6F2;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
-.mg-concepto .mgl{color:#7E7C76}
+   el color de la nota de marginalia no debe ser naranja»). v1.107 · el reparto que fijó Koi: la nota en gris frío (slate), el concepto
+   en arena (sand) y la pieza derivada en azul claro, «el azul tiene sentido como color taxonómico de sección» (es el de Notes).
+   Sale el cobre y el turquesa del margen. Relleno 21, como todo lo que es un bloque. */
 .mg-nota{background:#F5F7F7;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
 .mg-nota .mgl{color:#787B7E}
-.mg-derivada{background:#FDF297;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
-.mg-derivada .mgl{color:#43392E}
+.mg-concepto{background:#F8F3E6;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
+.mg-concepto .mgl{color:#7D6F5D}
+.mg-derivada{background:#E2EAF1;border-radius:var(--muda-radius-sm,5px);padding:var(--muda-space-lg)}
+.mg-derivada .mgl{color:#335E82}
 .pq{margin:var(--sp-lg) 0;padding-left:var(--sp-md);
   border-left:3px solid var(--acc,var(--tinta));
   font-size:18px;font-style:italic;line-height:1.45;color:#141618}
@@ -190,14 +191,25 @@ kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--li
 #panel.is-idx .desc{display:none}
 .ix-dek{font:400 19px/1.45 'Newsreader',Georgia,serif;font-style:italic;
   color:rgba(11,11,11,.66);max-width:44ch;margin:0 0 26px}
-.ix-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  padding:12px 0;border-top:.5px solid var(--line);border-bottom:.5px solid var(--line);margin-bottom:22px}
+.ix-bar{display:flex;align-items:center;justify-content:flex-end;padding:0 0 var(--muda-space-sm,8px);border-bottom:.5px solid var(--line);margin-bottom:var(--muda-space-lg,21px)}   /* v1.107 · solo el conmutador */
 .ix-count{font:400 11px ui-monospace,monospace;color:var(--ink-3);letter-spacing:.02em}
-.ix-seg{display:flex;gap:6px}
-.ix-seg button{font:500 10.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.07em;
-  text-transform:uppercase;padding:6px 11px;border-radius:999px;border:.5px solid var(--line);
-  background:transparent;color:var(--ink-3);cursor:pointer}
-.ix-seg button[aria-pressed="true"]{background:var(--tinta);color:var(--papel);border-color:var(--tinta)}
+/* v1.107 · el conmutador de vista: dos iconos, el activo en su círculo */
+.ix-vista{display:flex;gap:4px}
+.ix-vista button{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;border:0;background:transparent;color:var(--muda-color-text-sub,#686761);cursor:pointer}
+.ix-vista button .ms{font-size:20px}
+.ix-vista button[aria-pressed="true"]{color:var(--muda-color-text-ink,#2D2A23);background:var(--muda-color-bg-recessed,#EDECEA)}
+.ix-vista button:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+/* v1.107 · la lista: una línea por pieza */
+.ix-lista{list-style:none;margin:0;padding:0;max-width:949px}
+.ix-li{display:flex;align-items:baseline;justify-content:space-between;gap:var(--muda-space-lg,21px);width:100%;padding:var(--muda-space-md,13px) 0;border:0;
+  border-top:.5px solid var(--muda-color-stroke-soft,#E3E1DA);background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit}
+.ix-lista li:last-child .ix-li{border-bottom:.5px solid var(--muda-color-stroke-soft,#E3E1DA)}
+.ix-li-t{font:400 var(--muda-typography-size-body-l,20px)/1.3 var(--muda-typography-family-serif,Georgia,serif);color:var(--muda-color-text-ink,#2D2A23)}
+.ix-li:hover .ix-li-t,.ix-li:focus-visible .ix-li-t{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.ix-li-m{flex:0 0 auto;font:400 var(--muda-typography-size-meta-s,11px)/1 var(--muda-typography-family-mono,ui-monospace,monospace);color:var(--muda-color-text-sub,#686761);letter-spacing:.04em}
+.ix-li.ghost{opacity:.5;cursor:default}
+.ix-li:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
+@media (max-width:640px){.ix-li{flex-direction:column;gap:var(--muda-space-xs,5px)}}
 /* ficha con artefacto jugable: el filete del acento la distingue */
 .ix-card.has-demo{border-color:rgba(11,11,11,.2)}
 .ix-card.has-demo::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2.5px;
@@ -257,14 +269,6 @@ body.v-pleno #panel-x{z-index:13}
   body.v-ancho{--panel-w:100vw}
   .ix-nat{display:none}
 }
-.ix-ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.ix-sel{font:500 10.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.04em;
-  padding:7px 26px 7px 11px;border-radius:999px;border:.5px solid var(--line);
-  background:transparent;color:var(--ink-2);cursor:pointer;appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg width='9' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='%23787B7E' stroke-width='1.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 10px center}
-.ix-sel:hover{border-color:var(--tinta);color:var(--ink)}
-.ix-sel:focus-visible{outline:2px solid var(--tinta);outline-offset:2px}
 /* dos columnas de verdad: el orden pedido se lee en zigzag */
 .ix-grid.two{display:flex;gap:14px;align-items:flex-start}
 .ix-grid.two .ix-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column}
@@ -5102,9 +5106,9 @@ function magHTML(items){
 }
 function magCardHTML(it,grande){
   var j=(typeof it.j==='number')?it.j:nodeByNid(it.nid),live=j>=0,demo=!!it.demo,dead=!demo&&!live;
-  var c=(live&&PAL)?brandHex(j):'#517597',conImg=IDXIMG&&!!it.img,lleno=grande&&!conImg;   /* sin nodo: el azul de Notes */
+  var c=(live&&PAL)?brandHex(j):'#517597',conImg=!!it.img,lleno=grande&&!conImg;   /* sin nodo: el azul de Notes */
   var img=conImg?'<span class="mg-img"><img src="'+it.img+'" alt="" loading="lazy"></span>'
-        :(lleno||!IDXIMG)?'':'<span class="mg-img mg-sin"><span class="mg-cod">'+esc(it.nid||it.cluster||'')+'</span></span>';
+        :lleno?'':'<span class="mg-img mg-sin"><span class="mg-cod">'+esc(it.nid||it.cluster||'')+'</span></span>';
   return '<button class="ix-card mg-c'+(grande?' mg-grande':'')+(lleno?' mg-lleno':'')+(dead?' ghost':'')+'" data-j="'+j+'" data-demo="'+esc(it.demo||'')+'" data-t="'+esc(it.title)+'" '+
     'data-w="'+(it.w||0)+'" data-vista="'+esc(it.vista||'panel')+'"'+(dead?' aria-disabled="true"':'')+
     ' style="--acc:'+c+(lleno?';--campo:'+c+';--campo-t:'+tintaSobre(c):'')+'">'+img+
@@ -5197,7 +5201,7 @@ function quantumHTML(items){   /* dos y una a lo ancho, como en Quantum */
   return '<div class="qt">'+ord.map(function(o){var it=o.it;
     var ancha=(pos%3===2),paso=QT_PASO[pos%QT_PASO.length];pos++;
     var j=(typeof it.j==='number')?it.j:nodeByNid(it.nid),live=j>=0,demo=!!it.demo,dead=!demo&&!live;
-    var pv=IDXIMG?labPrev(it.demo):null,c=RAMPS.teal[paso];
+    var pv=labPrev(it.demo),c=RAMPS.teal[paso];
     var meta=[it.nid,(it.read&&it.read!=='—')?it.read:'',demo?'':String(it.state||'').toLowerCase()].filter(Boolean).map(esc).join(' · ');
     return '<button class="ix-card qt-t'+(ancha?' qt-ancha':'')+(pv?'':' qt-campo')+(dead?' ghost':'')+'" data-j="'+j+'" data-demo="'+esc(it.demo||'')+'" '+
       'data-t="'+esc(it.title)+'" data-w="'+(it.w||0)+'" data-vista="'+esc(it.vista||'panel')+'"'+(dead?' aria-disabled="true"':'')+
@@ -5247,7 +5251,7 @@ function irASerie(j){   /* v1.59 · lleva la página a la sección de la serie y
     el.classList.add('aqui');setTimeout(function(){el.classList.remove('aqui');},2600);},80);
 }
 /* Estado del índice. Por defecto: 2 columnas con imagen (aprobado 21-jul). */
-var IDXCOLS=2,IDXIMG=true,IDXORD='desc',IDXTEMA='',IDXDEMO=null;
+var IDXVISTA=(function(){try{return localStorage.getItem('ks-vista')==='lista'?'lista':'mosaico';}catch(_e){return 'mosaico';}})(),IDXDEMO=null;   /* v1.107 · dos vistas: mosaico con imagen o lista sin ella; se recuerda (Koi, 17-nov: «esto es excesivo») */
 
 /* ── LAS TRES VISTAS DE UN ARTEFACTO ──────────────────────────────
    El panel lateral es una vista VERTICAL: 50vw ≈ 720px en un portátil.
@@ -5267,21 +5271,7 @@ var IDXCOLS=2,IDXIMG=true,IDXORD='desc',IDXTEMA='',IDXDEMO=null;
 var VISTAS={panel:'Panel',ancho:'Ancho',pleno:'Pleno'};
 var VMODO=null;   /* vista elegida a mano; null = la declarada del artefacto */
 var DEMO_FUERA=null;   /* v1.101 · el nodo cuyo artefacto cerró el visitante con «Ficha»: hasta cambiar de nodo, no se vuelve a abrir solo */
-/* Las categorías vivas hoy en koisamsa.com son tres, leídas del WordPress
-   (taxonomía `category`): Cultura · Economía · IA. Pero NO se dan por
-   cerradas: el desplegable se construye desde el propio dato, así que
-   añadir una categoría nueva es escribirla en `tema:` de una nota y ya
-   aparece. `TEMA_ORDEN` solo fija el orden de las conocidas; lo que no
-   esté en la lista se añade detrás, alfabético.
-   PROVISIONAL: el reparto nota→categoría lo hizo el operador por criterio,
-   no está firmado. En WP solo 5 posts tienen categoría asignada. */
-var TEMA_ORDEN=['IA','Economía','Cultura'];
-function temasDe(items){
-  var vis={},out=[];
-  items.forEach(function(it){if(it.tema)vis[it.tema]=(vis[it.tema]||0)+1;});
-  TEMA_ORDEN.forEach(function(t){if(vis[t]){out.push(t);delete vis[t];}});
-  return out.concat(Object.keys(vis).sort(function(a,b){return a.localeCompare(b,'es');}));
-}
+/* v1.107 · el desplegable de temáticas se retiró con la barra de la portada; `tema:` sigue en cada nota y lo lee la lista */
 
 /* ¿esta pieza tiene nodo en el grafo?
    BUG v1.9 (cazado por Patricia el 21-jul): esto buscaba el código SOLO al
@@ -5318,7 +5308,7 @@ function lanzaderaHTML(it){   /* v1.101 · ya sin vista previa: el artefacto abr
 }
 function idxCardHTML(it){
   var j=(typeof it.j==='number')?it.j:nodeByNid(it.nid),live=j>=0,demo=!!it.demo;   /* v1.31 · las portadas nuevas apuntan al nodo */
-  var im=(IDXIMG&&it.img)?'<span class="ix-img"><img src="'+it.img+'" alt="" loading="lazy"></span>':'';
+  var im=it.img?'<span class="ix-img"><img src="'+it.img+'" alt="" loading="lazy"></span>':'';
   /* una pieza es accionable si tiene artefacto O nodo en el mapa */
   var dead=!demo&&!live;
   return '<button class="ix-card'+(dead?' ghost':'')+(demo?' has-demo':'')+'" '+
@@ -5370,11 +5360,7 @@ function ajustaEscala(){
 /* filtra + ordena · el orden que se pide es el orden que se lee */
 function idxItems(key){
   var out=IDX[key].items.slice();
-  if(IDXTEMA&&!IDX[key].simple)out=out.filter(function(it){return it.tema===IDXTEMA;});
-  if(!IDX[key].simple)out.sort(function(a,b){
-    if(a.date===b.date)return 0;
-    return (IDXORD==='desc')?(a.date<b.date?1:-1):(a.date>b.date?1:-1);
-  });
+  if(!IDX[key].simple)out.sort(function(a,b){if(a.date===b.date)return 0;return a.date<b.date?1:-1;});   /* v1.107 · más reciente primero, y punto */
   return out;
 }
 /* Masonry de verdad: reparte por la columna más corta, así el orden pedido
@@ -5382,55 +5368,33 @@ function idxItems(key){
    antes de saltar a la segunda — y entonces ordenar por fecha no servía de
    nada, porque lo más viejo aparecía arriba a la derecha. */
 function idxGridHTML(items){
-  if(IDXCOLS===1)return '<div class="ix-grid one">'+items.map(idxCardHTML).join('')+'</div>';
   var h=[0,0],col=[[],[]];
   items.forEach(function(it){
     var m=(h[1]<h[0])?1:0;
     col[m].push(idxCardHTML(it));
-    h[m]+= 110 + it.title.length*0.6 + it.lead.length*0.33 + ((IDXIMG&&it.img)?190:0);
+    h[m]+= 110 + it.title.length*0.6 + it.lead.length*0.33 + (it.img?190:0);
   });
   return '<div class="ix-grid two">'+col.map(function(c){
     return '<div class="ix-col">'+c.join('')+'</div>';}).join('')+'</div>';
 }
-function idxHTML(key){
-  var items=idxItems(key),pub=0,ghosts=0,demos=0;
-  items.forEach(function(it){
-    if(it.state==='Circulación'||it.state==='Publicado')pub++;
-    if(nodeByNid(it.nid)<0)ghosts++;
-    if(it.demo)demos++;
-  });
-  var esLab=(key==='LAB'),simple=!!IDX[key].simple;
-  var SER=IDX[key].serie,nser=SER?SER.filter(function(o){return o.k==='Serie';}).length:0;
-  var recuento=SER?(nser+' series y obra suelta · '+items.length+(items.length===1?' pieza':' piezas')+' en el mapa')
-    :simple?(items.length+(items.length===1?' pieza':' piezas')):esLab
-    ? (items.length+' artefactos · '+demos+' jugables · '+ghosts+' sin nodo')
-    : (items.length+' notas · '+pub+' en circulación · '+ghosts+' sin nodo');
-  var todos=IDX[key].items;
-  var opTema=['<option value=""'+(IDXTEMA?'':' selected')+'>Todas las temáticas ('+todos.length+')</option>']
-    .concat(temasDe(todos).map(function(t){
-      var c=todos.filter(function(x){return x.tema===t;}).length;
-      return '<option value="'+esc(t)+'"'+(IDXTEMA===t?' selected':'')+'>'+esc(t)+' ('+c+')</option>';
-    })).join('');
+function listaHTML(items){   /* v1.107 · la lista: título, tema y fecha, una línea por pieza y sin imagen (Koi, 17-nov: «no es necesaria la info») */
+  return '<ol class="ix-lista">'+items.map(function(it){
+    var j=(typeof it.j==='number')?it.j:nodeByNid(it.nid),live=j>=0,demo=!!it.demo,dead=!demo&&!live;
+    var meta=[it.tema||it.cluster||'',it.date||''].filter(Boolean).map(esc).join(' · ');
+    return '<li><button class="ix-li'+(dead?' ghost':'')+'" data-j="'+j+'" data-demo="'+esc(it.demo||'')+'" data-t="'+esc(it.title)+'" data-w="'+(it.w||0)+'" data-vista="'+esc(it.vista||'panel')+'"'+(dead?' aria-disabled="true"':'')+'>'+
+      '<span class="ix-li-t">'+esc(it.title)+'</span>'+(meta?'<span class="ix-li-m">'+meta+'</span>':'')+'</button></li>';}).join('')+'</ol>';
+}
+function idxHTML(key){   /* v1.107 · la portada: entradilla, un conmutador de dos vistas y las piezas. Fuera el recuento, el orden y las temáticas */
+  var items=idxItems(key),SER=IDX[key].serie,lista=(IDXVISTA==='lista');
+  var btn=function(v,ic,t){return '<button type="button" data-v="'+v+'" aria-pressed="'+(IDXVISTA===v)+'" title="'+t+'" aria-label="'+t+'"><span class="ms" aria-hidden="true">'+ic+'</span></button>';};
+  var cuerpo=!items.length?'<p class="ix-empty">Aún no hay piezas aquí.</p>'
+    :lista?listaHTML(items)
+    :(key==='NOTES'?magHTML(items):(key==='LAB'?quantumHTML(items):(key==='STUDIO'&&!RM?mazoHTML(items):idxGridHTML(items))));   /* v1.61 · Notes en revista; Studio en mazo */
   return '<div class="ix">'+
     '<p class="ix-dek">'+esc(IDX[key].dek)+'</p>'+
-    '<div class="ix-bar">'+
-      '<span class="ix-count">'+recuento+'</span>'+
-      (simple?'':'<span class="ix-ctl">'+
-        '<select class="ix-sel" id="ix-ord" aria-label="Ordenar por fecha">'+
-          '<option value="desc"'+(IDXORD==='desc'?' selected':'')+'>Más reciente primero</option>'+
-          '<option value="asc"'+(IDXORD==='asc'?' selected':'')+'>Más antigua primero</option>'+
-        '</select>'+
-        '<select class="ix-sel" id="ix-tema" aria-label="Filtrar por temática">'+opTema+'</select>'+
-        '<span class="ix-seg">'+
-          '<button data-c="1" aria-pressed="'+(IDXCOLS===1)+'">1 col</button>'+
-          '<button data-c="2" aria-pressed="'+(IDXCOLS===2)+'">2 col</button>'+
-          '<button data-c="img" aria-pressed="'+IDXIMG+'">img</button>'+
-        '</span>'+
-      '</span>')+
-    '</div>'+
+    '<div class="ix-bar"><span class="ix-vista" role="group" aria-label="Cómo ver las piezas">'+btn('mosaico','grid_view','Mosaico')+btn('lista','view_list','Lista')+'</span></div>'+
     (SER?serieHTML(SER)+(items.length?'<p class="ix-count ix-mapa">Además, en el mapa</p>':''):'')+
-    (items.length?(key==='NOTES'&&IDXCOLS===2?magHTML(items):(key==='LAB'&&IDXCOLS===2?quantumHTML(items):(key==='STUDIO'&&!RM?mazoHTML(items):idxGridHTML(items))))   /* v1.61 · Notes en revista; Studio en mazo */
-      :'<p class="ix-empty">'+(simple?'Aún no hay piezas aquí.':'No hay notas en esta temática todavía.')+'</p>')+
+    cuerpo+
   '</div>';
 }
 
@@ -5683,12 +5647,6 @@ function mapaClic(e){
   if(j===sel||slugURL()===SLUGN[j]){e.preventDefault();if(j===sel)cpTab(0,e.detail===0);else{clearFilt();setSel(j);}}
 }
 document.getElementById('cp-p2').addEventListener('click',mapaClic);
-/* los dos desplegables: fecha y temática */
-document.getElementById('p-art').addEventListener('change',function(e){
-  var t=e.target;
-  if(t.id==='ix-ord'){IDXORD=t.value;renderPanel();}
-  else if(t.id==='ix-tema'){IDXTEMA=t.value;renderPanel();}
-});
 /* clics dentro del índice: volver, conmutadores, fichas, artefactos */
 document.getElementById('p-art').addEventListener('click',function(e){
   var wl=e.target.closest('a.wl[data-nodo]');if(wl){e.preventDefault();clearFilt();setSel(+wl.dataset.nodo);return;}   /* v1.33 · [[enlaces]] del md */
@@ -5700,12 +5658,9 @@ document.getElementById('p-art').addEventListener('click',function(e){
   if(e.target.closest('.ix-out'))return;              /* abrir aparte: que siga */
   var vb=e.target.closest('.ix-vb');
   if(vb){VMODO=vb.dataset.v;renderPanel();return;}
-  var s=e.target.closest('.ix-seg button');
-  if(s){
-    if(s.dataset.c==='img')IDXIMG=!IDXIMG; else IDXCOLS=+s.dataset.c;
-    renderPanel();return;
-  }
-  var c=e.target.closest('.ix-card')||e.target.closest('.ix-launch-b');
+  var vv=e.target.closest('.ix-vista button');
+  if(vv){IDXVISTA=vv.dataset.v;try{localStorage.setItem('ks-vista',IDXVISTA);}catch(_e){}renderPanel();return;}   /* v1.107 · mosaico o lista, y se recuerda */
+  var c=e.target.closest('.ix-card')||e.target.closest('.ix-li')||e.target.closest('.ix-launch-b');
   if(!c)return;
   if(c.dataset.demo){                                  /* el artefacto manda */
     IDXDEMO={src:c.dataset.demo,t:c.dataset.t,key:N[sel][0],
