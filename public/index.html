@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.107 · la portada, dos vistas y un conmutador">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.108 · la ficha técnica delante del artefacto">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -238,15 +238,19 @@ kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--li
   padding:6px 11px;border-radius:999px;white-space:nowrap}
 .ix-out:hover{color:var(--ink);border-color:var(--tinta)}
 /* lanzadera del artefacto dentro del panel de una PIEZA */
-.ix-launch{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 26px;
-  padding:16px 18px;border:.5px solid var(--line);border-left:2.5px solid var(--acc,var(--tinta));
-  border-radius:10px;background:#fff}
+.ix-launch{display:grid;gap:var(--muda-space-lg,21px);justify-items:start;margin:0 0 var(--muda-space-2xl,55px);max-width:680px;
+  padding:var(--muda-space-lg,21px);border-left:2.5px solid var(--acc,var(--tinta));background:var(--muda-color-bg-soft,#F6F6F3);border-radius:0 var(--muda-radius-sm,5px) var(--muda-radius-sm,5px) 0}   /* v1.108 · la ficha técnica */
+.ix-ft{display:grid;grid-template-columns:max-content 1fr;gap:var(--muda-space-sm,8px) var(--muda-space-lg,21px);margin:0;width:100%}
+.ix-ft div{display:contents}
+.ix-ft dt{font:500 var(--muda-typography-size-meta-s,11px)/1.5 var(--muda-typography-family-mono,ui-monospace,monospace);letter-spacing:.06em;text-transform:uppercase;color:var(--muda-color-text-sub,#686761)}
+.ix-ft dd{margin:0;font:400 var(--muda-typography-size-body-s,15px)/1.5 var(--muda-typography-family-fira,sans-serif);color:var(--muda-color-text-ink,#2D2A23)}
+.ix-aviso{margin:0;font:400 var(--muda-typography-size-body-s,15px)/1.5 var(--muda-typography-family-fira,sans-serif);color:var(--muda-color-text-sub,#686761)}
+@media (max-width:640px){.ix-ft{grid-template-columns:1fr}}
 .ix-launch-b{font:500 11.5px/1 'Albert Sans',system-ui,sans-serif;letter-spacing:.06em;
   text-transform:uppercase;padding:11px 18px;border-radius:999px;border:0;
   background:var(--tinta);color:var(--papel);cursor:pointer}
 .ix-launch-b:hover{opacity:.86}
 .ix-launch-b:focus-visible{outline:2px solid var(--tinta);outline-offset:3px}
-.ix-launch-m{font:400 10.5px ui-monospace,monospace;color:var(--ink-3);letter-spacing:.03em}
 .ix-stage{flex:1 1 auto;min-height:0;overflow:hidden;position:relative;background:#F6F6F3}
 .ix-frame{width:100%;height:100%;border:0;background:#F6F6F3;display:block}
 .ix-nat{font:400 9.5px ui-monospace,monospace;color:var(--ink-3);letter-spacing:.04em;white-space:nowrap}
@@ -5042,15 +5046,15 @@ var IDX={
   'LAB':{
     dek:'Artefactos: piezas que se manipulan, no se leen. Cada una investiga algo que un texto no puede enseñar.',
     items:[
- {nid:'N17.a1',date:'2026-06',tema:'Economía',cluster:'Interactivo',title:'El Ouroboros Digital',lead:'La industria de la IA no opera como un mercado: es un circuito cerrado donde el capital del inversor A financia al laboratorio B para que compre infraestructura al proveedor A.',authors:'Canvas · fuerzas',read:'v3.1',state:'Publicado',img:'notes-assets/propuesta_ouroboros2.png',demo:'KS-N17a1-ouroboros-v3.1.html',w:1320,vista:'ancho'},
+ {nid:'N17.a1',ficha:true,date:'2026-06',tema:'Economía',cluster:'Interactivo',title:'El Ouroboros Digital',lead:'La industria de la IA no opera como un mercado: es un circuito cerrado donde el capital del inversor A financia al laboratorio B para que compre infraestructura al proveedor A.',authors:'Canvas · fuerzas',read:'v3.1',state:'Publicado',img:'notes-assets/propuesta_ouroboros2.png',demo:'KS-N17a1-ouroboros-v3.1.html',w:1320,vista:'ancho'},
  {nid:'N20.a1',date:'2026-05',tema:'Cultura',cluster:'Color',title:'KS Color Compass',lead:'Brújula de color: navegar el catálogo y ver qué le pasa a un matiz cuando se le quita luz.',authors:'Rampas · CIELAB',read:'v0.8.2',state:'Borrador',img:'',demo:'KS-N20a1-color-compass-v0.8.2.html',w:1380,vista:'ancho'},
  {nid:'N07.a1',date:'2026-05',tema:'Economía',cluster:'Diagrama',title:'Stakeholder Topology',lead:'Topología de partes interesadas: quién sostiene a quién en una organización, y por dónde se rompe.',authors:'MUDA · 290 tokens',read:'v2',state:'Borrador',img:'',demo:'KS-N07a1-stakeholder-v2-muda.html',w:900,vista:'panel'},
  {nid:'N20.a3',date:'2026-07',tema:'Cultura',cluster:'3D',title:'NCS Navigator',lead:'El sólido de color NCS, navegable en tres dimensiones. Buscar un matiz mirándolo por dentro.',authors:'Canvas 3D',read:'v0.2',state:'Uso propio',img:'',demo:'',w:900,vista:'pleno'},   /* v1.44 · no se publica: su ficha dice «uso propio · no redistribuir» (dato de NCS Colour AB) */
  {nid:'N20.a2',date:'2026-03',tema:'Cultura',cluster:'3D',title:'Munsell Hotel',lead:'Visualizador tridimensional interactivo del sólido de color de Munsell. Permite localizar cualquier color en el espacio HVC y leer su posición como notación Munsell.',authors:'Canvas 3D',read:'v0.7',state:'Borrador',img:'',demo:'KS-N20a2-munsell-hotel-v0.7.html',w:1110,vista:'ancho'},   /* v1.44 */
  {nid:'N01.a1',date:'2026-03',tema:'IA',cluster:'Modelo',title:'Han Stack',lead:'La pila del cansancio: capas de infraestructura, energía y cuerpo bajo cada consulta a un modelo.',authors:'6 columnas',read:'v0.2',state:'Borrador',img:'',demo:'KS-N01a1-han-stack-v0.2.html',w:1160,vista:'ancho'}   /* v1.44 · 1160: a 1100 su retícula pasa a una columna */,
  {nid:'N19.a2',date:'2026-05',tema:'Economía',cluster:'Datos',title:'Rare Earths',lead:'Tierras raras, litio y cobalto: el mapa material de las dependencias que el discurso de innovación deja fuera de plano.',authors:'3 columnas',read:'v0.1',state:'Borrador',img:'',demo:'KS-N19a2-rare-earths-v0.1.html',w:1100,vista:'ancho'},
- {nid:'N09.a1',date:'2026-10',tema:'Cultura',cluster:'Interactivo',title:'La habitación de la entropía',lead:'Una frase tuya pasa de copista en copista, y cada uno solo ve la del anterior. El artefacto que mide en números lo que la nota de Woolf y Arendt cuenta en palabras.',authors:'Cadena de copistas',read:'v1',state:'Borrador',img:'',demo:'KS-N09a1-habitacion-entropia-v1.html',w:1280,vista:'ancho'},
- {nid:'N07.a2',date:'2026-07',tema:'IA',cluster:'Corpus',title:'Glosario UX·UI',lead:'502 términos del oficio, cada uno con qué es, cómo se hace, un ejemplo y sus trampas. Vive entre LAB y ACADEMIA.',authors:'502 términos · 7 categorías',read:'v3.4',state:'Circulación',img:'',demo:'KS-N07a2-glosario-v3.4.html',w:1180,vista:'ancho'}   /* v1.44 */
+ {nid:'N09.a1',ficha:true,date:'2026-10',tema:'Cultura',cluster:'Interactivo',title:'La habitación de la entropía',lead:'Una frase tuya pasa de copista en copista, y cada uno solo ve la del anterior. El artefacto que mide en números lo que la nota de Woolf y Arendt cuenta en palabras.',authors:'Cadena de copistas',read:'v1',state:'Borrador',img:'',demo:'KS-N09a1-habitacion-entropia-v1.html',w:1280,vista:'ancho'},
+ {nid:'N07.a2',ficha:true,date:'2026-07',tema:'IA',cluster:'Corpus',title:'Glosario UX·UI',lead:'502 términos del oficio, cada uno con qué es, cómo se hace, un ejemplo y sus trampas. Vive entre LAB y ACADEMIA.',authors:'502 términos · 7 categorías',read:'v3.4',state:'Circulación',img:'',demo:'KS-N07a2-glosario-v3.4.html',w:1180,vista:'ancho'}   /* v1.44 */
     ]}
 };
 /* v1.31 · PORTADAS PARA TODAS LAS SECCIONES (Patricia, 28-sep): /studio, /galería, /academia, /store y /about
@@ -5297,13 +5301,15 @@ function itemByNode(i){
   return null;
 }
 /* bloque que se pinta en el panel de una PIEZA que tiene artefacto */
-function lanzaderaHTML(it){   /* v1.101 · ya sin vista previa: el artefacto abre solo al llegar; esto es la ficha de detrás (Koi, 16-nov: «no quiero esas ventanas de carga») */
-  var v=it.vista||'panel';
+function lanzaderaHTML(it){   /* v1.108 · la ficha técnica: versión, técnica, medida, estado y el botón «Ver artefacto». Va delante en el móvil y en los
+  artefactos complejos (ficha:true); en los demás, el artefacto abre solo y la ficha queda detrás («‹ Ficha»). Koi, 17-nov: «en Entropic
+  hay tanta info que quizá al entrar se vea una ficha técnica y el botón; la mayoría de mis artefactos son grandes» */
+  var v=it.vista||'panel',grande=(it.w||0)>760,movil=MOV.matches;
+  var fila=function(t,d){return d?'<div><dt>'+t+'</dt><dd>'+esc(d)+'</dd></div>':'';};
   return '<div class="ix-launch">'+
-    '<button class="ix-launch-b" data-demo="'+esc(it.demo)+'" data-t="'+esc(it.title)+'" '+
-      'data-w="'+(it.w||0)+'" data-vista="'+esc(v)+'">Abrir artefacto · '+esc(VISTAS[v])+'</button>'+
-    '<span class="ix-launch-m">'+esc(it.nid)+' · '+esc(it.read)+
-      (it.w?(' · ancho natural '+it.w+'px'):'')+'</span>'+
+    '<dl class="ix-ft">'+fila('Versión',it.read)+fila('Técnica',it.authors)+fila('Medida',it.w?(it.w+' px de ancho · vista '+VISTAS[v].toLowerCase()):'')+fila('Estado',it.state)+'</dl>'+
+    (grande&&movil?'<p class="ix-aviso">Pensado para pantalla grande: en el móvil se ve a escala y algunas partes piden ratón.</p>':'')+
+    '<button class="ix-launch-b" data-demo="'+esc(it.demo)+'" data-t="'+esc(it.title)+'" data-w="'+(it.w||0)+'" data-vista="'+esc(v)+'">Ver artefacto · '+esc(VISTAS[v])+'</button>'+
   '</div>';
 }
 function idxCardHTML(it){
@@ -5334,7 +5340,7 @@ function demoHTML(){
   return '<div class="ix-viewer" data-w="'+w+'">'+
     '<div class="ix-vbar">'+
       '<button class="ix-back" id="ix-back">'+
-        (IDXDEMO.from==='indice'?'‹ Índice':(IDXDEMO.from==='auto'?'‹ Ficha':'‹ Volver a la pieza'))+'</button>'+   /* v1.101 · abierto solo: detrás queda la ficha */
+        (IDXDEMO.from==='indice'?'‹ Índice':'‹ Ficha')+'</button>'+   /* v1.101 · abierto solo: detrás queda la ficha · v1.108 · también cuando se abrió desde ella */
       '<span class="ix-vt">'+esc(IDXDEMO.t)+'</span>'+
       /* v1.24 · fuera el selector de vista, el «ancho natural» y «Aparte» (Patricia, 27-sep):
          cada artefacto abre en la vista que declara */
@@ -5457,7 +5463,7 @@ function renderPanel(){
   if(sel===null)return;
   var n=N[sel],d=DOC[sel],key=n[0],isIdx=(n[1]===1&&IDX[key]);
   var mm=isIdx?null:itemByNode(sel);
-  if(!IDXDEMO&&mm&&mm.it.demo&&DEMO_FUERA!==sel){   /* v1.101 · una pieza con artefacto abre el artefacto, sin lanzadera (Koi, 16-nov) */
+  if(!IDXDEMO&&mm&&mm.it.demo&&DEMO_FUERA!==sel&&!mm.it.ficha&&!MOV.matches){   /* v1.101 · una pieza con artefacto abre el artefacto, sin lanzadera (Koi, 16-nov) · v1.108 · salvo en el móvil y en los complejos: primero la ficha técnica */
     IDXDEMO={src:mm.it.demo,t:mm.it.title,key:mm.sec,w:mm.it.w||0,vista:mm.it.vista||'panel',from:'auto'};VMODO=null;}
   var isDemo=!!IDXDEMO;
   document.getElementById('p-k').textContent=isDemo?('Artefacto · /'+(IDXDEMO.key||'lab').toLowerCase())
