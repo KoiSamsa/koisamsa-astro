@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.103 · una sola hoja">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.104 · una sola hoja, decidida">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1227,17 +1227,6 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 #velo-top{height:100%}
 body.cx-on #velo-top{height:var(--carpeta-top)}
 #hermanas .her-sec[aria-pressed="true"] .ms{color:var(--muda-color-text-ink);background:var(--muda-color-bg-recessed);border-radius:50%;padding:7px;margin:-7px}
-/* PROTOTIPO ?lateral (17-nov) · la hoja, panel a la derecha entre el menú y el pie; el grafo, siempre a la vista, corrido a su izquierda.
-   El hub lo pliega hacia su lado. Solo en pantalla ancha. */
-@media (min-width:761px){
-  html.lateral #panel.carpeta,html.lateral body.hermanas-on #panel.carpeta{top:var(--carpeta-top);bottom:var(--pie-h);height:auto;left:auto;right:0;width:min(640px,58vw);
-    transform:translateX(calc(100% + 40px))}
-  html.lateral body.hermanas-on #panel.carpeta{bottom:calc(var(--pie-h) + var(--her-h))}
-  html.lateral #panel.carpeta.open{transform:translateX(0)}
-  html.lateral #panel.carpeta.recogida{transform:translateX(calc(100% + 40px))}
-  html.lateral #velo-top{display:none}
-  html.lateral .cp-hoja{border-radius:var(--muda-radius-md) 0 0 0}
-}
 /* v1.78 · los hilos del mapa: detrás del índice, un SVG con un hilo por conexión; los nombres llevan el papel de la hoja
    para que el hilo pase por detrás. v1.79: a la vista siempre. */
 #cp-p2 .mp-hilos-w{position:relative}
@@ -6511,7 +6500,7 @@ function frame(){
      descentrada correcta — mover la cámara metía el grafo en el borde del
      cono y lo deformaba. */
   var wide=W>760;   /* v1.63 · el corte de MUDA */
-  var pxw=(LATERAL&&wide&&panel.classList.contains('open')&&CPT!==1)?panel.getBoundingClientRect().width:0;   /* v1.26 · ya no hay panel lateral · prototipo ?lateral: lo hay, y el grafo se corre a su izquierda */
+  var pxw=0;   /* v1.26 · ya no hay panel lateral (v1.104: el prototipo ?lateral se vio y se descartó; Koi, 17-nov: la hoja única) */
   /* v1.28 · el centro del grafo: con la carpeta abierta, el de la ventana de Conexiones (cuerpo de la hoja de delante);
      explorando, el del hueco que deja el pie */
   var pyT;
@@ -6519,8 +6508,8 @@ function frame(){
     var _vt=document.getElementById('velo-top').getBoundingClientRect().bottom,
         _hb=(document.body.classList.contains('hermanas-on')?HER:document.getElementById('pie')).getBoundingClientRect().top;
     pyT=H/2-(_vt+_hb)/2;}
-  else if(panel.classList.contains('open')&&!(LATERAL&&wide)){var fb=panel.querySelector('.cp-hoja.delante .cp-cuerpo').getBoundingClientRect();pyT=H/2-(fb.top+fb.bottom)/2;}
-  else pyT=0;   /* v1.29 · explorando no hay pie · prototipo lateral: el panel no tapa en vertical */
+  else if(panel.classList.contains('open')){var fb=panel.querySelector('.cp-hoja.delante .cp-cuerpo').getBoundingClientRect();pyT=H/2-(fb.top+fb.bottom)/2;}
+  else pyT=0;   /* v1.29 · explorando no hay pie */
   PANX+=((pxw*0.5)-PANX)*0.09;
   PANY+=(pyT-PANY)*0.09;
   if(Math.abs(PANX)>0.5||Math.abs(PANY)>0.5)cam.setViewOffset(W,H,PANX,PANY,W,H);else cam.clearViewOffset();
@@ -6727,7 +6716,7 @@ function frame(){
 
   /* v1.27 · con la carpeta abierta y el velo ya opaco, el grafo no se pinta: nadie lo ve. El motor sigue
      corriendo, así que al cerrar vuelve tal cual, en su sitio. */
-  var tapado=panel.classList.contains('open')&&CPT!==1&&!(LATERAL&&wide)&&performance.now()>TAPADO_T;   /* v1.28 · Conexiones enseña el grafo · prototipo lateral: siempre a la vista */
+  var tapado=panel.classList.contains('open')&&CPT!==1&&performance.now()>TAPADO_T;   /* v1.28 · Conexiones enseña el grafo */
   if(!tapado)rnd.render(scene,cam);
 
   var VB={};   /* v1.60 · las VB_MAX piezas más cercanas a ti, en la banda; con algo señalado o abierto, nadie en voz baja */
@@ -6851,9 +6840,6 @@ function slugTxt(t){return String(t||'').toLowerCase().normalize('NFD').replace(
    En la demo de claude.ai (otro origen) todo sigue por #: RUTAS dice dónde estamos. El glosario toma su dirección
    larga (decidida el 29-oct); la corta queda como alias. ═══ */
 var RUTAS=/koisamsa\.com$|\.pages\.dev$|^127\.0\.0\.1$|^localhost$/.test(location.hostname);
-/* PROTOTIPO (17-nov) · ?lateral: la hoja como panel a la derecha y el grafo siempre a la vista (la tercera opción del revisor y de Oscar).
-   Solo en pantalla ancha; en el móvil, la hoja de siempre. Para compararlo, no es la decisión. */
-var LATERAL=/[?&]lateral(?!=0)/.test(location.search);if(LATERAL)document.documentElement.classList.add('lateral');
 (function(){var g=NSLUG['glosario-de-producto-ux-ui-e-ia'];if(g!==undefined){SLUGN[g]='glosario-terminos-producto-digital';NSLUG['glosario-terminos-producto-digital']=g;}})();
 function slugURL(){var h=(location.hash||'').slice(1).toLowerCase();if(h&&NSLUG[h]!==undefined)return h;
   if(!RUTAS)return '';var p=location.pathname.replace(/^\/+|\/+$/g,'').split('/')[0]||'';try{p=decodeURIComponent(p);}catch(_e){}return p.toLowerCase();}
