@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.110 · la lista enseña la entradilla al pasar">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.111 · la entradilla de la lista, al cuerpo de los títulos">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -203,8 +203,8 @@ kbd{font-family:ui-monospace,monospace;font-size:11px;border:.5px solid var(--li
 .ix-lista-w{display:grid;grid-template-columns:minmax(0,43fr) 15fr;gap:0 var(--muda-space-xl,34px);align-items:start;max-width:1280px}   /* v1.110 · la lista y su margen, como el artículo (43 · 2 · 15) */
 .ix-lista{list-style:none;margin:0;padding:0;min-width:0}
 .ix-excerpt{position:sticky;top:var(--muda-space-lg,21px);padding:var(--muda-space-md,13px) 0 0;border-top:.5px solid var(--muda-color-stroke-soft,#E3E1DA)}
-.ix-ex-t{margin:0 0 var(--muda-space-sm,8px);font:500 var(--muda-typography-size-meta-s,11px)/1.4 var(--muda-typography-family-fira,sans-serif);letter-spacing:.06em;text-transform:uppercase;color:var(--muda-color-text-sub,#686761)}
-.ix-ex-l{margin:0;font:italic 400 var(--muda-typography-size-body-m,17px)/1.5 var(--muda-typography-family-serif,Georgia,serif);color:var(--muda-color-text-ink,#2D2A23)}
+.ix-ex-t{margin:0 0 var(--muda-space-sm,8px);font:500 var(--muda-typography-size-meta-m,12px)/1.4 var(--muda-typography-family-fira,sans-serif);letter-spacing:.06em;text-transform:uppercase;color:var(--muda-color-text-sub,#686761)}
+.ix-ex-l{margin:0;font:italic 400 var(--muda-typography-size-body-l,20px)/1.45 var(--muda-typography-family-serif,Georgia,serif);color:var(--muda-color-text-ink,#2D2A23)}
 @media (max-width:760px){.ix-lista-w{display:block}.ix-excerpt{display:none}}
 .ix-li{display:flex;align-items:baseline;justify-content:space-between;gap:var(--muda-space-lg,21px);width:100%;padding:var(--muda-space-md,13px) 0;border:0;
   border-top:.5px solid var(--muda-color-stroke-soft,#E3E1DA);background:transparent;text-align:left;cursor:pointer;font:inherit;color:inherit}
