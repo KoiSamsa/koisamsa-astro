@@ -6,11 +6,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.101 · el Lab abre directo">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.105 · el mapa vuelve junto a la casita">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0&icon_names=account_tree,article,arrow_back,arrow_forward,grid_on,hub,link,mail,search,share&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,300,0,0&icon_names=account_tree,article,arrow_back,arrow_forward,hub,link,mail,search,share&display=block" rel="stylesheet">
 <style>
 :root{--papel:#FAF9F7;--tinta:#0B0B0B;--ink:#3F4245;--ink-2:#787B7E;--ink-3:#A1A3A6;
   --line:rgba(11,11,11,.11);--panel-w:440px}
@@ -385,24 +385,17 @@ body.strip-on #panel{bottom:var(--strip-h)}   /* v1.24 · el panel termina encim
 #panel.carpeta.open{transform:translateY(0)}
 #panel.carpeta.is-demo{display:block;overflow:visible}
 .cp-hoja{position:absolute;left:0;right:0;bottom:0;transition:top .46s cubic-bezier(.3,.7,.15,1)}
-.cp-hoja.detras{top:0;z-index:1}
 .cp-hoja.delante{top:var(--cp-hh);z-index:2}
 .cp-hoja.sube{animation:cp-sube .46s cubic-bezier(.3,.7,.15,1)}
 @keyframes cp-sube{0%{transform:translateY(0)}40%{transform:translateY(-12px)}100%{transform:translateY(0)}}
 .cp-cab{position:relative;height:var(--cp-hh);display:flex;align-items:center;padding:0 var(--sp-2xl);
   border-radius:21px 21px 0 0;background:var(--hoja);box-shadow:0 -.5px 0 var(--line);transition:background-color .3s ease}
-.cp-hoja.detras .cp-cab{background:#EDECEA;background:color-mix(in srgb,var(--hoja),#0B0B0B 5.6%)}
-/* la de detrás se prolonga bajo los hombros redondos de la de delante */
-.cp-hoja.detras .cp-cab::after{content:"";position:absolute;left:0;right:0;top:100%;height:24px;background:inherit}
 .cp-hoja.delante .cp-cab{box-shadow:0 -.5px 0 var(--line),0 -14px 30px -20px rgba(11,11,11,.22)}
 .cp-t{display:inline-flex;align-items:baseline;gap:10px;border:0;background:transparent;padding:0;cursor:default;
   font:600 15px/1 'Albert Sans',system-ui,sans-serif;color:#141618;letter-spacing:-.005em}
-.cp-hoja.detras .cp-t{cursor:pointer;flex:1 1 auto;height:100%;color:var(--ink-2)}
-.cp-hoja.detras .cp-cab:hover .cp-t{color:#141618}
 .cp-t:focus-visible{outline:2px solid var(--tinta);outline-offset:4px;border-radius:4px}
 .cp-t .n{font:400 11px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-3)}
 .cp-cuerpo{position:absolute;top:var(--cp-hh);left:0;right:0;bottom:0;overflow-y:auto;background:var(--hoja);padding:var(--sp-sm) var(--sp-2xl) calc(var(--sp-2xl) + env(safe-area-inset-bottom,0px))}
-.cp-hoja.detras .cp-cuerpo{visibility:hidden}
 .cp-pan{max-width:1120px;container-type:inline-size}
 .cp-pan>.kicker,.cp-pan>h1,.cp-pan>.desc,.cp-pan>#p-art{max-width:none}
 .cp-pan>h1{margin-top:0}
@@ -420,11 +413,9 @@ body.strip-on #panel{bottom:var(--strip-h)}   /* v1.24 · el panel termina encim
 #panel.carpeta #st-body .cell{flex:none;min-height:96px}
 body.panel-on #logo,body.panel-on #hud-br{opacity:0;pointer-events:none}
 /* v1.28 · CONEXIONES es el grafo: su hoja es una ventana — el nodo activado, en el centro, con sus vecinos */
-#cp-c1{background:transparent;pointer-events:none}
 /* la carpeta solo recoge los clics donde hay papel: cabeceras, ✕ y la Ficha; por la ventana pasan al grafo */
 #panel.carpeta{pointer-events:none}
 #panel.carpeta .cp-cab,#panel.carpeta #panel-x,#panel.carpeta #cp-c0,#panel.carpeta #cp-c2{pointer-events:auto}   /* v1.75 · el Mapa también es papel */
-#cp-p1{display:none}
 body.v-pleno #hud-tl,body.v-pleno #hud-tr,body.v-pleno #search{display:flex}   /* la carpeta deja el menú arriba también con un artefacto a pleno */
 @media (prefers-reduced-motion:reduce){.cp-hoja,#panel.carpeta{transition:none}.cp-hoja.sube{animation:none}}
 @media (max-width:760px){
@@ -550,12 +541,8 @@ body.panel-on #pie{transform:translateY(0)}
 @keyframes cp-aparece{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
 .cp-cab{padding:0 var(--muda-space-2xl);border-radius:var(--muda-radius-lg) var(--muda-radius-lg) 0 0;
   box-shadow:0 calc(-1 * var(--muda-stroke-1)) 0 var(--muda-color-stroke-soft);transition:background-color var(--muda-duration-8f) var(--muda-motion-easing-default)}
-.cp-hoja.detras .cp-cab{background:var(--muda-color-bg-recessed)}
-.cp-hoja.detras .cp-cab:hover{background:var(--muda-color-bg-recessed-hover)}
 .cp-hoja.delante .cp-cab{box-shadow:0 calc(-1 * var(--muda-stroke-1)) 0 var(--muda-color-stroke-soft),0 -4px 16px rgba(29,20,12,.10)}
 .cp-t{gap:var(--muda-space-sm);font:600 var(--muda-typography-size-body-s)/1 var(--muda-typography-family-sans);color:var(--muda-color-text-ink);letter-spacing:normal}
-.cp-hoja.detras .cp-t{font-weight:500;color:var(--muda-color-text-sub)}
-.cp-hoja.detras .cp-cab:hover .cp-t{color:var(--muda-color-text-ink)}
 .cp-t .n{font:400 var(--muda-typography-size-meta-s)/1 var(--muda-typography-family-mono);color:var(--muda-color-text-soft)}
 .cp-cuerpo{padding:var(--muda-space-xl) var(--muda-space-2xl) calc(var(--muda-space-2xl) + env(safe-area-inset-bottom,0px))}
 #panel.carpeta #panel-x{top:calc(var(--cp-hh) + (var(--cp-hh) - 44px) / 2);right:var(--muda-space-lg);background:var(--muda-color-bg-surface);border-color:var(--muda-color-stroke-soft)}
@@ -923,7 +910,7 @@ button.pie-ic{border:0;background:transparent;padding:0;cursor:pointer;font:inhe
 #panel.carpeta .cp-t{min-width:0;max-width:calc(100% - 44px)}
 /* v1.42 · icono delante (article / hub), centrado de verdad —también la de detrás, que se quedaba arriba—, un espacio
    normal entre «de:» y el nombre, y sin negrita: el prefijo en gris y el nombre en tinta en la de delante */
-#panel.carpeta .cp-t,#panel.carpeta .cp-hoja.detras .cp-t{align-items:center;gap:var(--muda-space-sm);font-weight:400}
+#panel.carpeta .cp-t{align-items:center;gap:var(--muda-space-sm);font-weight:400}
 #panel.carpeta .cp-t .cp-ic{font-size:20px;flex:0 0 auto;color:inherit}
 #panel.carpeta .cp-t .cp-tx{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #panel.carpeta .cp-t .cp-l{color:var(--muda-color-text-sub)}
@@ -956,7 +943,6 @@ body.hermanas-on #panel.carpeta{bottom:calc(var(--pie-h) + var(--her-h));
 #hermanas .her-a:hover .her-t,#hermanas .her-a:focus-visible .her-t{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;
   text-decoration-color:var(--muda-color-stroke-soft)}
 #hermanas .her-a:focus-visible{outline:var(--muda-stroke-3) solid var(--muda-color-focus);outline-offset:-3px;border-radius:var(--muda-radius-sm)}
-#hermanas .her-n{flex:0 0 auto;font:400 var(--muda-typography-size-meta-s)/1 var(--muda-typography-family-mono);color:var(--muda-color-text-sub);letter-spacing:.04em}
 /* la tienda: «Relacionados» y sus piezas en fila */
 #hermanas.tienda{justify-content:flex-start}
 #hermanas.tienda .her-l{flex:0 0 auto;font:400 var(--muda-typography-size-meta-s)/1 var(--muda-typography-family-mono);letter-spacing:.06em;text-transform:uppercase}
@@ -965,7 +951,7 @@ body.hermanas-on #panel.carpeta{bottom:calc(var(--pie-h) + var(--her-h));
 #hermanas .her-sep{color:var(--muda-color-text-soft)}
 @media (max-width:760px){
   #hermanas{padding:0 var(--muda-space-md);gap:var(--muda-space-sm)}
-  #hermanas .her-n,#hermanas .her-pv .her-l,#hermanas .her-nx .her-l{display:none}
+  #hermanas .her-pv .her-l,#hermanas .her-nx .her-l{display:none}
 }
 @media (prefers-reduced-motion:reduce){#hermanas{transition:none}}
 
@@ -1199,19 +1185,13 @@ body.busq-on #logo,body.busq-on #hud-br,body.busq-on #qn{opacity:0;pointer-event
 @media (max-width:760px){:root{--cp-mx:var(--muda-space-sm)}}
 #panel.carpeta{left:var(--cp-mx);right:var(--cp-mx);width:auto}
 .cp-hoja{border-radius:var(--muda-radius-lg) var(--muda-radius-lg) 0 0}
-.cp-hoja.detras{left:var(--muda-space-xs);right:var(--muda-space-xs)}
 .cp-hoja.delante{box-shadow:0 0 0 var(--muda-stroke-1) var(--muda-color-stroke-soft)}
 @media (max-width:760px){.cp-hoja{border-radius:var(--muda-radius-md) var(--muda-radius-md) 0 0}}
-body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
 /* ═══ v1.73 · TRES HOJAS: CONTENIDO, CONEXIONES Y MAPA DEL SITIO ════════════════════════════════════════════════
    La de delante, a dos cabeceras del borde; la de detrás, a una; la de más lejos, arriba, 10 px más estrecha por lado
    y un tono más (soft). El radio de las hojas, el de sus cabeceras (md). */
 .cp-hoja{border-radius:var(--muda-radius-md) var(--muda-radius-md) 0 0}
 .cp-hoja.delante{top:calc(2 * var(--cp-hh))}
-.cp-hoja.detras{top:var(--cp-hh)}
-.cp-hoja.detras.lejos{top:0;z-index:0;left:calc(2 * var(--muda-space-xs));right:calc(2 * var(--muda-space-xs))}
-.cp-hoja.detras.lejos .cp-cab{background:var(--muda-color-bg-soft)}
-.cp-hoja.detras.lejos .cp-cab:hover{background:var(--muda-color-bg-recessed-hover)}
 #panel.carpeta #panel-x{top:calc(2 * var(--cp-hh) + (var(--cp-hh) - 32px) / 2)}
 #velo-top{height:calc(var(--carpeta-top) + 2 * var(--cp-hh))}
 @media (max-width:760px){body.cp-lee{--carpeta-top:calc(env(safe-area-inset-top,0px) - 3 * var(--cp-hh))}}
@@ -1236,13 +1216,17 @@ body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
 #cp-p2 .mp-prep{font-size:var(--muda-typography-size-meta-s);color:var(--muda-color-text-sub)}
 /* ═══ v1.77 · LAS HOJAS POR SU PROFUNDIDAD (dos desde la v1.84: Contenido y Conexiones) ═════════════════════════════
    La de detrás, una cabecera más arriba, 5 px más estrecha por lado y un tono más. */
-#panel.carpeta .cp-hoja.p0{top:var(--cp-hh);left:0;right:0;z-index:2}
-#panel.carpeta .cp-hoja.p1{top:0;left:var(--muda-space-xs);right:var(--muda-space-xs);z-index:1}
-#panel.carpeta .cp-hoja.p1 .cp-cab{background:var(--muda-color-bg-recessed)}
-#panel.carpeta .cp-hoja.detras .cp-cab:hover{background:var(--muda-color-bg-recessed-hover)}
-#panel.carpeta #panel-x{top:calc(var(--cp-hh) + (var(--cp-hh) - 32px) / 2)}
-#velo-top{height:calc(var(--carpeta-top) + var(--cp-hh))}
-@media (max-width:760px){body.cp-lee{--carpeta-top:calc(env(safe-area-inset-top,0px) - 2 * var(--cp-hh))}}
+#panel.carpeta .cp-hoja.p0{top:0;left:0;right:0;z-index:2}   /* v1.103 · sola: arriba del todo */
+#panel.carpeta #panel-x{top:calc((var(--cp-hh) - 32px) / 2)}
+@media (max-width:760px){body.cp-lee{--carpeta-top:calc(env(safe-area-inset-top,0px) - var(--cp-hh))}}
+/* ═══ v1.103 · UNA SOLA HOJA (Koi, 17-nov: «esta manera de navegar permite eliminar una de las cards… todo sucede en una única card») ═══
+   Conexiones deja de ser una hoja: el hub del pie recoge la hoja y deja el grafo a la vista, centrado en el nodo y con sus
+   vecinos; el hub se queda pulsado. Pulsar la bola del nodo, el hub o la miga de la cadena vuelve a subir la hoja, con su
+   lectura donde estaba. El velo de arriba baja entero con la hoja subida y se queda en el menú con la hoja recogida. */
+#panel.carpeta.recogida{transform:translateY(calc(100% + var(--pie-h) + 40px))}
+#velo-top{height:100%}
+body.cx-on #velo-top{height:var(--carpeta-top)}
+#hermanas .her-sec[aria-pressed="true"] .ms{color:var(--muda-color-text-ink);background:var(--muda-color-bg-recessed);border-radius:50%;padding:7px;margin:-7px}
 /* v1.78 · los hilos del mapa: detrás del índice, un SVG con un hilo por conexión; los nombres llevan el papel de la hoja
    para que el hilo pase por detrás. v1.79: a la vista siempre. */
 #cp-p2 .mp-hilos-w{position:relative}
@@ -1393,7 +1377,9 @@ body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
   <button class="ico" id="btn-home" aria-label="Volver al inicio · pasa por encima para ver la posición de partida" title="Inicio">
     <svg viewBox="0 0 20 20" fill="none"><path d="M3 9.2 L10 3.2 L17 9.2 M5 8.4 V16.4 H15 V8.4" stroke="#1A1C1E" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/></svg>
   </button>
-  <!-- v1.99 · el mapa del sitio ya no va en la cabecera: solo en el pie (Koi, 16-nov: «así dejaré el header más simple»). Estuvo aquí de la v1.81 a la v1.98 -->
+  <button class="ico" id="btn-mapa" aria-label="Mapa del sitio" title="Mapa del sitio">   <!-- v1.81 · el mapa del sitio, junto a la casita · v1.99 fuera · v1.105 vuelve (Koi, 17-nov) -->
+    <svg viewBox="0 0 20 20" fill="none"><rect x="2.6" y="7.7" width="4.8" height="4.6" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><rect x="12.6" y="3" width="4.8" height="4.4" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><rect x="12.6" y="12.6" width="4.8" height="4.4" rx=".8" stroke="#1A1C1E" stroke-width="1.3"/><path d="M7.4 10 H10 M10 5.2 V14.8 M10 5.2 H12.6 M10 14.8 H12.6" stroke="#1A1C1E" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
 </div>
 
 <div class="hud" id="hud-tr">
@@ -1437,11 +1423,7 @@ body.panel-on:has(#cp-h0.delante) #velo-top{height:100%}
      Buscar es ir del usuario hacia adentro, como en un archivador: la hoja de delante enseña su contenido; la de
      detrás, solo su cabecera. Las pestañas de toda la vida, en un mismo plano, se llaman SEPARADORES. -->
 <aside id="panel" class="carpeta" role="dialog" aria-labelledby="p-t">
-  <section class="cp-hoja detras p1" id="cp-h1">
-    <div class="cp-cab"><button class="cp-t" id="cp-t1" aria-expanded="false" aria-controls="cp-c1"><span class="ms cp-ic" aria-hidden="true">hub</span><span class="cp-tx"><span class="cp-l">Conexiones de:</span></span></button></div>
-    <div class="cp-cuerpo" id="cp-c1"><div class="cp-pan" id="cp-p1"></div></div>
-  </section>
-  <section class="cp-hoja delante p0" id="cp-h0">
+  <section class="cp-hoja delante p0" id="cp-h0">   <!-- v1.103 · la única hoja: Conexiones ya no es una hoja, es el grafo con esta recogida -->
     <div class="cp-cab"><button class="cp-t" id="cp-t0" aria-expanded="true" aria-controls="cp-c0"><span class="ms cp-ic" aria-hidden="true">article</span><span class="cp-tx"><span class="cp-l">Contenido de:</span></span></button></div>
     <div class="cp-cuerpo" id="cp-c0"><div class="cp-pan" id="cp-p0">
       <div class="p-heroe" id="p-heroe">   <!-- v1.61 · la cabecera de la hoja: en las piezas, un campo del color de su sección -->
@@ -5473,7 +5455,7 @@ function renderHermanas(){
     var pv7=(VENGO!==null&&VENGO!==sel)?VENGO:0;
     var nx7=null,cx7=nbrList(sel).filter(on_);for(var q7=0;q7<cx7.length;q7++){if(cx7[q7]!==0&&cx7[q7]!==pv7&&cx7[q7]!==sel){nx7=cx7[q7];break;}}
     h='<button class="her-a her-pv" data-j="'+pv7+'"><span class="ms" aria-hidden="true">arrow_back</span><span class="her-t"><span class="her-l">Anterior</span> '+esc(pv7===0?'Inicio':nombreDe(pv7))+'</span></button>'+
-      '<button class="her-a her-sec" data-cx="1" title="Conexiones de '+esc(nombreDe(sel))+'" aria-label="Conexiones de '+esc(nombreDe(sel))+'"><span class="ms" aria-hidden="true">hub</span></button>'+
+      '<button class="her-a her-sec" data-cx="1" aria-pressed="'+(CPT===1?'true':'false')+'" title="Conexiones de '+esc(nombreDe(sel))+'" aria-label="Conexiones de '+esc(nombreDe(sel))+'"><span class="ms" aria-hidden="true">hub</span></button>'+
       (nx7!==null?'<button class="her-a her-nx" data-j="'+nx7+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx7))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
   }
   else if(sel!==null&&sel>=8){   /* v1.100 · toda pieza tiene pie; v1.101 · también con su artefacto abierto (Koi, 16-nov: «revisa los prefooters de toda la web») */
@@ -5488,7 +5470,7 @@ function renderHermanas(){
     }else{on=true;   /* v1.100 · también sola, o sin texto: al menos la rejilla a su sección */
       var pv=at>0?hs[at-1]:null,nx=(at>=0&&at<hs.length-1)?hs[at+1]:null;
       h=(pv!==null?'<button class="her-a her-pv" data-j="'+pv+'"><span class="ms" aria-hidden="true">arrow_back</span><span class="her-t"><span class="her-l">Anterior</span> '+esc(nombreDe(pv))+'</span></button>':'<span class="her-a her-pv her-vacio"></span>')+
-        '<button class="her-a her-sec" data-j="'+sc+'" title="Todas las piezas de '+esc(nombreDe(sc))+'" aria-label="Todas las piezas de '+esc(nombreDe(sc))+'"><span class="ms" aria-hidden="true">grid_on</span><span class="her-n">'+(at>=0?((at+1)+' / '+hs.length):(hs.length+(hs.length===1?' pieza':' piezas')))+'</span></button>'+   /* v1.92 · la rejilla, al índice de la sección (Koi, 16-nov) */
+        '<button class="her-a her-sec" data-cx="1" aria-pressed="'+(CPT===1?'true':'false')+'" title="Conexiones de '+esc(nombreDe(sel))+'" aria-label="Conexiones de '+esc(nombreDe(sel))+'"><span class="ms" aria-hidden="true">hub</span></button>'+   /* v1.102 · el hub siempre en el centro, como en las secciones (Koi, 17-nov: «un lío que a veces sea rejilla y a veces conexiones») */
         (nx!==null?'<button class="her-a her-nx" data-j="'+nx+'"><span class="her-t"><span class="her-l">Siguiente</span> '+esc(nombreDe(nx))+'</span><span class="ms" aria-hidden="true">arrow_forward</span></button>':'<span class="her-a her-nx her-vacio"></span>');
     }
   }
@@ -5496,7 +5478,7 @@ function renderHermanas(){
   document.body.classList.toggle('hermanas-on',on);
 }
 HER.addEventListener('click',function(e){
-  var cx=e.target.closest('.her-a[data-cx]');if(cx){cpTab(1,e.detail===0);return;}   /* v1.93 · el hub pone delante Conexiones */
+  var cx=e.target.closest('.her-a[data-cx]');if(cx){cpTab(CPT===1?0:1,e.detail===0);return;}   /* v1.93 · el hub, Conexiones · v1.103 · y otra vez, la hoja */
   var b=e.target.closest('.her-a[data-j]');if(!b)return;
   clearFilt();setSel(+b.dataset.j,CPT===1);   /* en Conexiones sigue en Conexiones */
 });
@@ -5608,16 +5590,14 @@ setTimeout(function notaHome(){
 /* v1.26 · la carpeta: qué hoja va delante (0 = la ficha, 1 = las conexiones, 2 = el mapa del sitio, v1.73).
    Detrás, por su orden: la más cercana, la de número menor; la otra, «lejos», asoma por encima de las dos */
 var CPT=0;
-function cpTab(k,foco){   /* v1.77 · las hojas, por su profundidad (p0 delante, p1 detrás) y su orden; dos desde la v1.84 */
-  var cambia=(CPT!==k),orden=[k].concat([0,1].filter(function(i){return i!==k;})),del=null;
-  CPT=k;
-  if(k!==1)TAPADO_T=performance.now()+600;   /* v1.28 · todo menos Conexiones vuelve a tapar el grafo tras el cambio de hoja */
-  orden.forEach(function(i,p){var h=document.getElementById('cp-h'+i);if(p===0)del=h;
-    h.classList.toggle('delante',p===0);h.classList.toggle('detras',p>0);h.classList.remove('lejos','p0','p1','p2','p3');h.classList.add('p'+p);
-    document.getElementById('cp-t'+i).setAttribute('aria-expanded',p===0?'true':'false');});
-  if(cambia&&!RM){del.classList.remove('sube');void del.offsetWidth;del.classList.add('sube');}
-  del.querySelector('.cp-cuerpo').scrollTop=0;
-  if(foco)del.querySelector('.cp-t').focus();
+function cpTab(k,foco){   /* v1.103 · una sola hoja: 0, la hoja subida; 1 (Conexiones), la hoja recogida y el grafo a la vista */
+  var cambia=(CPT!==k);CPT=k;
+  if(k!==1)TAPADO_T=performance.now()+600;   /* v1.28 · con la hoja subida el grafo deja de pintarse al cabo del velo */
+  panel.classList.toggle('recogida',k===1);document.body.classList.toggle('cx-on',k===1);
+  var hub=HER.querySelector('.her-sec[data-cx]');if(hub)hub.setAttribute('aria-pressed',k===1?'true':'false');
+  var t0=document.getElementById('cp-t0');t0.setAttribute('aria-expanded',k===0?'true':'false');
+  if(cambia&&!RM&&k===0){var h=document.getElementById('cp-h0');h.classList.remove('sube');void h.offsetWidth;h.classList.add('sube');}
+  if(foco&&k===0)t0.focus();
 }
 /* ═══ v1.73 · EL MAPA DEL SITIO (Patricia, 29-oct: «para quien se ha perdido… un mapa del site lo más normativo posible»).
    Un índice de los de siempre: Inicio, las siete secciones y, debajo de cada una, sus páginas por su código; la página
@@ -5696,10 +5676,6 @@ function mapaClic(e){
   if(j===sel||slugURL()===SLUGN[j]){e.preventDefault();if(j===sel)cpTab(0,e.detail===0);else{clearFilt();setSel(j);}}
 }
 document.getElementById('cp-p2').addEventListener('click',mapaClic);
-panel.addEventListener('click',function(e){
-  var c=e.target.closest('.cp-hoja.detras .cp-cab');if(!c)return;
-  cpTab(+c.parentNode.id.slice(4),e.detail===0);   /* v1.37 · con ratón no se lleva el foco: sin aro */
-});
 /* los dos desplegables: fecha y temática */
 document.getElementById('p-art').addEventListener('change',function(e){
   var t=e.target;
@@ -5738,7 +5714,6 @@ document.getElementById('p-art').addEventListener('click',function(e){
 var strip=document.getElementById('strip'),stCrumb=document.getElementById('st-crumb'),
     stTags=document.getElementById('st-tags'),stBody=document.getElementById('st-body');
 /* v1.26 · la franja se muda a la segunda lengüeta de la carpeta (mismos nodos, mismos oyentes) */
-document.getElementById('cp-p1').appendChild(stTags);document.getElementById('cp-p1').appendChild(stBody);
 var cadena=document.getElementById('cadena'),CAD_SEL=null;
 function bolaHTML(j,here,mini){
   var c=(j===0)?'#000000':(PAL?brandHex(j):'#0B0B0B');   /* v1.38 · la cadena, en la marca */
@@ -5795,7 +5770,6 @@ function renderStrip(){
   stTags.innerHTML=tg.map(function(t){
     return '<button class="tag" data-t="'+t+'" data-on="'+(FILT_TAG&&t===FILT_Q?'1':'0')+'">'+t+'</button>';}).join('');
   stBody.innerHTML=cs.map(cellHTML).join('');
-  document.getElementById('cp-t1').innerHTML=lengueta('Conexiones de:',nombreDe(sel),'hub');   /* v1.37 · sin el número: junto al nombre se leía «KS Color Book 2» */
 }
 stBody.addEventListener('click',function(e){
   var b=e.target.closest('.cell');if(!b)return;clearFilt();setSel(+b.dataset.j);
@@ -5864,7 +5838,7 @@ function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al sal
   try{var _sl=(sel!==null&&sel>=1)?((SLUGN&&SLUGN[_serie!==null?_serie:sel])||slugDe(sel)):'';
     if(RUTAS){var _ru=(_sl?'/'+_sl:'/')+location.search;if(location.pathname+location.search+location.hash!==_ru)history[NAVPOP?'replaceState':'pushState'](null,'',_ru);}   /* v1.91 · en la web, la pieza va en la ruta · v1.92 · y es un paso del historial: Atrás vuelve a la anterior (Koi, 16-nov: «volver a la página anterior sin más») */
     else{var _hs=_sl?'#'+_sl:'';if(location.hash!==_hs)history.replaceState(null,'',_hs||(location.pathname+location.search));}}catch(_e){}   /* v1.61 · cada nodo y micronodo, su dirección (antes, solo las secciones) */
-  if(sel!==null){if(!mantener)cpTab(0);renderPanel();openPanel();renderStrip();blip();if(_serie!==null)irASerie(_serie);}
+  if(sel!==null){if(!mantener)cpTab(0);document.getElementById('cp-c0').scrollTop=0;renderPanel();openPanel();renderStrip();blip();if(_serie!==null)irASerie(_serie);}   /* v1.103 · otro nodo, lectura desde arriba; volver de Conexiones la deja donde estaba */
   else{closePanel();closeStrip();cadena.hidden=true;CAD_SEL=null;renderHermanas();}
 }
 
@@ -6423,7 +6397,7 @@ document.getElementById('mapa-x').addEventListener('click',cierraMapa);
 vMapa.addEventListener('click',function(e){if(e.target===vMapa)cierraMapa();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&vMapa.classList.contains('open')){e.preventDefault();e.stopPropagation();cierraMapa();}},true);
 document.getElementById('pie-mapa').addEventListener('click',abreMapa);
-/* v1.99 · el botón del mapa de la cabecera (v1.81) se retiró: el mapa se abre desde el pie y desde la «i» */
+document.getElementById('btn-mapa').addEventListener('click',abreMapa);   /* v1.81 · y arriba, junto a la casita (v1.99 se quitó; v1.105 vuelve: Koi, 17-nov) */
 document.getElementById('pie-mail').addEventListener('click',function(){vCont.classList.add('open');setTimeout(function(){document.getElementById('contacto-x').focus();},30);});
 document.getElementById('contacto-x').addEventListener('click',function(){vCont.classList.remove('open');document.getElementById('pie-mail').focus();});
 vCont.addEventListener('click',function(e){
@@ -6528,11 +6502,15 @@ function frame(){
      descentrada correcta — mover la cámara metía el grafo en el borde del
      cono y lo deformaba. */
   var wide=W>760;   /* v1.63 · el corte de MUDA */
-  var pxw=0;   /* v1.26 · ya no hay panel lateral */
+  var pxw=0;   /* v1.26 · ya no hay panel lateral (v1.104: el prototipo ?lateral se vio y se descartó; Koi, 17-nov: la hoja única) */
   /* v1.28 · el centro del grafo: con la carpeta abierta, el de la ventana de Conexiones (cuerpo de la hoja de delante);
      explorando, el del hueco que deja el pie */
   var pyT;
-  if(panel.classList.contains('open')){var fb=panel.querySelector('.cp-hoja.delante .cp-cuerpo').getBoundingClientRect();pyT=H/2-(fb.top+fb.bottom)/2;}
+  if(panel.classList.contains('open')&&CPT===1){   /* v1.103 · hoja recogida: el centro del hueco entre el velo y el pie */
+    var _vt=document.getElementById('velo-top').getBoundingClientRect().bottom,
+        _hb=(document.body.classList.contains('hermanas-on')?HER:document.getElementById('pie')).getBoundingClientRect().top;
+    pyT=H/2-(_vt+_hb)/2;}
+  else if(panel.classList.contains('open')){var fb=panel.querySelector('.cp-hoja.delante .cp-cuerpo').getBoundingClientRect();pyT=H/2-(fb.top+fb.bottom)/2;}
   else pyT=0;   /* v1.29 · explorando no hay pie */
   PANX+=((pxw*0.5)-PANX)*0.09;
   PANY+=(pyT-PANY)*0.09;
