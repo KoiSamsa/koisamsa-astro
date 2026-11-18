@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.113 · la hoja crece con la ventana; cabecera y pie alineados con la hoja">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.114 · cada sección entra en mosaico">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -5300,7 +5300,7 @@ function irASerie(j){   /* v1.59 · lleva la página a la sección de la serie y
     el.classList.add('aqui');setTimeout(function(){el.classList.remove('aqui');},2600);},80);
 }
 /* Estado del índice. Por defecto: 2 columnas con imagen (aprobado 21-jul). */
-var IDXVISTA=(function(){try{return localStorage.getItem('ks-vista')==='lista'?'lista':'mosaico';}catch(_e){return 'mosaico';}})(),IDXDEMO=null;   /* v1.107 · dos vistas: mosaico con imagen o lista sin ella; se recuerda (Koi, 17-nov: «esto es excesivo») */
+var IDXVISTA='mosaico',IDXDEMO=null;   /* v1.107 · dos vistas: mosaico con imagen o lista sin ella. v1.114 · ya no se recuerda: cada sección entra en mosaico (Koi, 18-nov: «cada vez, masonry. Es más espectacular»); la lista dura lo que dura la visita a la sección */
 
 /* ── LAS TRES VISTAS DE UN ARTEFACTO ──────────────────────────────
    El panel lateral es una vista VERTICAL: 50vw ≈ 720px en un portátil.
@@ -5716,7 +5716,7 @@ document.getElementById('p-art').addEventListener('click',function(e){
   var vb=e.target.closest('.ix-vb');
   if(vb){VMODO=vb.dataset.v;renderPanel();return;}
   var vv=e.target.closest('.ix-vista button');
-  if(vv){IDXVISTA=vv.dataset.v;try{localStorage.setItem('ks-vista',IDXVISTA);}catch(_e){}renderPanel();return;}   /* v1.107 · mosaico o lista, y se recuerda */
+  if(vv){IDXVISTA=vv.dataset.v;renderPanel();return;}   /* v1.107 · mosaico o lista; desde la v1.114, solo mientras se está en la sección */
   var c=e.target.closest('.ix-card')||e.target.closest('.ix-li')||e.target.closest('.ix-launch-b');
   if(!c)return;
   if(c.dataset.demo){                                  /* el artefacto manda */
@@ -5857,7 +5857,7 @@ function setSel(v,mantener){   /* v1.28 · mantener: seguir en Conexiones al sal
   try{var _sl=(sel!==null&&sel>=1)?((SLUGN&&SLUGN[_serie!==null?_serie:sel])||slugDe(sel)):'';
     if(RUTAS){var _ru=(_sl?'/'+_sl:'/')+location.search;if(location.pathname+location.search+location.hash!==_ru)history[NAVPOP?'replaceState':'pushState'](null,'',_ru);}   /* v1.91 · en la web, la pieza va en la ruta · v1.92 · y es un paso del historial: Atrás vuelve a la anterior (Koi, 16-nov: «volver a la página anterior sin más») */
     else{var _hs=_sl?'#'+_sl:'';if(location.hash!==_hs)history.replaceState(null,'',_hs||(location.pathname+location.search));}}catch(_e){}   /* v1.61 · cada nodo y micronodo, su dirección (antes, solo las secciones) */
-  if(sel!==null){if(!mantener)cpTab(0);document.getElementById('cp-c0').scrollTop=0;renderPanel();openPanel();renderStrip();blip();if(_serie!==null)irASerie(_serie);}   /* v1.103 · otro nodo, lectura desde arriba; volver de Conexiones la deja donde estaba */
+  if(sel!==null){if(!mantener)cpTab(0);document.getElementById('cp-c0').scrollTop=0;IDXVISTA='mosaico';renderPanel();openPanel();renderStrip();blip();if(_serie!==null)irASerie(_serie);}   /* v1.103 · otro nodo, lectura desde arriba; volver de Conexiones la deja donde estaba */
   else{closePanel();closeStrip();cadena.hidden=true;CAD_SEL=null;renderHermanas();}
 }
 
