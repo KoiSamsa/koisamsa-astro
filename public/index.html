@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.112 · las miniaturas animadas en las teselas de /lab, sin teal">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.113 · la hoja crece con la ventana; cabecera y pie alineados con la hoja">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1253,6 +1253,27 @@ body.cx-on #velo-top{height:var(--carpeta-top)}
 #panel.carpeta.is-pieza .p-heroe::before{left:-100vw}
 @media (min-width:761px){#cadena{right:140px}}
 #panel.carpeta .cp-cuerpo{padding-bottom:calc(89px + env(safe-area-inset-bottom,0px))}   /* el final de la hoja respira (Fibonacci: 89) */
+/* ═══ v1.113 · LA HOJA CRECE CON LA VENTANA (Koi, 18-nov: «el cuerpo me pide que para resoluciones grandes la web siga ensanchando…
+   no me gusta que haya más fondo sin utilizar que utilizado»). Maquetación fluida: la hoja vuelve a ser la ventana menos su margen,
+   sin tope (se retira el de 1440 de la v1.106); lo que cambia por dentro es el número de columnas de los mosaicos. La lectura no
+   crece: el artículo sigue en sus 60 unidades con techo en 949 y el texto a 680. Y la casita, los iconos de la derecha, la cadena y
+   el pie se alinean con los bordes de la hoja (--cp-mx), «a la misma altura que el final de la card». */
+:root{--hoja-max:none}
+.cp-pan{max-width:none}
+.ix-lista-w{max-width:none}
+@media (min-width:761px){
+  #hud-tl{left:var(--cp-mx)}#hud-tr{right:var(--cp-mx)}
+  #search{left:calc(var(--cp-mx) + 112px)}
+  #cadena{left:calc(var(--cp-mx) + 168px);right:calc(var(--cp-mx) + 112px)}
+  #pie{padding-left:var(--cp-mx);padding-right:var(--cp-mx)}
+}
+/* los mosaicos ganan una columna cuando su contenedor pasa de 1500: Lab, dos teselas → tres (la ancha ocupa dos, y el hueco lo
+   rellena la siguiente); Notes, tres columnas → cuatro */
+@container (min-width:1500px){
+  .qt{grid-template-columns:1fr 1fr 1fr;grid-auto-flow:dense}
+  .qt .ix-card.qt-t.qt-ancha{grid-column:span 2}
+  .mg{grid-template-columns:2fr 1fr 1fr 1fr}
+}
 /* v1.78 · los hilos del mapa: detrás del índice, un SVG con un hilo por conexión; los nombres llevan el papel de la hoja
    para que el hilo pase por detrás. v1.79: a la vista siempre. */
 #cp-p2 .mp-hilos-w{position:relative}
