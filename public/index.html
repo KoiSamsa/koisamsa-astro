@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Koi Samsa · arte, diseño y estrategia de marca</title>
-<meta name="ks-version" content="v1.115 · la entradilla a la altura de la fila; la frase corta de Entropic; sin cortinilla de llegada">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
+<meta name="ks-version" content="v1.116 · la hoja a 1c · 4c · 1c: un sexto de margen a cada lado desde 1024">   <!-- v1.86 · la versión, aquí: el título es lo que se ve en la pestaña -->
 <!-- PROTOTIPO: fuentes por CDN, como el mock de Claude Design. MUDA v1.1 las
      tiene alojadas y embebidas — al pasar a Astro se usan las de MUDA. -->
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Sans:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -1255,6 +1255,11 @@ body.cx-on #velo-top{height:var(--carpeta-top)}
    crece: el artículo sigue en sus 60 unidades con techo en 949 y el texto a 680. Y la casita, los iconos de la derecha, la cadena y
    el pie se alinean con los bordes de la hoja (--cp-mx), «a la misma altura que el final de la card». */
 :root{--hoja-max:none}
+/* v1.116 · 1c · 4c · 1c (Koi, 18-nov, tras ver la comparativa: «ahora te has pasado de mostrar toda la pantalla, pensando en columnas… era
+   60, o sea 1c, 4c, 1c»). La ventana se reparte en seis columnas: la hoja ocupa las cuatro del centro y cada margen una, es decir, un sexto
+   del ancho. Vale desde 1024 px; por debajo (tablet en vertical, móvil) el margen sigue siendo 21 y 8. La casita, los iconos y el pie van
+   con el borde de la hoja, así que se reparten igual. */
+@media (min-width:1024px){:root{--cp-mx:calc(100vw / 6)}}
 .cp-pan{max-width:none}
 .ix-lista-w{max-width:none}
 @media (min-width:761px){
