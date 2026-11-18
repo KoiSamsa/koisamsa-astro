@@ -525,8 +525,9 @@
     var SERIF = 'Newsreader,Georgia,serif', SANS = '"Fira Sans","Albert Sans",system-ui,sans-serif', MONO = '"Fira Code",ui-monospace,monospace';
     var biro = false;
     if (document.fonts && document.fonts.load) document.fonts.load('20px "KS Biro"').then(function(f){ biro = !!(f && f.length); }, function(){});
-    var A = ['Quizá','nunca','descubriremos','lo','mucho','que','faltaba','por','escribir','cuando','el','lápiz','se','rompió'];
-    var B = {0:'Acaso', 1:'jamás', 2:'sabremos', 4:'tanto', 6:'quedaba', 8:'redactar', 11:'bolígrafo', 13:'quebró'};
+    /* v1.115 · frase corta, que quepa en la caja en Biro (Koi, 18-nov): la de la v1.112 desbordaba */
+    var A = ['Los','modelos','de','lenguaje','sufren','alucinaciones','que','este','artefacto','demuestra'];
+    var B = {1:'sistemas', 4:'padecen', 5:'espejismos', 8:'experimento', 9:'enseña'};
     var CUANDO = {2:0, 5:1, 8:2, 11:4, 14:6, 17:8, 20:11, 23:13};   /* en qué copista cae cada palabra */
     var N = A.length, FRASE = A.join(' '), COP = 25;
     var t = 0, fase = 0, f0 = 0, paso = 0, camb = [], hist = [];
